@@ -1,7 +1,8 @@
 import bcrypt
 from datetime import datetime
 from shortuuid import ShortUUID
-from Habit import Habit
+
+from Classes.Habit import Habit
 
 class User:
     def __init__(self,name:str,password:str,email:str=None) -> None:

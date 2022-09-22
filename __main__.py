@@ -5,9 +5,11 @@ from time import sleep
 import os
 
 #Import of Classes and Functions
-from Habit import Habit
-from User import User
-from Users import Users
+from Classes.Habit import Habit
+from Classes.User import User
+from Classes.Users import Users
+
+#Import for Mock data
 from Load import load_example_data, load_user_data
 
 #Function to Clear Terminal

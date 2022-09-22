@@ -1,4 +1,4 @@
-from User import User
+from Classes.User import User
 
 class Users:
     def __init__(self) -> None:

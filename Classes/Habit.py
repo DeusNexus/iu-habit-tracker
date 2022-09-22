@@ -2,7 +2,7 @@ from datetime import datetime
 from shortuuid import ShortUUID
 
 #Child Class
-from CheckIn import CheckIn
+from Classes.CheckIn import CheckIn
 
 #Functions
 from Utils import interval_to_seconds, add_streak_to_deadline, interval_to_seconds

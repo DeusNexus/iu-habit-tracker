@@ -4,7 +4,7 @@ from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
-import Analytics
+import Classes.Analytics as Analytics
 
 def view(active_user,user_screen):
     clear()
