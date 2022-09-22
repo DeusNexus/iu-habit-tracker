@@ -1,5 +1,6 @@
 #habits:list[habit]
 from functools import reduce
+from Classes.Habit import Habit
 
 def active_habits(habits:list) -> list:
     pass
@@ -112,3 +113,6 @@ def avg_break_streak(habits:list) -> int:
 
 def avg_time_left(habits:list) -> int:
     pass
+
+def earliest(habits:list) -> Habit:
+    return reduce(lambda x,y: x if x.next_deadline < y.next_deadline else y, habits)

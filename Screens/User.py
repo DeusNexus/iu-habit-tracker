@@ -14,18 +14,27 @@ from Screens.Reset import reset
 from Screens.Credits import credits
 from Screens.Logout import logout
 
-def user_screen(active_user):
-    clear()
-    sleep(1)
-    
-    print(f'\nWelcome back {active_user.name}, your last login was on {active_user.last_login}.')
-    print(f'You currently have {len(active_user.habits)} habits of which ...\n')
-    print(f'Please select one of the menu options to interact with the habit tracker.\n')
-    
-    #Screens
-    option = quest.select('[User Screen Options]', ['View','New','Edit','Delete','Export/Import','Reset','See Credits','Logout & Exit']).ask()
+from Classes.Analytics import earliest
 
+def user_screen(active_user):
     try:
+        clear()
+        sleep(1)
+
+
+        print(f'\nWelcome back {active_user.name}, your last login was on {active_user.last_login.strftime("%A %d-%m-%Y, %H:%M")}.')
+        print(f'\nYou currently have {len([habit for habit in active_user.habits if habit.active])} active and {len([habit for habit in active_user.habits if not habit.active])} inactive habits.')
+
+
+        if active_user.habits:
+            earliest_deadline = earliest(active_user.habits)
+            print(f'Next earliest deadline for "{earliest_deadline.title}" is on {earliest_deadline.next_deadline.strftime("%A %d-%m-%Y, %H:%M")}, please check-in if you have completed it or your streak will reset!')
+
+        print(f'\nPlease select one of the menu options to interact with the habit tracker.\n')
+        
+        #Screens
+        option = quest.select('[User Screen Options]', ['View','New','Edit','Delete','Export/Import','Reset','See Credits','Logout & Exit']).ask()
+
         if(option == 'View'):
             view(active_user,user_screen)
         elif(option == 'New'):
@@ -42,5 +51,6 @@ def user_screen(active_user):
             credits(active_user,user_screen)
         elif(option == 'Logout & Exit'):
             logout(active_user)
+            
     except Exception as e:
         print(e)

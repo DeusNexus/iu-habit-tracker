@@ -84,7 +84,7 @@ class Habit:
     def checkin(self,note:str,rating:int) -> None:
         #Check if deadline is success or failed
         now = datetime.now()
-        print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now)
+        #print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now)
         if(now <= self.next_deadline):
             #Insert successful checkin to checkins list
             self.checkins.append(CheckIn(self.next_deadline,True,note,rating,self.cost,self.cost_accum))

@@ -47,7 +47,7 @@ def banner() -> list[str]:
     b = {
         'l1': '*' * columns,
         'l2': '.' * (columns//3)+ ' ' * (( columns//3 - len('Welcome to Habit Tracker') ) // 2) + 'Welcome to Habit Tracker' + ' ' * (( columns//3 - len('Welcome to Habit Tracker') ) // 2) + '.' * (columns//3),
-        'l3': '.' * (columns//3)+ ' ' * (( columns//3 - len(f'Today is {datetime.now()}') ) // 2) + f'Today is {datetime.now()}' + ' ' * (( columns//3 - len(f'Today is {datetime.now()}') ) // 2) + '.' * (columns//3),
+        'l3': '.' * (columns//3)+ ' ' * (( columns//3 - len(f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}') ) // 2) + f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}' + ' ' * (( columns//3 - len(f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}') ) // 2) + '.' * (columns//3),
         'l4': '.' * (columns//3)+ ' ' * (( columns//3 - len(f'Total Users Registered: {len(users.users)}') ) // 2) + f'Total Users Registered: {len(users.users)}' + ' ' * (( columns//3 - len(f'Total Users Registered: {len(users.users)}') ) // 2) + '.' * (columns//3),
         'l5': '*' * (columns//3)+ ' ' * (columns//3)  + '*'*(columns//3),
     }
