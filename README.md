@@ -27,3 +27,5 @@ Users can easily track their habits by creating or logging in to their own user-
 ### Credits
 ### Logout & Exit
 
+# Disclaimer
+The developed application is licensed under the GNU General Public License.
