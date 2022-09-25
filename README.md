@@ -8,6 +8,12 @@ For compatibility reasons and keeping the appliciation lightweight the choice wa
 
 Users can easily track their habits by creating or logging in to their own user-profile and then proceed to create, manage and view their habits in an organized and accessible manner. In this way it is easy to keep track of personal progress with the use of analytics that show habit streaks, best performing and worst performing, and more.
 
+# Development Planning - UML Schemas
+## Class Diagram
+![Alt text](UML.jpg?raw=true "UML Class Diagram")
+## Flow Diagram
+![Alt text](Flow-Diagram.jpg?raw=true "UML Flow Diagram")
+
 # How To Get Started
 ## Dependencies
 ## Installation Instruction
