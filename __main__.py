@@ -43,6 +43,7 @@ from Screens.Credits import credits
 from Screens.Logout import logout
 
 def banner() -> list[str]:
+    '''Creates a dynamic welcome banner depending on the command-line column and lines of the open window.'''
     lines = []
     b = {
         'l1': '*' * columns,
@@ -67,6 +68,7 @@ def banner() -> list[str]:
     return lines
 
 def app(skip:bool=False) -> None:
+    '''The main application, receives whether to skip as boolean the question whether to create a new user if user just created an account and directly goes to the user list to login.'''
     global login
     global active_user
 
@@ -135,6 +137,7 @@ def app(skip:bool=False) -> None:
         
 #Mock demo that created habits and shows them seperately.
 def demo() -> None:
+    '''Debugging Habits without creating a user.'''
     listofhabits = [
         Habit('Gym','Go to the gym once every day.','1M',True,None,3,'Health','Good looking figure and healthy body',5,'f@e.nl',7,0),
         Habit('Sport at Home','Do 10 situps in the evening','3D',True,None,2,'Health','Good looking figure and healthy body',3,'f@e.nl',5,0),

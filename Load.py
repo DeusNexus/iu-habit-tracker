@@ -1,4 +1,5 @@
 def load_example_data(users):
+    '''Creates Example Users, Habits and Check-ins'''
     #hardcoded example data, could be stored in database aswell
     users.create('John', 'pass')
     users.create('Rick', 'pass1')
@@ -19,6 +20,7 @@ def load_example_data(users):
     
 
 def load_user_data(users):
+    '''The load_user_data function receives the current users and then fetches the latest local database to insert the registered users. Each User is iteratively loaded into the users with all habits and checkins. Its main purpose is to load data from storage to memory while the program operates.'''
     pass
     #users:list = DB
     #for user in users, create a user in active_users
