@@ -5,6 +5,7 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 
 def delete(active_user,user_screen):
+        '''The delete screen is used for deleting habits. Habits list is printed and user can select which one to permanently remove. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
         print('[Delete Screen]')
         if( len(active_user.habits) == 0 ): 

@@ -16,7 +16,9 @@ from Screens.Logout import logout
 
 from Classes.Analytics import earliest
 
+#The user screen acts as the main menu after a user logs-in to his personal account.
 def user_screen(active_user):
+    '''The user screen acts as the main menu for the user. The user_screen function receives the User-object of the logged-in user and passes it further to the individual menu views. The individual views can then access user data and execute user functions.'''
     try:
         clear()
         sleep(1)

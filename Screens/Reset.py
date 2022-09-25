@@ -5,6 +5,7 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 
 def reset(active_user,user_screen):
+    '''The reset screen is used for resetting the user to various default states. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[Reset Screen]')
     print('In case that you would like to completely reset your account then you can make use of this menu.\n')

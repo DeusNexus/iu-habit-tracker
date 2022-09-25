@@ -5,6 +5,7 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 
 def edit(active_user,user_screen):
+        '''The edit screen is used for editing habits. Habits can be set to active or inactive, and have their unique details changed. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
         print('[Edit Screen]')
         if( len(active_user.habits) == 0 ): 

@@ -7,6 +7,7 @@ from datetime import datetime
 clear = lambda : os.system('tput reset')
 
 def new(active_user,user_screen):
+    '''The new screen is used for creating new habits, which can be normal or dynamic. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[New Screen]')
     questions = ['Regular Habit - Fixed Deadlines)','Dynamic Habit - Specify how often to check in before deadline','Go back to User Screen']

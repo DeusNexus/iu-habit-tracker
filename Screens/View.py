@@ -7,6 +7,7 @@ clear = lambda : os.system('tput reset')
 import Classes.Analytics as Analytics
 
 def view(active_user,user_screen):
+    '''The view screen is used to display habits of the user and give various options to see all, an individual or filtered habits. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[View Screen]')
     if( len(active_user.habits) == 0 ): 

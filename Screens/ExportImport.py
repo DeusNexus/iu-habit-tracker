@@ -5,6 +5,7 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 
 def export_import(active_user,user_screen):
+    '''The export/import screen is used for importing or exporting a user account using json files. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[Export/Import Screen]\n')
     print('You have options to either export your user file as a json file or import it by giving the file path.')
