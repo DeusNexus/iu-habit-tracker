@@ -11,18 +11,16 @@ def interval_to_seconds(intrv: str) -> int:
         'Y':60*60*24*365
     }
 
-    try:
-        #multiply the found value of char in time by numbers - e.g. 2D = 2 * time['D'] 
-        char:str = intrv[-1]
-        num:int = int(intrv[:-1])
+    #multiply the found value of char in time by numbers - e.g. 2D = 2 * time['D'] 
+    char:str = intrv[-1]
+    num:int = int(intrv[:-1])
 
-        if num == 0 or num < 1 or intrv[0] == '0':
-            raise ValueError('Invalid Numerical Prefix')
-            
-        return num * time[char]
-
-    except ValueError as e:
-        print(e)
+    if num == 0 or num < 1 or intrv[0] == '0':
+        raise ValueError('Invalid Numerical Prefix')
+    if char not in ['m','H','D','W','M','Y']:
+        raise ValueError(('Invalid postfix'))
+        
+    return num * time[char]
 
 def add_streak_to_deadline(deadline: datetime, seconds: int) -> datetime:
     '''Receives a deadline date and adds the number of seconds to the date to provide us with the new next deadline which is returned as datetime.'''
@@ -35,5 +33,7 @@ def stylize(src: str, style:str = 'bold') -> str:
         'bold': '\033[1m',
         'end': '\033[0m'
     }
+
+    if style not in styles: raise ValueError('Style is not available in styles!')
 
     return styles[style]+src+styles['end']

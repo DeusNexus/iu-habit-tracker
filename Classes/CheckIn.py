@@ -1,6 +1,5 @@
 from datetime import datetime
 from shortuuid import ShortUUID
-from Utils import stylize
 
 class CheckIn:
     def __init__(self, deadline:datetime, success:bool,note:str=None,rating:int=None,cost:float=0, cost_accum:float=0, dynamic:bool=False, dynamic_count:int=0) -> None:
@@ -17,4 +16,4 @@ class CheckIn:
     
     def info_checkin(self) -> None:
         '''Used for debugging, prints out the information of the checkin.'''
-        print(stylize(f'Check-in id:{self.checkin_id}, Check-in Date: {self.checkin_datetime}, Success: {self.success}, Personal Note: {self.note}, Rating: {self.rating}\n\n\n','bold'))
+        print(f'Check-in id:{self.checkin_id}, Check-in Date: {self.checkin_datetime}, Success: {self.success}, Personal Note: {self.note}, Rating: {self.rating}\n\n\n')

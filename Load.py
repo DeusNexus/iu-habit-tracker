@@ -17,11 +17,22 @@ def load_example_data(users):
     users.users[0].habits[0].checkin('Good first attempt!', 5)
     users.users[0].habits[1].checkin('Good first attempt!', 5)
     users.users[0].habits[1].checkin('Good first attempt!', 5)
-    
 
-def load_user_data(users):
+def default_example_data():
+    '''Return example data to a provided user'''
+    return [
+        [
+           'Cardio Workout', 'Cardio Activities','3D',True,None,1,'Sport','To become lean and more stamina',5,True,5,0,False,0
+        ],[
+           'Weight Lifting', 'Muscle workout','2D',True,None,4,'Sport','For power in body',5,True,5,0,False,0
+        ]
+    ]
+
+def load_user_data(db_users):
     '''The load_user_data function receives the current users and then fetches the latest local database to insert the registered users. Each User is iteratively loaded into the users with all habits and checkins. Its main purpose is to load data from storage to memory while the program operates.'''
     pass
     #users:list = DB
     #for user in users, create a user in active_users
     #for user in active_users insert the corresponding user habits/data
+
+

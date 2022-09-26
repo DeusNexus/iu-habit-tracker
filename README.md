@@ -10,9 +10,9 @@ Users can easily track their habits by creating or logging in to their own user-
 
 # Development Planning - UML Schemas
 ## Class Diagram
-![Alt text](UML.jpg?raw=true "UML Class Diagram")
+![Alt text](Images/UML.jpg?raw=true "UML Class Diagram")
 ## Flow Diagram
-![Alt text](Flow-Diagram.jpg?raw=true "UML Flow Diagram")
+![Alt text](Images/Flow-Diagram.jpg?raw=true "UML Flow Diagram")
 
 # How To Get Started
 ## Dependencies

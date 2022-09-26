@@ -3,6 +3,7 @@ from datetime import datetime
 from shortuuid import ShortUUID
 
 from Classes.Habit import Habit
+from Load import default_example_data
 
 class User:
     def __init__(self,name:str,password:str,email:str=None) -> None:
@@ -25,14 +26,17 @@ class User:
         #reset to default OR clean without example data
         self.created = datetime.now()
         self.last_login = datetime.now()
-        self.email = email
 
         #default reset with example data
         if(type==0):
             self.habits = [] #insert example habits!!
+            examples = default_example_data()
+            for example in examples:
+                self.create_habit(*example)
+            
         #clean all habits and don't add example data
         elif(type==1):
-            self.habits = [] #insert example habits!!
+            self.habits = []
 
     def info(self) -> None:
         '''Used for debugging and prints User data to the terminal.'''

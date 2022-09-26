@@ -10,9 +10,9 @@ from Utils import interval_to_seconds, add_streak_to_deadline, interval_to_secon
 class Habit:
     def __init__(
             self,
-            title:str='My Habit',
-            description:str='Habit Description',
-            interval:str='1H',
+            title:str,
+            description:str,
+            interval:str,
             active:bool=True,
             start_from:datetime=None,
             difficulity:int=None,
@@ -84,14 +84,16 @@ class Habit:
         self.fail += 1
     def dynamic_incr(self) -> None:
         '''Increases dynamic checkin count by 1. Once the checkin count reaches the dynamic checkin goal value before the deadline the habit is considered successfull and next streak begins. '''
-        self.dynamic_checkin += 1
+        self.dynamic_count += 1
     def dynamic_reset(self) -> None:
         '''Resets the dynamic checkin count to 0. If the deadline of a dynamic habit is not reached with the required checkin goal count the dynamic streak resets back to 0. The user can then attempt to reach the dynamic goal before the new the next_deadline.'''
-        self.dynamic_checkin = 0
+        self.dynamic_count = 0
 
     def checkin(self,note:str,rating:int) -> None:
         '''Used to checkin a habit and user can optionally provide a note to himself and a rating how well it went. 
         For regular habit if the deadline is met the streak is increased and deadline updated. All checkins are appended to the Habit checkins list.'''
+        if self.is_dynamic:
+            raise ValueError('Tried to checkin with regular checkin method for a dynamic habit!')
         #Check if deadline is success or failed
         now = datetime.now()
         #print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now)
@@ -114,26 +116,28 @@ class Habit:
     def dynamic_checkin(self,note:str,rating:int):
         '''Used to checkin a dynamic habit and user can optionally provide a note to himself and a rating how well it went. 
         For dynamic habit it checks if the goal count is reached or the deadline is due and updates the dynamic streak and deadlines accordingly. All checkins are appended to the Habit checkins list.'''
+        if not self.is_dynamic:
+            raise ValueError('Tried to checkin with dynamic checkin method for a regular habit!')
         #Compare if we haven't exceeded deadline yet with less than required checkins
         now = datetime.now()
-        print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now, ' Checkin Target:', checkin_num_before_deadline)
-        if(now <= self.next_deadline and dynamic_count < checkin_num_before_deadline):
+        print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now, ' Checkin Target:', self.checkin_num_before_deadline)
+        if(now <= self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline):
             #success dynamic checkin before deadline
             self.dynamic_incr()
             #Insert successful checkin to checkins list
             self.checkins.append(CheckIn(self.next_deadline,True,note,rating,self.cost,self.cost_accum,True,self.dynamic_count))
 
         #Still before deadline but this checkin target is met and therefor the dynamic habit has completed its goal for current deadline!    
-        elif(now <= self.next_deadline and dynamic_count >= checkin_num_before_deadline):
+        elif(now <= self.next_deadline and self.dynamic_count >= self.checkin_num_before_deadline):
             #Insert final checkin to checkins list before resetting the habit counters
             self.checkins.append(CheckIn(self.next_deadline,True,note,rating,self.cost,self.cost_accum,True,self.dynamic_count))
             #Reset counter for next deadline
-            self.dynamic_reset()()
+            self.dynamic_reset()
             #Update deadline to next interval
             self.update_deadlines()
         
         #Failed checkins, deadline is met but dynamic checkin count hasn't meet target
-        elif(now > self.next_deadline and dynamic_count < checkin_num_before_deadline):
+        elif(now > self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline):
             #Insert failed checkin to checkins list
             self.checkins.append(CheckIn(self.next_deadline,False,note,rating,self.cost,self.cost_accum,True,self.dynamic_count))
              #failed checkin
@@ -146,7 +150,7 @@ class Habit:
         '''Used for debugging to print Habit information to the terminal.'''
         return print(f'{self.title}: {self.description} \nCreated on: {self.created_on} \nDeadline: {self.next_deadline}\n')
 
-    def checkins(self) -> None:
+    def info_checkins(self) -> None:
         '''Used for debugging, iterates over the checkins of a habit and prints information out for each checkin.'''
         for checkin in self.checkins:
             checkin.info_checkin()
