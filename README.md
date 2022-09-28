@@ -29,7 +29,6 @@ After the application is started from the command-line the welcome screen will g
 Options will be given of what the user can do next, which include creating a new user if someone doesn't yet have an account or logging in to one of the already registered users using the correct password.
 ### Create User
 The new user will be asked to provide a unique username and password for his account.
-(NOTE TO SELF, THIS REQUIRES SOME DAEMON PROCESS TO RUN..)
 ### Login Existing User
 Choosing one of the registered users will ask you to provide the password. One can try again if it was wrong or choose to exit.
 ## User Screen
