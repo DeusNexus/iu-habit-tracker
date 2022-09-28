@@ -19,7 +19,6 @@ class Habit:
             category:str=None,
             moto:str=None,
             importance:int=None,
-            push_notif:bool=False,
             milestone:int=None,
             style:int=0,
             is_dynamic:bool=False,
@@ -37,7 +36,6 @@ class Habit:
         self.category:str = category
         self.moto:str = moto
         self.importance:int = importance
-        self.push_notif:bool = push_notif
         self.style:int = style
         self.milestone_streak:int = milestone
         self.is_dynamic:bool = is_dynamic
@@ -148,21 +146,9 @@ class Habit:
 
     def info_habit(self) -> None:
         '''Used for debugging to print Habit information to the terminal.'''
-        return print(f'{self.title}: {self.description} \nCreated on: {self.created_on} \nDeadline: {self.next_deadline}\n')
+        return print(f'[{self.title}: {self.description}] \nCreated on: {self.created_on} \nDeadline: {self.next_deadline}')
 
     def info_checkins(self) -> None:
         '''Used for debugging, iterates over the checkins of a habit and prints information out for each checkin.'''
         for checkin in self.checkins:
             checkin.info_checkin()
-
-# #Test data
-# sport = Habit('Sport','1D')
-# print('[HABIT] Created: ',sport.created_on, 'Prev_deadline:',sport.prev_deadline, 'Next_deadline:',sport.next_deadline, sep='\n')
-# sport.checkin('Good Job!',3)
-# for checkin in sport.checkins:
-#     print('Checkin Date',checkin.checkin_datetime, 'Checkin Note:',checkin.note, 'Checkin Success:',checkin.success,sep='\n')
-# print('Streak:',sport.streak)
-# sport.checkin('Getting beter!',5)
-# for checkin in sport.checkins:
-#     print('Checkin Date',checkin.checkin_datetime, 'Checkin Note:',checkin.note, 'Checkin Success:',checkin.success,sep='\n')
-# print('Streak:',sport.streak)

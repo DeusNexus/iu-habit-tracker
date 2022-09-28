@@ -6,15 +6,14 @@ from Classes.Habit import Habit
 from Load import default_example_data
 
 class User:
-    def __init__(self,name:str,password:str,email:str=None) -> None:
-        '''On init is used when setting up a User and receives a name, password and email (optional). Using a salt the password is hashed and stored in encrypted manner. It creates a habit list for the user where the Habit objects are stored in. '''
+    def __init__(self,name:str,password:str) -> None:
+        '''On init is used when setting up a User and receives a name and password. Using a salt the password is hashed and stored in encrypted manner. It creates a habit list for the user where the Habit objects are stored in. '''
         self.user_id:str = ShortUUID().random(length=5).lower()
         self.salt:bytes = bcrypt.gensalt(14)
         self.name:str = name
         self.password:bytes = bcrypt.hashpw(bytes(password,'utf8'),self.salt)
         self.created:datetime = datetime.now()
         self.last_login:datetime = datetime.now()
-        self.email:str = email
         self.habits:list = []
 
     def set_last_login(self) -> None:
@@ -58,7 +57,6 @@ class User:
         category:str,
         moto:str,
         importance:int,
-        push_notif:bool,
         milestone:int,
         style:int,
         is_dynamic:bool,
@@ -66,7 +64,7 @@ class User:
         ) -> None:
         '''Creates a new Habit for the user and appends it to the users's habits list.'''
         #Instantiate a habit and put it in the user habits list
-        self.habits.append(Habit(title, description, interval, active, start_from, difficulity, category, moto, importance, push_notif, milestone, style, is_dynamic, checkin_num_before_deadline))
+        self.habits.append(Habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline))
     
     def delete_habit(self,habit_id:str) -> None:
         '''Delete a habit from the user's habits list by providing the habit_id of the habit to be removed.'''
@@ -80,11 +78,4 @@ class User:
         if(index==len(self.habits)):
             print(f'Could not find habit with habit_id: {habit_id}!')
 
-
-# u = Users()
-# u.create('Fabian','Cow123')
-# for user in u.users: user.info()
-# print(u.users[0].user_id)
-# u.delete(u.users[0].user_id)
-# #for user in u.users: user.info()
 

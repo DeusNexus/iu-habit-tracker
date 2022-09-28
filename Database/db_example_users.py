@@ -9,7 +9,6 @@ c = conn.cursor()
 # self.password:bytes = bcrypt.hashpw(bytes(password,'utf8'),self.salt)
 # self.created:datetime = datetime.now()
 # self.last_login:datetime = datetime.now()
-# self.email:str = email
 # self.habits:list = [] -- NOT A users table attribute
 
 users = [{
@@ -19,7 +18,6 @@ users = [{
             'password':'pass1',
             'created':'2022-06-27 06:59:59',
             'last_login':'2022-09-28 14:29:00',
-            'email':'jim@test.com'
         },
         {
             'userid':'userid_2',
@@ -28,7 +26,6 @@ users = [{
             'password':'pass2',
             'created':'2022-03-27 10:10:34',
             'last_login':'2022-10-4 15:32:03',
-            'email':'rick@test.com'
         },
         {
             'userid':'userid_3',
@@ -37,7 +34,6 @@ users = [{
             'password':'pass3',
             'created':'2022-02-11 05:12:43',
             'last_login':'2022-05-15 19:54:15',
-            'email':'tom@test.com'
         },
         ]
 

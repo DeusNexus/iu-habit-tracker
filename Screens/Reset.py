@@ -10,7 +10,7 @@ def reset(active_user,user_screen):
     print('[Reset Screen]')
     print('In case that you would like to completely reset your account then you can make use of this menu.\n')
     sleep(1)
-    print('You have two options, either delete all your creation date, login time, email, habits and then have example habit data loaded again \n')
+    print('You have two options, either delete all your creation date, login time, habits and then have example habit data loaded again \n')
     sleep(1)
     print('or everything gets reset like stated above and no example data is added so you can start with your own personal journey.')
     sleep(1)

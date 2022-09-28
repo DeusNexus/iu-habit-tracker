@@ -31,13 +31,12 @@ def new(active_user,user_screen):
         category = quest.text('Do you want to assign this habit to a common category? Similar habits will be grouped together. E.g.: Eduction, Sport, Hobby').ask()
         moto = quest.text('What is your moto you would like to remind yourself of to keep doing the habit?').ask()
         importance = quest.select("How important do you find it to perform?",['1','2','3','4','5']).ask()
-        push_notif = quest.confirm("Do you want to receive push notifications to your email for this habit?").ask()
         milestone = quest.text("Set milestone target for multiple successes. E.g. 5 for 5 consequent succesfull checkins!").ask()
         style = 0
 
         #Create habit with user input
         try:
-            active_user.create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, push_notif, milestone, style, is_dynamic, checkin_num_before_deadline)
+            active_user.create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline)
             print('[*] Added your habit!')
         except Exception as e:
             print('[!] Failed to add habit, an error occured!')

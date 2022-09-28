@@ -13,7 +13,6 @@ c = conn.cursor()
 # self.category:str = category
 # self.moto:str = moto
 # self.importance:int = importance
-# self.push_notif:bool = push_notif
 # self.style:int = style
 # self.milestone_streak:int = milestone
 # self.is_dynamic:bool = is_dynamic
@@ -43,7 +42,6 @@ habits = [
         'category':'Eduction',
         'moto':'The more you learn the better',
         'importance':5,
-        'push_notif':'False',
         'style':1,
         'milestone_streak':30,
         'is_dynamic':'False',
@@ -70,7 +68,6 @@ habits = [
         'category':'Mental Health',
         'moto':'More joy is better',
         'importance':5,
-        'push_notif':'False',
         'style':1,
         'milestone_streak':365,
         'is_dynamic':'False',
@@ -97,7 +94,6 @@ habits = [
         'category':'Entertainment',
         'moto':'To get inspired',
         'importance':2,
-        'push_notif':'False',
         'style':1,
         'milestone_streak':4,
         'is_dynamic':'False',
@@ -118,7 +114,7 @@ habits = [
 #habit examples
 def insert_habit(habit):
     c.execute("""INSERT INTO habits VALUES (:user_id,:habit_id,:title,
-    :description,:interval,:active,:start_from,:difficulity,:category,:moto,:importance,:push_notif,
+    :description,:interval,:active,:start_from,:difficulity,:category,:moto,:importance,
     :style,:milestone_streak,:is_dynamic,:checkin_num_before_deadline,:dynamic_count,:created_on,:prev_deadline,
     :next_deadline,:streak,:success,:fail,:cost,:cost_accum)""", habit)
 

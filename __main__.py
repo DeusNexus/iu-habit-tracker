@@ -139,10 +139,10 @@ def app(skip:bool=False) -> None:
 def demo() -> None:
     '''Debugging Habits without creating a user.'''
     listofhabits = [
-        Habit('Gym','Go to the gym once every day.','1M',True,None,3,'Health','Good looking figure and healthy body',5,'f@e.nl',7,0),
-        Habit('Sport at Home','Do 10 situps in the evening','3D',True,None,2,'Health','Good looking figure and healthy body',3,'f@e.nl',5,0),
-        Habit('Study for at least 30min','Progress your study by being actively engaged','1Y',True,None,2,'Education','Become smarter by doing small step everyday',5,'f@e.nl',30,0),
-        Habit('Check emails','Reply to any new emails','4H',True,None,1,'Be responsive',4,'f@e.nl',7,0)
+        Habit('Gym','Go to the gym once every day.','1M',True,None,3,'Health','Good looking figure and healthy body',5,7,0),
+        Habit('Sport at Home','Do 10 situps in the evening','3D',True,None,2,'Health','Good looking figure and healthy body',3,5,0),
+        Habit('Study for at least 30min','Progress your study by being actively engaged','1Y',True,None,2,'Education','Become smarter by doing small step everyday',5,30,0),
+        Habit('Check emails','Reply to any new emails','4H',True,None,1,'Be responsive',4,7,0)
     ]
 
     for habit in listofhabits:

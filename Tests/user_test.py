@@ -8,21 +8,20 @@ from Load import default_example_data
 def tCred(): 
     return {
         'name':'TestUser',
-        'password':'testpass',
-        'email':'testemai@email.com',
+        'password':'testpass'
     }
 
 @pytest.fixture
 def tUser():
-    return User('TestUser','testpass','test@email.com')
+    return User('TestUser','testpass')
 
 @pytest.fixture
 def tUserHabits(tUser):
-    tUser.create_habit(title='TestHabit', description='TestDescription', interval='1W', active=True, start_from=None, difficulity=5, category='TestCat', moto='TestMoto', importance=5, push_notif=False, milestone=10, style=None, is_dynamic=False, checkin_num_before_deadline=0)
-    tUser.create_habit(title='TestHabit2', description='TestDescription2', interval='1W', active=True, start_from=None, difficulity=5, category='TestCat2', moto='TestMoto2', importance=5, push_notif=False, milestone=10, style=None, is_dynamic=False, checkin_num_before_deadline=0)
-    tUser.create_habit(title='TestHabit3', description='TestDescription3', interval='1W', active=True, start_from=None, difficulity=5, category='TestCat3', moto='TestMoto3', importance=5, push_notif=False, milestone=10, style=None, is_dynamic=False, checkin_num_before_deadline=0)
-    tUser.create_habit(title='TestHabitD1', description='TestDescriptionD1', interval='1W', active=True, start_from=None, difficulity=5, category='TestCatD1', moto='TestMotoD1', importance=5, push_notif=False, milestone=10, style=None, is_dynamic=True, checkin_num_before_deadline=3)
-    tUser.create_habit(title='TestHabitD2', description='TestDescriptionD2', interval='1W', active=True, start_from=None, difficulity=5, category='TestCatD2', moto='TestMotoD2', importance=5, push_notif=False, milestone=10, style=None, is_dynamic=True, checkin_num_before_deadline=3)
+    tUser.create_habit(title='TestHabit', description='TestDescription', interval='1W', active=True, start_from=None, difficulity=5, category='TestCat', moto='TestMoto', importance=5, milestone=10, style=None, is_dynamic=False, checkin_num_before_deadline=0)
+    tUser.create_habit(title='TestHabit2', description='TestDescription2', interval='1W', active=True, start_from=None, difficulity=5, category='TestCat2', moto='TestMoto2', importance=5, milestone=10, style=None, is_dynamic=False, checkin_num_before_deadline=0)
+    tUser.create_habit(title='TestHabit3', description='TestDescription3', interval='1W', active=True, start_from=None, difficulity=5, category='TestCat3', moto='TestMoto3', importance=5, milestone=10, style=None, is_dynamic=False, checkin_num_before_deadline=0)
+    tUser.create_habit(title='TestHabitD1', description='TestDescriptionD1', interval='1W', active=True, start_from=None, difficulity=5, category='TestCatD1', moto='TestMotoD1', importance=5, milestone=10, style=None, is_dynamic=True, checkin_num_before_deadline=3)
+    tUser.create_habit(title='TestHabitD2', description='TestDescriptionD2', interval='1W', active=True, start_from=None, difficulity=5, category='TestCatD2', moto='TestMotoD2', importance=5, milestone=10, style=None, is_dynamic=True, checkin_num_before_deadline=3)
 
 @pytest.fixture
 def tUserHabitsCheckins(tUser):
@@ -41,13 +40,8 @@ def test_create_user_empty() -> None:
 
 @pytest.fixture
 def test_create_user_default(tCred) -> None:
-    user = User(tCred.name,tCred.password,tCred.email)
-    assert type(user) == User, "Failed to create user of type User!"
-
-@pytest.fixture
-def test_create_user_no_email(tCred) -> None:
     user = User(tCred.name,tCred.password)
-    assert type(user) == User, "Failed to create user without email of type User!"
+    assert type(user) == User, "Failed to create user of type User!"
 
 def test_set_last_login_updates(tUser):
     last_login  = tUser.last_login
@@ -83,7 +77,7 @@ def test_auth(tUser):
 def test_create_habit(tUser):
     #Create 5 regular habits
     for x in range(5):
-            tUser.create_habit(title=f'TestHabit{x}', description=f'TestDescription{x}', interval='1W', active=True, start_from=None, difficulity=5, category=f'TestCat{x}', moto=f'TestMoto{x}', importance=5, push_notif=False, milestone=10, style=None, is_dynamic=False, checkin_num_before_deadline=0)
+            tUser.create_habit(title=f'TestHabit{x}', description=f'TestDescription{x}', interval='1W', active=True, start_from=None, difficulity=5, category=f'TestCat{x}', moto=f'TestMoto{x}', importance=5, milestone=10, style=None, is_dynamic=False, checkin_num_before_deadline=0)
 
     #Check that atleast one habit exists
     assert tUser.habits[0], 'No habits were created!'
