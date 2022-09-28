@@ -28,7 +28,7 @@ Use docker? Or use python __main__.py?
 After the application is started from the command-line the welcome screen will greet the user with total amount of registered users, datetime and general title screen.
 Options will be given of what the user can do next, which include creating a new user if someone doesn't yet have an account or logging in to one of the already registered users using the correct password.
 ### Create User
-The new user will be asked to provide a unique username and password for his account. Optionally an email account can be registered where push notification will be send to if a deadline is about to expire or has failed. 
+The new user will be asked to provide a unique username and password for his account.
 (NOTE TO SELF, THIS REQUIRES SOME DAEMON PROCESS TO RUN..)
 ### Login Existing User
 Choosing one of the registered users will ask you to provide the password. One can try again if it was wrong or choose to exit.
