@@ -24,7 +24,8 @@ def interval_to_seconds(intrv: str) -> int:
 
 def add_streak_to_deadline(deadline: datetime, seconds: int) -> datetime:
     '''Receives a deadline date and adds the number of seconds to the date to provide us with the new next deadline which is returned as datetime.'''
-    return datetime.fromtimestamp((seconds + deadline.timestamp()))
+    
+    return datetime.fromtimestamp((seconds + datetime.strptime(deadline, '%Y-%m-%d %H:%M:%S').timestamp()))
 
 def stylize(src: str, style:str = 'bold') -> str:
     '''Receives text as string, a pre-defined style and then decorates the string with the style codes and returns the styled string as string.'''

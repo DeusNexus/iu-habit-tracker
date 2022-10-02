@@ -2,6 +2,7 @@ import os
 import questionary as quest
 from time import sleep
 from datetime import datetime
+from Database import db_api as api
 
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
@@ -24,7 +25,7 @@ def new(active_user,user_screen):
             checkin_num_before_deadline = 1
         active = quest.confirm("Do you directly want to set the habit to active?").ask()
         if(active):
-            start_from = datetime.now()
+            start_from = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         else:
             start_from = quest.text('Provide a start date when you want it to become active? Please follow the format YYYY/MM/DD HH:mm, e.g. 2050/03/28 15:35.').ask()
         difficulity = quest.select("How difficult do you find it to perform?",['1','2','3','4','5']).ask()
@@ -36,7 +37,36 @@ def new(active_user,user_screen):
 
         #Create habit with user input
         try:
+            habit_index = len(active_user.habits)
             active_user.create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline)
+            api.db_habits_insert([
+                {
+                    'user_id':active_user.user_id,
+                    'habit_id':active_user.habits[habit_index].habit_id,
+                    'title':title,
+                    'description':description,
+                    'interval':interval,
+                    'active':active,
+                    'start_from':start_from,
+                    'difficulity':difficulity,
+                    'category':category,
+                    'moto':moto,
+                    'importance':importance,
+                    'style':style,
+                    'milestone_streak':milestone,
+                    'is_dynamic':is_dynamic,
+                    'checkin_num_before_deadline':checkin_num_before_deadline,
+                    'dynamic_count':active_user.habits[habit_index].dynamic_count,
+                    'created_on':active_user.habits[habit_index].created_on,
+                    'prev_deadline':active_user.habits[habit_index].prev_deadline,
+                    'next_deadline':active_user.habits[habit_index].next_deadline,
+                    'streak':active_user.habits[habit_index].streak,
+                    'success':active_user.habits[habit_index].success,
+                    'fail':active_user.habits[habit_index].fail,
+                    'cost':active_user.habits[habit_index].cost,
+                    'cost_accum':active_user.habits[habit_index].cost_accum
+                }
+            ])
             print('[*] Added your habit!')
         except Exception as e:
             print('[!] Failed to add habit, an error occured!')

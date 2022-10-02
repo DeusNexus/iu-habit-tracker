@@ -22,7 +22,8 @@ class Habit:
             milestone:int=None,
             style:int=0,
             is_dynamic:bool=False,
-            checkin_num_before_deadline:int=1
+            checkin_num_before_deadline:int=1,
+            habit_id:str=None,
             ) -> None:
 
         '''Initializes a new Habit instance with the supplied arguments, can be normal or dynamic which indicate how the streak habit is interpreted and deadline met.'''
@@ -47,9 +48,9 @@ class Habit:
         #Datetime now for all initial variables
         date = datetime.now()
 
-        self.habit_id:str = ShortUUID().random(length=5).lower()
-        self.created_on:datetime = date
-        self.prev_deadline: datetime = date
+        self.habit_id:str = habit_id if habit_id else ShortUUID().random(length=5).lower()
+        self.created_on:datetime = date.strftime('%Y-%m-%d %H:%M:%S')
+        self.prev_deadline: datetime = date.strftime('%Y-%m-%d %H:%M:%S')
         self.next_deadline: datetime = add_streak_to_deadline(self.prev_deadline, interval_to_seconds(self.interval))
 
         #initialize counters
@@ -61,6 +62,60 @@ class Habit:
 
         #checkin list - childeren of habit
         self.checkins:list[CheckIn] = []
+
+    def overwrite(self,
+            user_id:str,
+            habit_id:str,
+            title:str,
+            description:str,
+            interval:str,
+            active:str,
+            start_from:str,
+            difficulity:int,
+            category:str,
+            moto:str,
+            importance:int,
+            milestone_streak:int,
+            style:int,
+            is_dynamic:str,
+            checkin_num_before_deadline:int,
+            dynamic_count:int,
+            created_on:str,
+            prev_deadline:str,
+            next_deadline:str,
+            streak:int,
+            success:int,
+            fail:int,
+            cost:float,
+            cost_accum:float):
+
+        """The function is used in combination with user_id to overwrite values of internal user class when a user already exists in DB"""
+        self.user_id:str = user_id
+        self.title:str = title
+        self.description:str = description
+        self.interval:str = interval
+        self.active:bool = bool(active)
+        self.start_from:datetime = lambda start_from: datetime.strptime(start_from,'%Y-%m-%d %H:%M:%S') if not start_from == '' else None
+        self.difficulity:int = difficulity
+        self.category:str = category
+        self.moto:str = moto
+        self.importance:int = importance
+        self.milestone_streak:int = milestone_streak
+        self.style:int = style
+        self.is_dynamic:bool = bool(is_dynamic)
+        self.checkin_num_before_deadline:int = checkin_num_before_deadline
+        self.habit_id:str = habit_id if habit_id else ShortUUID().random(length=5).lower()
+        self.dynamic_count:int = dynamic_count
+        self.created_on:datetime = datetime.strptime(created_on,'%Y-%m-%d %H:%M:%S')
+        self.prev_deadline: datetime = datetime.strptime(prev_deadline,'%Y-%m-%d %H:%M:%S')
+        self.next_deadline: datetime = datetime.strptime(next_deadline,'%Y-%m-%d %H:%M:%S')
+        self.streak:int = streak
+        self.success:int = success
+        self.fail:int = fail
+        self.cost:float = cost
+        self.cost_accum:float = cost_accum
+        self.checkins:list[CheckIn] = []
+        
 
     def update_deadlines(self) -> None:
         '''Updates the previous_deadline to the current and sets the next_deadline to current deadline plus habit interval length.'''
@@ -93,7 +148,7 @@ class Habit:
         if self.is_dynamic:
             raise ValueError('Tried to checkin with regular checkin method for a dynamic habit!')
         #Check if deadline is success or failed
-        now = datetime.now()
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         #print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now)
         if(now <= self.next_deadline):
             #Insert successful checkin to checkins list
@@ -117,7 +172,7 @@ class Habit:
         if not self.is_dynamic:
             raise ValueError('Tried to checkin with dynamic checkin method for a regular habit!')
         #Compare if we haven't exceeded deadline yet with less than required checkins
-        now = datetime.now()
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now, ' Checkin Target:', self.checkin_num_before_deadline)
         if(now <= self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline):
             #success dynamic checkin before deadline

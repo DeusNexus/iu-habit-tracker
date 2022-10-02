@@ -6,25 +6,44 @@ from Classes.Habit import Habit
 from Load import default_example_data
 
 class User:
-    def __init__(self,name:str,password:str) -> None:
+    def __init__(self,name:str,password:str,user_id:str=None) -> None:
         '''On init is used when setting up a User and receives a name and password. Using a salt the password is hashed and stored in encrypted manner. It creates a habit list for the user where the Habit objects are stored in. '''
-        self.user_id:str = ShortUUID().random(length=5).lower()
-        self.salt:bytes = bcrypt.gensalt(14)
+        self.user_id:str = user_id if user_id else ShortUUID().random(length=5).lower()
+        self.salt:bytes = bcrypt.gensalt(14) #Each new user gets a random salt
         self.name:str = name
-        self.password:bytes = bcrypt.hashpw(bytes(password,'utf8'),self.salt)
-        self.created:datetime = datetime.now()
-        self.last_login:datetime = datetime.now()
+        self.password:bytes = bcrypt.hashpw(bytes(password,encoding='utf8'),self.salt) if type(password) == str else password #Bcrypt uses bytes for password and hashedpassword arguments
+        self.created:datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.last_login:datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.habits:list = []
+
+    def overwrite(self,
+        user_id:str,
+        salt:str,
+        name:str,
+        password:str,
+        created:str,
+        last_login:str):
+        """The function is used in combination with user_id to overwrite values of internal user class when a user already exists in DB."""
+
+        # print("Overwrite password: ",password," Overwrite salt: ",salt)
+        self.user_id:str = str(user_id)
+        self.salt:bytes = bcrypt.gensalt(14) if type(salt) == str else salt #If salt is empty then generate a new one, else take the salt and store as bytes
+        # print("Overwrite password: ",password," Overwrite salt: ",self.salt)
+        self.name:str = str(name)
+        self.password:bytes = eval(password) if type(password) == str else password #Only hash password if it's not already in bytes format == already hashed!
+        # print("Overwrite password: ",password," Overwrite salt: ",self.salt)
+        self.created:datetime = datetime.strptime(created,'%Y-%m-%d %H:%M:%S')
+        self.last_login:datetime = datetime.strptime(last_login,'%Y-%m-%d %H:%M:%S')
 
     def set_last_login(self) -> None:
         '''Calling the function will update the last_login to the current datetime.'''
-        self.last_login = datetime.now()
+        self.last_login = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     def reset(self,type:int=0) -> None:
         '''Used to reset the user to initial state and depending on the provided type it will load example habits or leave the habits list empty.'''
         #reset to default OR clean without example data
-        self.created = datetime.now()
-        self.last_login = datetime.now()
+        self.created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.last_login = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         #default reset with example data
         if(type==0):
@@ -41,10 +60,12 @@ class User:
         '''Used for debugging and prints User data to the terminal.'''
         print(f'id:{self.user_id} \nsalt:{self.salt} \nname:{self.name} \npassword:{self.password} \ncreated:{self.created} \nlast_login:{self.last_login}')
     
-    def auth(self,password:bytes) -> bool:
+    def auth(self,password:str) -> bool:
         '''Checks if the provided password in bytes is valid against the hashed stored password in the User.'''
         #validate given password against hashed password
-        return bcrypt.checkpw(password, self.password)
+        # print("User/Auth: ",type(password),password,type(self.password),self.password)
+        psw = password if type(password) == bytes else bytes(password,encoding='utf8')
+        return bcrypt.checkpw(psw, self.password)
     
     def create_habit(
         self,

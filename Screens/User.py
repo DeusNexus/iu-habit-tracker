@@ -1,8 +1,10 @@
 import os
 import questionary as quest
 from time import sleep
+import datetime as datetime
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
+import traceback
 
 #Screens
 from Screens.View import view
@@ -22,9 +24,8 @@ def user_screen(active_user):
     try:
         clear()
         sleep(1)
-
-
-        print(f'\nWelcome back {active_user.name}, your last login was on {active_user.last_login.strftime("%A %d-%m-%Y, %H:%M")}.')
+        
+        print(f'\nWelcome back {active_user.name}, {("your last login was on " + active_user.last_login.strftime("%A %d-%m-%Y, %H:%M")) if type(active_user.last_login) == datetime.datetime else "this is the first time you login! This is a great way to keep building your habits, good luck."}.')
         print(f'\nYou currently have {len([habit for habit in active_user.habits if habit.active])} active and {len([habit for habit in active_user.habits if not habit.active])} inactive habits.')
 
 
@@ -56,3 +57,4 @@ def user_screen(active_user):
             
     except Exception as e:
         print(e)
+        traceback.print_exc()

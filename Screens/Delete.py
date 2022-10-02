@@ -3,6 +3,7 @@ import questionary as quest
 from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
+from Database import db_api as api
 
 def delete(active_user,user_screen):
         '''The delete screen is used for deleting habits. Habits list is printed and user can select which one to permanently remove. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
@@ -31,6 +32,7 @@ def delete(active_user,user_screen):
             sleep(1)
             print(f'Deleting "{h2d.title}" habit with id: {h2d.habit_id}...')
             active_user.habits.pop(index)
+            api.db_habits_delete(h2d.habit_id)
 
             #active_user.delete_habit(habit_id)
             sleep(1)
