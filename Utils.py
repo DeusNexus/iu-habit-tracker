@@ -18,7 +18,7 @@ def interval_to_seconds(intrv: str) -> int:
     if num == 0 or num < 1 or intrv[0] == '0':
         raise ValueError('Invalid Numerical Prefix')
     if char not in ['m','H','D','W','M','Y']:
-        raise ValueError(('Invalid postfix'))
+        raise ValueError('Invalid postfix')
         
     return num * time[char]
 

@@ -19,25 +19,33 @@ def delete(active_user,user_screen):
         else:
             habits:list = active_user.habits
             print('Total Available Habits: ',len(habits))
-            habit_strings:list =  [habit.title for habit in habits]
+            habit_strings:list =  [habit.title for habit in habits] + ['Return']
             ans = quest.select('Be careful, which habit would you like to permanently delete?', habit_strings).ask()
-            print('Showing each habit: ...')
-            h2d = None
-            index = 0
-            for habit in active_user.habits:
-                if ans == habit.title:
-                    h2d = habit
-                else:
-                    index += 1
-            sleep(1)
-            print(f'Deleting "{h2d.title}" habit with id: {h2d.habit_id}...')
-            active_user.habits.pop(index)
-            api.db_habits_delete(h2d.habit_id)
+            
+            if(ans == 'Return'):
+                sleep(1)
+                print('[!] Returning to User Screen...')
+                sleep(2)
+                clear()
+                user_screen(active_user)
+            else:
+                print('Showing each habit: ...')
+                h2d = None
+                index = 0
+                for habit in active_user.habits:
+                    if ans == habit.title:
+                        h2d = habit
+                    else:
+                        index += 1
+                sleep(1)
+                print(f'Deleting "{h2d.title}" habit with id: {h2d.habit_id}...')
+                active_user.habits.pop(index)
+                api.db_habits_delete(h2d.habit_id)
 
-            #active_user.delete_habit(habit_id)
-            sleep(1)
-            print('[!] Returning to User Screen...')
-            sleep(2)
-            clear()
-            user_screen(active_user)
+                #active_user.delete_habit(habit_id)
+                sleep(1)
+                print('[!] Returning to User Screen...')
+                sleep(2)
+                clear()
+                user_screen(active_user)
 

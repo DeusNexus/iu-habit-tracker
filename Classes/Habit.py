@@ -95,7 +95,7 @@ class Habit:
         self.description:str = description
         self.interval:str = interval
         self.active:bool = bool(active)
-        self.start_from:datetime = lambda start_from: datetime.strptime(start_from,'%Y-%m-%d %H:%M:%S') if not start_from == '' else None
+        self.start_from:datetime = datetime.strptime(start_from,'%Y-%m-%d %H:%M:%S') if not start_from == '' else None
         self.difficulity:int = difficulity
         self.category:str = category
         self.moto:str = moto
