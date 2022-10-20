@@ -14,6 +14,8 @@ from Classes.Users import Users
 #Import for Mock data
 from Load import load_users, load_user_data
 
+SLEEP_SPEED=0
+
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
@@ -71,11 +73,11 @@ def app(skip:bool=False) -> None:
                     'created':uu.created,
                     'last_login':uu.last_login,
                 }])
-                sleep(1)
+                sleep(1*SLEEP_SPEED)
                 print('[💾] Successfully registered! Lets get started.')
-                sleep(1)
+                sleep(1*SLEEP_SPEED)
                 print('[🔃] Reloading application... Please login to the Habit Tracker with your new account!\n')
-                sleep(1)
+                sleep(1*SLEEP_SPEED)
                 app(skip=True)
             else:
                 print('[⚠️] Try to register again until you get your login details right!')
@@ -119,10 +121,10 @@ def app(skip:bool=False) -> None:
                 login = False
                 ans = quest.select('The password you entered seems to be incorrect. Would you like to try again or go back to the start screen?',['Try again','Return to Start Screen']).ask()
                 if(ans == 'Return to Start Screen'):
-                    sleep(1)
+                    sleep(1*SLEEP_SPEED)
                     clear()
                     print('\n[↩️] Going back to Start Screen...\n')
-                    sleep(1)
+                    sleep(1*SLEEP_SPEED)
                     app()
                 else:
                     pass
@@ -137,7 +139,7 @@ if __name__ == "__main__":
         clear()
         for line in banner(users):
             print(line)
-            sleep(0.04)
+            sleep(0.04*SLEEP_SPEED)
         print('\n')
         app()
     except KeyboardInterrupt as e:

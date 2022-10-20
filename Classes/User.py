@@ -12,8 +12,8 @@ class User:
         self.salt:bytes = bcrypt.gensalt(14) #Each new user gets a random salt
         self.name:str = name
         self.password:bytes = bcrypt.hashpw(bytes(password,encoding='utf8'),self.salt) if type(password) == str else password #Bcrypt uses bytes for password and hashedpassword arguments
-        self.created:datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.last_login:datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.created:datetime = datetime.now()
+        self.last_login:datetime = datetime.now()
         self.habits:list = []
 
     def overwrite(self,
@@ -32,24 +32,25 @@ class User:
         self.name:str = str(name)
         self.password:bytes = eval(password) if type(password) == str else password #Only hash password if it's not already in bytes format == already hashed!
         # print("Overwrite password: ",password," Overwrite salt: ",self.salt)
-        self.created:datetime = datetime.strptime(created,'%Y-%m-%d %H:%M:%S')
-        self.last_login:datetime = datetime.strptime(last_login,'%Y-%m-%d %H:%M:%S')
+        self.created:datetime = datetime.strptime(created, "%Y-%m-%d %H:%M:%S")
+        self.last_login:datetime = datetime.strptime(last_login, "%Y-%m-%d %H:%M:%S")
 
     def set_last_login(self) -> None:
         '''Calling the function will update the last_login to the current datetime.'''
-        self.last_login = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.last_login = datetime.now()
     
     def reset(self,type:int=0) -> None:
         '''Used to reset the user to initial state and depending on the provided type it will load example habits or leave the habits list empty.'''
         #reset to default OR clean without example data
-        self.created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.last_login = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.created = datetime.now()
+        self.last_login = datetime.now()
 
         #default reset with example data
         if(type==0):
             self.habits = [] #insert example habits!!
             examples = default_example_data()
             for example in examples:
+                print('*example: ',*example)
                 self.create_habit(*example)
             
         #clean all habits and don't add example data
@@ -81,11 +82,12 @@ class User:
         milestone:int,
         style:int,
         is_dynamic:bool,
-        checkin_num_before_deadline:int
+        checkin_num_before_deadline:int,
+        habit_id: str
         ) -> None:
         '''Creates a new Habit for the user and appends it to the users's habits list.'''
         #Instantiate a habit and put it in the user habits list
-        self.habits.append(Habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline))
+        self.habits.append(Habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline, habit_id))
     
     def delete_habit(self,habit_id:str) -> None:
         '''Delete a habit from the user's habits list by providing the habit_id of the habit to be removed.'''

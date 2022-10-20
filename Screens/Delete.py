@@ -5,15 +5,17 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 from Database import db_api as api
 
+SLEEP_SPEED=0
+
 def delete(active_user,user_screen):
         '''The delete screen is used for deleting habits. Habits list is printed and user can select which one to permanently remove. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
         print('[Delete Screen]')
         if( len(active_user.habits) == 0 ): 
             print('You currently do not have any habits to delete!')
-            sleep(1)
+            sleep(1*SLEEP_SPEED)
             print('[!] Returning to User Screen...')
-            sleep(2)
+            sleep(2*SLEEP_SPEED)
             clear()
             user_screen(active_user)
         else:
@@ -23,9 +25,9 @@ def delete(active_user,user_screen):
             ans = quest.select('Be careful, which habit would you like to permanently delete?', habit_strings).ask()
             
             if(ans == 'Return'):
-                sleep(1)
+                sleep(1*SLEEP_SPEED)
                 print('[!] Returning to User Screen...')
-                sleep(2)
+                sleep(2*SLEEP_SPEED)
                 clear()
                 user_screen(active_user)
             else:
@@ -37,15 +39,15 @@ def delete(active_user,user_screen):
                         h2d = habit
                     else:
                         index += 1
-                sleep(1)
+                sleep(1*SLEEP_SPEED)
                 print(f'Deleting "{h2d.title}" habit with id: {h2d.habit_id}...')
                 active_user.habits.pop(index)
                 api.db_habits_delete(h2d.habit_id)
 
                 #active_user.delete_habit(habit_id)
-                sleep(1)
+                sleep(1*SLEEP_SPEED)
                 print('[!] Returning to User Screen...')
-                sleep(2)
+                sleep(2*SLEEP_SPEED)
                 clear()
                 user_screen(active_user)
 

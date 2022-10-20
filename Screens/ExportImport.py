@@ -4,6 +4,8 @@ from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
+SLEEP_SPEED=0
+
 def export_import(active_user,user_screen):
     '''The export/import screen is used for importing or exporting a user account using json files. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
@@ -15,14 +17,14 @@ def export_import(active_user,user_screen):
     questions = ['Export My Account', 'Import Account', 'Go Back to User Screen']
     ans = quest.select('What do you want to do?', questions).ask()
     if(ans==questions[0]):
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         pass
     elif(ans==questions[1]):
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         pass
     elif(ans==questions[2]):
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         print('[!] Returning to User Screen...')
-        sleep(2)
+        sleep(2*SLEEP_SPEED)
         clear()
         user_screen(active_user)

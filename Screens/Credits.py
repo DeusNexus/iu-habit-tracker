@@ -7,6 +7,8 @@ clear = lambda : os.system('tput reset')
 # of the terminal
 columns,lines = os.get_terminal_size()
 
+SLEEP_SPEED=0
+
 def credits(active_user,user_screen):
     '''The credits screen is used for showing credits of the creator, course and the university name and returns afterwards back to user screen. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
@@ -19,14 +21,14 @@ def credits(active_user,user_screen):
             plines.append(((lines-i) * (columns//lines) * '.' + ' Created by Fabian Menne - 2022'))
     for line in plines:
         print(line)
-        sleep(0.1)
+        sleep(0.1*SLEEP_SPEED)
     print('\nThank you for checking out the Habit Tracker! :D\n')
-    sleep(2)
+    sleep(2*SLEEP_SPEED)
     print('Returning to User Menu...')
     for i in range(3):
-        sleep(0.5)
+        sleep(0.5*SLEEP_SPEED)
         print(f'.... in {3-i} ....')
     print('[*] Loading User Screen!')
-    sleep(1)
+    sleep(1*SLEEP_SPEED)
     clear()
     user_screen(active_user)

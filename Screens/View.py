@@ -4,6 +4,8 @@ from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
+SLEEP_SPEED=0
+
 import Classes.Analytics as Analytics
 
 def view(active_user,user_screen):
@@ -12,9 +14,9 @@ def view(active_user,user_screen):
     print('[View Screen]')
     if( len(active_user.habits) == 0 ): 
         print('You currently do not have any habits to view!')
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         print('[!] Returning to User Screen...')
-        sleep(2)
+        sleep(2*SLEEP_SPEED)
         clear()
         user_screen(active_user)
     else:
@@ -31,26 +33,26 @@ def view(active_user,user_screen):
             print('longest_streak: ', Analytics.total_longest_streak(active_user.habits))
             print('most_punctual_sec: ', Analytics.most_punctual(active_user.habits))
             print('most_late_sec: ', Analytics.most_late(active_user.habits))
-            sleep(8)
+            sleep(8*SLEEP_SPEED)
             print('[!] Returning to User Screen...')
-            sleep(1)
+            sleep(1*SLEEP_SPEED)
             clear()
             user_screen(active_user)
             pass
 
         elif(ans == options[1]):
             print('Not Yet Implemented')
-            sleep(8)
+            sleep(8*SLEEP_SPEED)
             print('[!] Returning to User Screen...')
-            sleep(1)
+            sleep(1*SLEEP_SPEED)
             clear()
             user_screen(active_user)
             pass
         elif(ans == options[2]):
             print('Not Yet Implemented')
-            sleep(2)
+            sleep(2*SLEEP_SPEED)
             print('[!] Returning to User Screen...')
-            sleep(1)
+            sleep(1*SLEEP_SPEED)
             clear()
             user_screen(active_user)
             pass

@@ -5,6 +5,8 @@ from datetime import datetime
 from Database import db_api as api
 from Utils import interval_to_seconds
 
+SLEEP_SPEED=0
+
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
@@ -12,12 +14,12 @@ def new(active_user,user_screen):
     '''The new screen is used for creating new habits, which can be normal or dynamic. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[New Screen]')
-    questions = ['Regular Habit - Fixed Deadlines','Dynamic Habit - Specify how often to check in before deadline','Go back to User Screen']
+    questions = ['Regular Habit - Fixed Deadlines','Dynamic Habit - Specify how often to check in before deadline'] + ['[Return]']
     ans = quest.select('Choose what kind of Habit you want to create:', questions).ask()
 
     def questionary(is_dynamic:bool):
         #user input
-        title_ask = interval_ask = milestone_ask = True
+        title_ask = interval_ask = milestone_ask = checkin_num_before_deadline_ask = True
 
         while(title_ask):
             title = quest.text('What will be the title of the new habit? E.g. Gym Workout').ask()
@@ -39,7 +41,7 @@ def new(active_user,user_screen):
         if(is_dynamic):
             while(checkin_num_before_deadline_ask):
                 checkin_num_before_deadline = quest.text('How often do you want to perform the habit before a deadline? Type an integer numer; e.g. 1, 3, 5').ask()
-                if(type(checkin_num_before_deadline) == int):
+                if(type(int(checkin_num_before_deadline)) == int):
                     checkin_num_before_deadline_ask = False
                 else:
                     print('Please use an integer value for how many times you need to checkin before the deadline. E.g. 1, 3, 10')
@@ -125,31 +127,31 @@ def new(active_user,user_screen):
     
     #Regular habit
     if(ans == questions[0]):
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         is_dynamic = False
         questionary(is_dynamic)
 
         #Show habit before submit? Then return to user screen
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         print('Returning back to User Screen...')
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         user_screen(active_user)
 
     #Dynamic Habit
     elif(ans == questions[1]):
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         is_dynamic = True
         questionary(is_dynamic)
 
         #Show habit before submit? Then return to user screen
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         print('Returning back to User Screen...')
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         user_screen(active_user)
 
-    elif(ans==questions[2]):
+    elif(ans == '[Return]'):
         clear()
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         print('Returning back to User Screen...')
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         user_screen(active_user)

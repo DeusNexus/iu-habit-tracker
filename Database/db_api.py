@@ -186,7 +186,7 @@ def db_init() -> None:
                     moto text,
                     importance integer,
                     style integer,
-                    milestone integer,
+                    milestone_streak integer,
                     is_dynamic text,
                     checkin_num_before_deadline integer,
                     dynamic_count integer,
@@ -311,6 +311,23 @@ def db_checkins_insert(checkins) -> None:
         insert_checkin(checkin)
 
     # c.execute("""SELECT * FROM checkins""")
+    # print(c.fetchall())
+
+    conn.commit()
+    conn.close()
+
+def db_update_habit(habit_id, attr, val) -> None:
+    """Update habit attribute by providing the habit_id, the attribute name to change and the new value."""
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+
+    #habit examples
+    def update_habit(habit_id,attr,val):
+        c.execute(f"""UPDATE habits SET {attr} = :val WHERE habit_id IS :habit_id""", {"habit_id":habit_id,"attr":attr,"val":val})
+
+    update_habit(habit_id, attr, val)
+
+    # c.execute("""SELECT * FROM habits""")
     # print(c.fetchall())
 
     conn.commit()

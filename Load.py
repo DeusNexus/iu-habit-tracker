@@ -4,6 +4,8 @@ from Classes.CheckIn import CheckIn
 import traceback
 from time import sleep
 
+SLEEP_SPEED=0
+
 def User_Model(res):
     user = {
         'user_id':res[0],
@@ -77,16 +79,30 @@ def load_users(users):
         users.users[index].overwrite(um['user_id'],um['salt'],um['name'],um['password'],um['created'],um['last_login'])
         index += 1
     print(f'[✔️] Habit Tracker fully initialized!')
-    sleep(2)
+    sleep(2*SLEEP_SPEED)
     
 
 def default_example_data():
     '''Return example data to a provided user when resetting!'''
+    # [ title:str,
+    # description:str,
+    # interval:str,
+    # active:bool,
+    # start_from:datetime,
+    # difficulity:int,
+    # category:str,
+    # moto:str,
+    # importance:int,
+    # milestone:int,
+    # style:int,
+    # is_dynamic:bool,
+    # checkin_num_before_deadline:int,
+    # habit_id: str]
     return [
         [
-           'Cardio Workout', 'Cardio Activities','3D',True,None,1,'Sport','To become lean and more stamina',5,5,0,False,0
+           'Cardio Workout', 'Cardio Activities','3D',True,None,1,'Sport','To become lean and more stamina',5,5,0,False,0,'1thyr'
         ],[
-           'Weight Lifting', 'Muscle workout','2D',True,None,4,'Sport','For power in body',5,5,0,False,0
+           'Weight Lifting', 'Muscle workout','2D',True,None,4,'Sport','For power in body',5,5,0,False,0,'2trsr'
         ]
     ]
 
@@ -108,7 +124,7 @@ def load_user_data(users,user_id):
                     #The database sends them in a list, for convenience the list is parsed into a dict model for easier access to the different attributes
                     hm = Habit_Model(h)
                     #Create new habit but then use overwrite to fill out all database values, basically a temporary place holder.
-                    u.create_habit(hm['title'],hm['description'],hm['interval'],hm['active'],hm['start_from'],hm['difficulity'],hm['category'],hm['moto'],hm['importance'],hm['milestone_streak'],hm['style'],hm['is_dynamic'],hm['checkin_num_before_deadline'])
+                    u.create_habit(hm['title'],hm['description'],hm['interval'],hm['active'],hm['start_from'],hm['difficulity'],hm['category'],hm['moto'],hm['importance'],hm['milestone_streak'],hm['style'],hm['is_dynamic'],hm['checkin_num_before_deadline'],hm['habit_id'])
                     #Overwrite the habit instance with current db values
                     u.habits[h_index].overwrite(
                         user_id=hm['user_id'],

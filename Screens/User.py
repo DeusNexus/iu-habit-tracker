@@ -6,6 +6,8 @@ import datetime as datetime
 clear = lambda : os.system('tput reset')
 import traceback
 
+SLEEP_SPEED=0
+
 #Screens
 from Screens.View import view
 from Screens.New import new
@@ -23,7 +25,7 @@ def user_screen(active_user):
     '''The user screen acts as the main menu for the user. The user_screen function receives the User-object of the logged-in user and passes it further to the individual menu views. The individual views can then access user data and execute user functions.'''
     try:
         clear()
-        sleep(1)
+        sleep(1*SLEEP_SPEED)
         
         print(f'\nWelcome back {active_user.name}, {("your last login was on " + active_user.last_login.strftime("%A %d-%m-%Y, %H:%M")) if type(active_user.last_login) == datetime.datetime else "this is the first time you login! This is a great way to keep building your habits, good luck."}.')
         print(f'\nYou currently have {len([habit for habit in active_user.habits if habit.active])} active and {len([habit for habit in active_user.habits if not habit.active])} inactive habits.')

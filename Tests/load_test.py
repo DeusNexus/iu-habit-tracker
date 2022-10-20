@@ -1,21 +1,55 @@
 import pytest
 import Load
+from Database import db_api as api
 from Classes.Users import Users
 
-def test_load_example_data():
+def test_load_users():
     users = Users()
+    print('test_load_users users.users: ',users.users)
     assert users.users == [], 'Users was not created with empty list'
-    Load.load_example_data(users)
-    assert len(users.users ) > 0, 'No example data was inserted into users!'
+
+    #Retrieve persistent data from database IF it exists!
+    db_users = api.db_get_users()
+
+    Load.load_users(users)
+
+    print('test_load_users users.users: ',users.users)
+
+    assert len(users.users) > 0, 'No users were loaded!'
+
+    for u in users.users:
+        assert(u.user_id,u.salt,u.name,u.password,u.created,u.last_login), 'User does not have the correct required data for a regular init.'
+
+    
+def test_load_user_data():
+    users = Users()
+    print('test_load_users users.users: ',users.users)
+    assert users.users == [], 'Users was not created with empty list'
+
+    #Retrieve persistent data from database IF it exists!
+    db_users = api.db_get_users()
+
+    Load.load_users(users)
+
+    print('test_load_users users.users: ',users.users)
+
+    assert len(users.users) > 0, 'No users were loaded!'
+
+    #Data Load test starts here
+    for user in users.users:
+        Load.load_user_data(users, user.user_id)
+    
+    print("users.users[0]",users.users[0])
+    assert users.users[0].habits
+    #Make sure that first user has actual habit to check for!!
+    print("users.users[0].habits[0]",users.users[0].habits)
+    assert users.users[0].habits[0], 'No habit was found for the user habits, make sure first user in db does have a habit!'
+    #Make sure that first user has actual checkins for first habit!!
+    print("users.users[0].habits[0].checkins[0]",users.users[0].habits[0].checkins)
+    assert users.users[0].habits[0].checkins[0], 'No checkins were found for habit[0], make sure first user in db does have a habit with checkin to check for!'
 
 def test_default_example_data():
     for example_habit in Load.default_example_data():
         #Create Habit takes 14 arguments
+        print(example_habit)
         assert len(example_habit) == 14, 'The function did not provide the correct amount of arguments to create habits.'
-
-
-########### NOT DONE
-def test_load_user_data():
-    db_users = ''
-    Load.load_user_data(db_users)
-    assert True

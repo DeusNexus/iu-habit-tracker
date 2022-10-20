@@ -7,7 +7,7 @@ class CheckIn:
         self.user_id: user_id
         self.habit_id:str = habit_id
         self.checkin_id:str = checkin_id if checkin_id else ShortUUID().random(length=5).lower()
-        self.checkin_datetime:datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.checkin_datetime:datetime = datetime.now()
         self.deadline:datetime = deadline
         self.success:bool = success
         self.note:str = note
@@ -33,8 +33,8 @@ class CheckIn:
         self.user_id:str = user_id
         self.habit_id:str = habit_id
         self.checkin_id:str = checkin_id if checkin_id else ShortUUID().random(length=5).lower()
-        self.checkin_datetime:datetime = datetime.strptime(checkin_datetime,'%Y-%m-%d %H:%M:%S')
-        self.deadline:datetime = datetime.strptime(deadline,'%Y-%m-%d %H:%M:%S')
+        self.checkin_datetime:datetime = datetime(checkin_datetime)
+        self.deadline:datetime = datetime(deadline)
         self.success:bool = bool(success)
         self.note:str = note
         self.rating:int = rating

@@ -5,8 +5,6 @@ import os
 # of the terminal
 columns,lines = os.get_terminal_size()
 
-
-
 def banner(users) -> list[str]:
     '''Creates a dynamic welcome banner depending on the command-line column and lines of the open window.'''
     lines = []
