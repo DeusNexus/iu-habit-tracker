@@ -7,7 +7,7 @@ from Database import db_api as api
 
 from Constants import SLEEP_SPEED
 
-def delete(active_user,user_screen):
+def delete(active_user,user_screen,app):
         '''The delete screen is used for deleting habits. Habits list is printed and user can select which one to permanently remove. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
         print('[Delete Screen]')
@@ -17,7 +17,7 @@ def delete(active_user,user_screen):
             print('[!] Returning to User Screen...')
             sleep(2*SLEEP_SPEED)
             clear()
-            user_screen(active_user)
+            user_screen(active_user,app)
         else:
             habits:list = active_user.habits
             print('Total Available Habits: ',len(habits))
@@ -29,7 +29,7 @@ def delete(active_user,user_screen):
                 print('[!] Returning to User Screen...')
                 sleep(2*SLEEP_SPEED)
                 clear()
-                user_screen(active_user)
+                user_screen(active_user,app)
             else:
                 print('Showing each habit: ...')
                 h2d = None
@@ -49,5 +49,5 @@ def delete(active_user,user_screen):
                 print('[!] Returning to User Screen...')
                 sleep(2*SLEEP_SPEED)
                 clear()
-                user_screen(active_user)
+                user_screen(active_user,app)
 

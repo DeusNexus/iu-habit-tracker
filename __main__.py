@@ -43,6 +43,9 @@ def app(skip:bool=False) -> None:
     global login
     global active_user
 
+    #Reset in case we logout from a user  and return to this app
+    login = False
+
     if(not skip):
         print('[START SCREEN]')
         start = quest.confirm("Are you a new user?").ask()
@@ -114,7 +117,7 @@ def app(skip:bool=False) -> None:
                     
                     #Set login true and show the user screen.
                     login = True
-                    user_screen(active_user)
+                    user_screen(active_user,app)
                 except Exception as e:
                     print('[❌] Error in app() authentication user:',e)
             else:

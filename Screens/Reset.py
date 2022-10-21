@@ -6,7 +6,7 @@ clear = lambda : os.system('tput reset')
 
 from Constants import SLEEP_SPEED
 
-def reset(active_user,user_screen):
+def reset(active_user,user_screen,app):
     '''The reset screen is used for resetting the user to various default states. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[Reset Screen]')
@@ -29,4 +29,4 @@ def reset(active_user,user_screen):
         sleep(1*SLEEP_SPEED)
         print('[!] Returning back to User Screen...')
         sleep(1*SLEEP_SPEED)
-        user_screen(active_user)
+        user_screen(active_user,app)

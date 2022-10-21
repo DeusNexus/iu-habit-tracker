@@ -21,7 +21,7 @@ from Screens.Logout import logout
 from Classes.Analytics import earliest
 
 #The user screen acts as the main menu after a user logs-in to his personal account.
-def user_screen(active_user):
+def user_screen(active_user,app):
     '''The user screen acts as the main menu for the user. The user_screen function receives the User-object of the logged-in user and passes it further to the individual menu views. The individual views can then access user data and execute user functions.'''
     try:
         clear()
@@ -41,21 +41,21 @@ def user_screen(active_user):
         option = quest.select('[User Screen Options]', ['View','New','Edit','Delete','Export/Import','Reset','See Credits','Logout & Exit']).ask()
 
         if(option == 'View'):
-            view(active_user,user_screen)
+            view(active_user,user_screen,app)
         elif(option == 'New'):
-            new(active_user,user_screen)
+            new(active_user,user_screen,app)
         elif(option == 'Edit'):
-            edit(active_user,user_screen)
+            edit(active_user,user_screen,app)
         elif(option == 'Delete'):
-            delete(active_user,user_screen)
+            delete(active_user,user_screen,app)
         elif(option == 'Export/Import'):
-            export_import(active_user,user_screen)
+            export_import(active_user,user_screen,app)
         elif(option == 'Reset'):
-            reset(active_user,user_screen)
+            reset(active_user,user_screen,app)
         elif(option == 'See Credits'):
-            credits(active_user,user_screen)
+            credits(active_user,user_screen,app)
         elif(option == 'Logout & Exit'):
-            logout(active_user)
+            logout(active_user,app)
             
     except Exception as e:
         print(e)

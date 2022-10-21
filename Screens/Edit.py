@@ -7,7 +7,7 @@ from Database.db_api import db_update_habit
 
 from Constants import SLEEP_SPEED
 
-def edit(active_user,user_screen):
+def edit(active_user,user_screen,app):
         '''The edit screen is used for editing habits. Habits can be set to active or inactive, and have their unique details changed. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
         print('[Edit Screen]')
@@ -19,7 +19,7 @@ def edit(active_user,user_screen):
             print('[!] Returning to User Screen...')
             sleep(2*SLEEP_SPEED)
             clear()
-            user_screen(active_user)
+            user_screen(active_user,app)
 
         #User has habits, show list of habits to edit.
         else:
@@ -29,7 +29,7 @@ def edit(active_user,user_screen):
                 print('[!] Returning to User Screen...')
                 sleep(2*SLEEP_SPEED)
                 clear()
-                user_screen(active_user)
+                user_screen(active_user,app)
 
             #Make variable for current habit for easy access
             curr_habit = None
@@ -74,7 +74,7 @@ def edit(active_user,user_screen):
                     print('[!] Returning to User Screen...')
                     sleep(2*SLEEP_SPEED)
                     clear()
-                    user_screen(active_user)
+                    user_screen(active_user,app)
 
                 ## Attributes to edit and update in database / in-memory
                 if(anw_attr == 'title'):

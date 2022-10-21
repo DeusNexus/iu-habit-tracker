@@ -12,7 +12,7 @@ SLEEP_SPEED*5
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
-def new(active_user,user_screen):
+def new(active_user,user_screen,app):
     '''The new screen is used for creating new habits, which can be normal or dynamic. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[New Screen]')
@@ -138,7 +138,7 @@ def new(active_user,user_screen):
         sleep(1*SLEEP_SPEED)
         print('[!] Returning back to User Screen...')
         sleep(1*SLEEP_SPEED)
-        user_screen(active_user)
+        user_screen(active_user,app)
 
     #Dynamic Habit
     elif(ans == questions[1]):
@@ -150,11 +150,11 @@ def new(active_user,user_screen):
         sleep(1*SLEEP_SPEED)
         print('[!] Returning back to User Screen...')
         sleep(1*SLEEP_SPEED)
-        user_screen(active_user)
+        user_screen(active_user,app)
 
     elif(ans == 'Go Back to User Screen'):
         clear()
         sleep(1*SLEEP_SPEED)
         print('[!] Returning back to User Screen...')
         sleep(1*SLEEP_SPEED)
-        user_screen(active_user)
+        user_screen(active_user,app)

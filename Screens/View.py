@@ -8,7 +8,7 @@ from Constants import SLEEP_SPEED
 
 import Classes.Analytics as Analytics
 
-def view(active_user,user_screen):
+def view(active_user,user_screen,app):
     '''The view screen is used to display habits of the user and give various options to see all, an individual or filtered habits. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[View Screen]')
@@ -18,7 +18,7 @@ def view(active_user,user_screen):
         print('[!] Returning to User Screen...')
         sleep(2*SLEEP_SPEED)
         clear()
-        user_screen(active_user)
+        user_screen(active_user,app)
     else:
         options = ['All Habits','Individual Habit', 'Filter Criteria','Go Back to User Screen']
         ans = quest.select('Menu Options:', options).ask()
@@ -37,7 +37,7 @@ def view(active_user,user_screen):
             print('[!] Returning to User Screen...')
             sleep(1*SLEEP_SPEED)
             clear()
-            user_screen(active_user)
+            user_screen(active_user,app)
             pass
 
         elif(ans == options[1]):
@@ -46,7 +46,7 @@ def view(active_user,user_screen):
             print('[!] Returning to User Screen...')
             sleep(1*SLEEP_SPEED)
             clear()
-            user_screen(active_user)
+            user_screen(active_user,app)
             pass
         elif(ans == options[2]):
             print('Not Yet Implemented')
@@ -54,12 +54,12 @@ def view(active_user,user_screen):
             print('[!] Returning to User Screen...')
             sleep(1*SLEEP_SPEED)
             clear()
-            user_screen(active_user)
+            user_screen(active_user,app)
             pass
         elif(ans == options[3]):
             clear()
             sleep(1*SLEEP_SPEED)
             print('[!] Returning back to User Screen...')
             sleep(1*SLEEP_SPEED)
-            user_screen(active_user)
+            user_screen(active_user,app)
         

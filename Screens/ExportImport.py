@@ -11,7 +11,7 @@ from Database import db_api as api
 
 from Constants import SLEEP_SPEED
 
-def export_import(active_user,user_screen):
+def export_import(active_user,user_screen,app):
     '''The export/import screen is used for importing or exporting a user account using json files. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[Export/Import Screen]\n')
@@ -47,7 +47,7 @@ def export_import(active_user,user_screen):
         print('[!] Returning to User Screen...')
         sleep(2*SLEEP_SPEED)
         clear()
-        user_screen(active_user)
+        user_screen(active_user,app)
 
     #Import
     elif(ans==questions[1]):
@@ -78,7 +78,7 @@ def export_import(active_user,user_screen):
         print('[!] Returning to User Screen...')
         sleep(2*SLEEP_SPEED)
         clear()
-        user_screen(active_user)
+        user_screen(active_user,app)
 
     #Return
     elif(ans==questions[2]):
@@ -86,4 +86,4 @@ def export_import(active_user,user_screen):
         print('[!] Returning to User Screen...')
         sleep(2*SLEEP_SPEED)
         clear()
-        user_screen(active_user)
+        user_screen(active_user,app)

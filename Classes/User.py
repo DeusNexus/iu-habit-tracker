@@ -32,7 +32,6 @@ class User:
         self.name:str = str(name)
         self.password:bytes = eval(password) if type(password) == str else password #Only hash password if it's not already in bytes format == already hashed!
         # print("Overwrite password: ",password," Overwrite salt: ",self.salt)
-        print(created,last_login)
         self.created:datetime = datetime.strptime(created, "%Y-%m-%d %H:%M:%S.%f")
         self.last_login:datetime = datetime.strptime(last_login, "%Y-%m-%d %H:%M:%S.%f")
 
