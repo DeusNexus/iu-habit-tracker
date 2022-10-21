@@ -8,7 +8,7 @@ from Load import default_example_data
 class User:
     def __init__(self,name:str,password:str,user_id:str=None) -> None:
         '''On init is used when setting up a User and receives a name and password. Using a salt the password is hashed and stored in encrypted manner. It creates a habit list for the user where the Habit objects are stored in. '''
-        self.user_id:str = user_id if user_id else ShortUUID().random(length=5).lower()
+        self.user_id:str = ShortUUID().random(length=5).lower()
         self.salt:bytes = bcrypt.gensalt(14) #Each new user gets a random salt
         self.name:str = name
         self.password:bytes = bcrypt.hashpw(bytes(password,encoding='utf8'),self.salt) if type(password) == str else password #Bcrypt uses bytes for password and hashedpassword arguments
@@ -32,8 +32,9 @@ class User:
         self.name:str = str(name)
         self.password:bytes = eval(password) if type(password) == str else password #Only hash password if it's not already in bytes format == already hashed!
         # print("Overwrite password: ",password," Overwrite salt: ",self.salt)
-        self.created:datetime = datetime.strptime(created, "%Y-%m-%d %H:%M:%S")
-        self.last_login:datetime = datetime.strptime(last_login, "%Y-%m-%d %H:%M:%S")
+        print(created,last_login)
+        self.created:datetime = datetime.strptime(created, "%Y-%m-%d %H:%M:%S.%f")
+        self.last_login:datetime = datetime.strptime(last_login, "%Y-%m-%d %H:%M:%S.%f")
 
     def set_last_login(self) -> None:
         '''Calling the function will update the last_login to the current datetime.'''

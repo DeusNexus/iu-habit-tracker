@@ -4,7 +4,7 @@ from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
-SLEEP_SPEED=0
+from Constants import SLEEP_SPEED
 
 def logout(active_user):
         '''The logout screen exits the User screen and greets a goodbye message and finally terminates the habit tracker application. It receives the User-object, active_user, to access the user data.'''

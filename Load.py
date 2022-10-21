@@ -108,12 +108,19 @@ def default_example_data():
 
 def load_user_data(users,user_id):
     '''The load_user_data function receives the loggedin user and then fetches the latest local database to insert users habits and checkins. Its main purpose is to load data from storage to memory while the program operates.'''
+    
      #For each example user class now, create example habits and overwrite with database values.
+    
+    #Get the habits of the active user_id
     habits = api.db_get_habits(user_id)
+    #Get the checkins of the active user_id
     checkins = api.db_get_checkins(user_id)
 
+    #Now we need to got the the correct index in users.users where our active user is located.
+    #h_index will be at which habit we are of the active user, e.g. if there are 4 habits we will add the habit and then add all checkins, then move to the next habit until all are added.
     h_index = 0
     c_index = 0
+    
     try:
         for u in users.users:
             #Find the user that is logging in

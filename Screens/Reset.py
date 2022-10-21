@@ -4,7 +4,7 @@ from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
-SLEEP_SPEED=0
+from Constants import SLEEP_SPEED
 
 def reset(active_user,user_screen):
     '''The reset screen is used for resetting the user to various default states. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
@@ -27,6 +27,6 @@ def reset(active_user,user_screen):
     elif(ans==questions[2]):
         clear()
         sleep(1*SLEEP_SPEED)
-        print('Returning back to User Screen...')
+        print('[!] Returning back to User Screen...')
         sleep(1*SLEEP_SPEED)
         user_screen(active_user)

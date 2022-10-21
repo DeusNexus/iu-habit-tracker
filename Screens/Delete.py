@@ -5,7 +5,7 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 from Database import db_api as api
 
-SLEEP_SPEED=0
+from Constants import SLEEP_SPEED
 
 def delete(active_user,user_screen):
         '''The delete screen is used for deleting habits. Habits list is printed and user can select which one to permanently remove. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
@@ -21,10 +21,10 @@ def delete(active_user,user_screen):
         else:
             habits:list = active_user.habits
             print('Total Available Habits: ',len(habits))
-            habit_strings:list =  [habit.title for habit in habits] + ['Return']
+            habit_strings:list =  [habit.title for habit in habits] + ['Go Back to User Screen']
             ans = quest.select('Be careful, which habit would you like to permanently delete?', habit_strings).ask()
             
-            if(ans == 'Return'):
+            if(ans == 'Go Back to User Screen'):
                 sleep(1*SLEEP_SPEED)
                 print('[!] Returning to User Screen...')
                 sleep(2*SLEEP_SPEED)

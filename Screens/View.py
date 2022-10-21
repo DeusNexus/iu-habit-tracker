@@ -4,7 +4,7 @@ from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
-SLEEP_SPEED=0
+from Constants import SLEEP_SPEED
 
 import Classes.Analytics as Analytics
 
@@ -20,7 +20,7 @@ def view(active_user,user_screen):
         clear()
         user_screen(active_user)
     else:
-        options = ['All Habits','Individual Habit', 'Filter Criteria']
+        options = ['All Habits','Individual Habit', 'Filter Criteria','Go Back to User Screen']
         ans = quest.select('Menu Options:', options).ask()
         if(ans == options[0]):
             for habit in active_user.habits:
@@ -56,4 +56,10 @@ def view(active_user,user_screen):
             clear()
             user_screen(active_user)
             pass
+        elif(ans == options[3]):
+            clear()
+            sleep(1*SLEEP_SPEED)
+            print('[!] Returning back to User Screen...')
+            sleep(1*SLEEP_SPEED)
+            user_screen(active_user)
         

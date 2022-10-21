@@ -7,7 +7,7 @@ clear = lambda : os.system('tput reset')
 # of the terminal
 columns,lines = os.get_terminal_size()
 
-SLEEP_SPEED=0
+from Constants import SLEEP_SPEED
 
 def credits(active_user,user_screen):
     '''The credits screen is used for showing credits of the creator, course and the university name and returns afterwards back to user screen. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''

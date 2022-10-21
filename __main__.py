@@ -66,10 +66,10 @@ def app(skip:bool=False) -> None:
                 #Insert the new user into the database for persistency
                 uu = users.users[users_len]
                 api.db_users_insert([{
-                    'user_id':uu.name,
-                    'salt':uu.salt,
+                    'user_id':uu.user_id,
+                    'salt':f"{uu.salt}",
                     'name':uu.name,
-                    'password':uu.password,
+                    'password':f"{uu.password}",
                     'created':uu.created,
                     'last_login':uu.last_login,
                 }])

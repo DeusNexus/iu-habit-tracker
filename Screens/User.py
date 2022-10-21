@@ -6,7 +6,7 @@ import datetime as datetime
 clear = lambda : os.system('tput reset')
 import traceback
 
-SLEEP_SPEED=0
+from Constants import SLEEP_SPEED
 
 #Screens
 from Screens.View import view

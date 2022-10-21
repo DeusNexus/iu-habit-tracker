@@ -1,6 +1,8 @@
 import sqlite3
 from urllib.request import pathname2url
 
+from time import sleep
+
 DB_FILE = 'Database/app.db'
 
 users = [
@@ -9,24 +11,24 @@ users = [
         'salt':"b'$2b$14$bjwObtQ6eROB8au4gaquLu'",
         'name':'<Example> Jim - pw:pass1',
         'password':"b'$2b$14$bjwObtQ6eROB8au4gaquLuhBljuja6D649YEtMfIfw8HAlrMGGdH2'",
-        'created':'2022-06-27 06:59:59',
-        'last_login':'2022-09-28 14:29:00',
+        'created':'2022-06-27 06:59:59.0',
+        'last_login':'2022-09-28 14:29:00.0',
     },
     {
         'user_id':'qpiqk',
         'salt':"b'$2b$14$Xt4xMz37x9NqP7d9sIUFlO'",
         'name':'<Example> Rick - pw:pass2',
         'password':"b'$2b$14$Xt4xMz37x9NqP7d9sIUFlOSFVMVDKU.GtTUW/gGbSbVAP/7vmqqlK'",
-        'created':'2022-03-27 10:10:34',
-        'last_login':'2022-10-4 15:32:03',
+        'created':'2022-03-27 10:10:34.0',
+        'last_login':'2022-10-4 15:32:03.0',
     },
     {
         'user_id':'bw8tg',
         'salt':"b'$2b$14$8uNhMbB6dmvvMg5JKzF.3u'",
         'name':'<Example> Tom - pw:pass3',
         'password':"b'$2b$14$8uNhMbB6dmvvMg5JKzF.3uWOCIJvW7XWv4JaQTgM4G1m9n7iGNgrO'",
-        'created':'2022-02-11 05:12:43',
-        'last_login':'2022-05-15 19:54:15',
+        'created':'2022-02-11 05:12:43.0',
+        'last_login':'2022-05-15 19:54:15.0',
     },
 ]
 
@@ -48,9 +50,9 @@ habits = [
         'is_dynamic':'False',
         'checkin_num_before_deadline':0,
         'dynamic_count':0,
-        'created_on':'2022-05-11 05:12:43',
-        'prev_deadline':'2022-05-11 05:12:43',
-        'next_deadline':'2022-05-12 05:12:43',
+        'created_on':'2022-05-11 05:12:43.0',
+        'prev_deadline':'2022-05-11 05:12:43.0',
+        'next_deadline':'2022-05-12 05:12:43.0',
         'streak':0,
         'success':0,
         'fail':0,
@@ -74,9 +76,9 @@ habits = [
         'is_dynamic':'False',
         'checkin_num_before_deadline':0,
         'dynamic_count':0,
-        'created_on':'2022-05-13 05:12:43',
-        'prev_deadline':'2022-05-14 05:12:43',
-        'next_deadline':'2022-05-15 05:12:43',
+        'created_on':'2022-05-13 05:12:43.0',
+        'prev_deadline':'2022-05-14 05:12:43.0',
+        'next_deadline':'2022-05-15 05:12:43.0',
         'streak':1,
         'success':1,
         'fail':0,
@@ -100,9 +102,9 @@ habits = [
         'is_dynamic':'False',
         'checkin_num_before_deadline':0,
         'dynamic_count':0,
-        'created_on':'2022-06-13 05:12:43',
-        'prev_deadline':'2022-06-13 05:12:43',
-        'next_deadline':'2022-06-20 05:12:43',
+        'created_on':'2022-06-13 05:12:43.0',
+        'prev_deadline':'2022-06-13 05:12:43.0',
+        'next_deadline':'2022-06-20 05:12:43.0',
         'streak':0,
         'success':1,
         'fail':0,
@@ -116,8 +118,8 @@ checkins = [
         'user_id':'4z6cr',
         'habit_id':'6tryr',
         'checkin_id':'hed69',
-        'checkin_datetime':'2022-05-11 05:12:43',
-        'deadline':'2022-05-12 05:12:43',
+        'checkin_datetime':'2022-05-11 05:12:43.0',
+        'deadline':'2022-05-12 05:12:43.0',
         'success':'True',
         'note':'Great work',
         'rating':4,
@@ -130,8 +132,8 @@ checkins = [
         'user_id':'4z6cr',
         'habit_id':'6tryr',
         'checkin_id':'9luhm',
-        'checkin_datetime':'2022-05-11 05:12:43',
-        'deadline':'2022-05-13 05:12:43',
+        'checkin_datetime':'2022-05-11 05:12:43.0',
+        'deadline':'2022-05-13 05:12:43.0',
         'success':'True',
         'note':'Wow',
         'rating':5,
@@ -144,8 +146,8 @@ checkins = [
         'user_id':'4z6cr',
         'habit_id':'6tryr',
         'checkin_id':'cg3yacl',
-        'checkin_datetime':'2022-05-13 05:12:43',
-        'deadline':'2022-05-14 05:12:43',
+        'checkin_datetime':'2022-05-13 05:12:43.0',
+        'deadline':'2022-05-14 05:12:43.0',
         'success':'True',
         'note':'Amazing',
         'rating':4,
@@ -396,3 +398,85 @@ def db_exists():
         db_checkins_insert(checkins)
         print('[💽] A persistent database has been created and will be used in the future to store your user data!')
         # print(e)
+
+def db_export(user_id: str) -> dict:
+    '''Export user for the given user_id. Used in the Import/Export screen for the active user.
+    Generates a dict object containing user, habits and checkins which is returned to write out as json file.
+    '''
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+
+    c.execute("""SELECT * FROM users WHERE user_id IS :user_id""",{"user_id":user_id})
+    user = c.fetchall()
+
+    c.execute("""SELECT * FROM habits WHERE user_id IS :user_id""",{"user_id":user_id})
+    habits = c.fetchall()
+
+    c.execute("""SELECT * FROM checkins WHERE user_id IS :user_id""",{"user_id":user_id})
+    checkins = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return {
+        "user":user,
+        "habits":habits,
+        "checkins":checkins
+    }
+
+def db_import(user_obj) -> bool:
+    '''Imports user for the given user_obj. Used in the Import/Export screen for importing user  from json file.
+    If user_id already exist it will throw an error.
+    Iterates over user, habits and checkins to add them to the database.
+    '''
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+
+    # print(user_obj)
+
+    user = user_obj['user']
+    # print('user: ',user)
+    user_id = user[0][0]
+    # print('user_id: ',user_id)
+    habits = user_obj['habits']
+    # print('habits: ',habits)
+    checkins = user_obj['checkins']
+    # print('checkins: ',checkins)
+
+    #Find if user_id exists in db
+    c.execute("""SELECT * FROM users WHERE user_id IS :user_id""",{"user_id":user_id})
+    fetched_user = c.fetchall()
+
+    # print('Fetched User: ',fetched_user)
+    try:
+        if(not fetched_user):
+            print('No user_id yet exists, proceeding to insert data to db.')
+            #User does not yet exist, proceed to import.
+            print('Inserting user...')
+            db_users_insert(user)
+            print('Inserting habits for user...')
+            db_habits_insert(habits)
+            print('Inserting checkins for habits of user...')
+            db_checkins_insert(checkins)
+            print('Committing all inserts...')
+            conn.commit()
+            print('Closing connection to database...')
+            conn.close()
+            sleep(2)
+            return "success"
+
+        elif(user):
+            #User already exists
+            print('user_id already exists in db, cancelling operation.')
+            conn.commit()
+            conn.close()
+            sleep(2)
+            return "exists"
+
+    except Exception as e:
+        #Error
+        conn.commit()
+        conn.close()
+        print('db_import error:',e)
+        sleep(2)
+        return "error"

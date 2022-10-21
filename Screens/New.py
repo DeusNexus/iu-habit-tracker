@@ -5,7 +5,9 @@ from datetime import datetime
 from Database import db_api as api
 from Utils import interval_to_seconds
 
-SLEEP_SPEED=0
+from Constants import SLEEP_SPEED
+
+SLEEP_SPEED*5
 
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
@@ -14,7 +16,7 @@ def new(active_user,user_screen):
     '''The new screen is used for creating new habits, which can be normal or dynamic. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[New Screen]')
-    questions = ['Regular Habit - Fixed Deadlines','Dynamic Habit - Specify how often to check in before deadline'] + ['[Return]']
+    questions = ['Regular Habit - Fixed Deadlines','Dynamic Habit - Specify how often to check in before deadline'] + ['Go Back to User Screen']
     ans = quest.select('Choose what kind of Habit you want to create:', questions).ask()
 
     def questionary(is_dynamic:bool):
@@ -53,7 +55,7 @@ def new(active_user,user_screen):
         #No optional questions -> Fill default values
         if(not optional):
             active = True
-            start_from = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            start_from = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
             difficulity = None
             category = None
             moto = None
@@ -66,7 +68,7 @@ def new(active_user,user_screen):
             active = quest.confirm("Do you directly want to set the habit to active?").ask()
 
             if(active):
-                start_from = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                start_from = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
             else:
                 start_from = quest.text('Provide a start date when you want it to become active? Please follow the format YYYY/MM/DD HH:mm, e.g. 2050/03/28 15:35.').ask()
 
@@ -80,7 +82,7 @@ def new(active_user,user_screen):
 
             while(milestone_ask):
                 milestone = quest.text("Set milestone target for multiple successes. E.g. 5 for 5 consequent succesfull checkins!").ask()
-                if(type(milestone) == int):
+                if(type(int(milestone)) == int):
                     milestone_ask = False
                 else:
                     print("Use an integer to specify the milestone target.")
@@ -90,7 +92,8 @@ def new(active_user,user_screen):
         #Create habit with user input
         try:
             habit_index = len(active_user.habits)
-            active_user.create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline)
+            #When habit_id = None is passed it automatically generates one.
+            active_user.create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline,None)
             api.db_habits_insert([
                 {
                     'user_id':active_user.user_id,
@@ -133,7 +136,7 @@ def new(active_user,user_screen):
 
         #Show habit before submit? Then return to user screen
         sleep(1*SLEEP_SPEED)
-        print('Returning back to User Screen...')
+        print('[!] Returning back to User Screen...')
         sleep(1*SLEEP_SPEED)
         user_screen(active_user)
 
@@ -145,13 +148,13 @@ def new(active_user,user_screen):
 
         #Show habit before submit? Then return to user screen
         sleep(1*SLEEP_SPEED)
-        print('Returning back to User Screen...')
+        print('[!] Returning back to User Screen...')
         sleep(1*SLEEP_SPEED)
         user_screen(active_user)
 
-    elif(ans == '[Return]'):
+    elif(ans == 'Go Back to User Screen'):
         clear()
         sleep(1*SLEEP_SPEED)
-        print('Returning back to User Screen...')
+        print('[!] Returning back to User Screen...')
         sleep(1*SLEEP_SPEED)
         user_screen(active_user)
