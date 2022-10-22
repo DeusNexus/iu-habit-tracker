@@ -1,0 +1,1 @@
+The export folder contains all exported user json files that are generated when logged in to a specific user. The exported files can be used on another device (or as backup) to load the current user with all its habits and checkins.

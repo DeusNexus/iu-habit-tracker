@@ -1,0 +1,1 @@
+The import folder is used to easily find the json files that the user whishes to import to his local habit tracker database and can then proceed to login to the imported user. If the user already exists for the json file that is being imported, the operation will abort.
