@@ -480,3 +480,23 @@ def db_import(user_obj) -> bool:
         print('db_import error:',e)
         sleep(2)
         return "error"
+
+def db_reset_user_full(user_id:str) -> None:
+    '''Reset the user completely to a blank minimum state, user table is unaffected, both habits and checkins for user are removed for the given user_id.'''
+    
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        print(('Removing all checkins for user...'))
+        c.execute("""DELETE FROM checkins WHERE user_id IS :user_id""",{"user_id":user_id})
+        print('Removing all habits for user...')
+        c.execute("""DELETE FROM habits WHERE user_id IS :user_id""",{"user_id":user_id})
+        conn.commit()
+        conn.close()
+        print('[*] User account successfully completed a full reset')
+        
+    except Exception as e:
+        print('db_reset_user_full error:',e)
+        conn.commit()
+        conn.close()
+        sleep(2)

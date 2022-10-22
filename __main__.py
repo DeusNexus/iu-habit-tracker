@@ -14,17 +14,8 @@ from Classes.Users import Users
 #Import for Mock data
 from Load import load_users, load_user_data
 
-SLEEP_SPEED=0
-
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
-
-#Define Users
-users = Users()
-
-#active user will contain unique User
-active_user = None
-login = False
 
 #Import screens
 from Screens.Banner import banner
@@ -40,11 +31,11 @@ from Screens.Logout import logout
 
 def app(skip:bool=False) -> None:
     '''The main application, receives whether to skip as boolean the question whether to create a new user if user just created an account and directly goes to the user list to login.'''
-    global login
-    global active_user
+    global state
 
     #Reset in case we logout from a user  and return to this app
-    login = False
+    state['login'] = False
+    state['active_user'] = None
 
     if(not skip):
         print('[START SCREEN]')
@@ -63,11 +54,11 @@ def app(skip:bool=False) -> None:
             corr_info = quest.confirm("Is your information correct?").ask()
             if(corr_info):
                 clear()
-                users_len = len(users.users)
+                users_len = len(state['users'].users)
                 #Create User instance in memory
-                users.create(uname, password)
+                state['users'].create(uname, password)
                 #Insert the new user into the database for persistency
-                uu = users.users[users_len]
+                uu = state['users'].users[users_len]
                 api.db_users_insert([{
                     'user_id':uu.user_id,
                     'salt':f"{uu.salt}",
@@ -76,12 +67,12 @@ def app(skip:bool=False) -> None:
                     'created':uu.created,
                     'last_login':uu.last_login,
                 }])
-                sleep(1*SLEEP_SPEED)
+                sleep(1*state['SLEEP_SPEED'])
                 print('[💾] Successfully registered! Lets get started.')
-                sleep(1*SLEEP_SPEED)
+                sleep(1*state['SLEEP_SPEED'])
                 print('[🔃] Reloading application... Please login to the Habit Tracker with your new account!\n')
-                sleep(1*SLEEP_SPEED)
-                app(skip=True)
+                sleep(1*state['SLEEP_SPEED'])
+                state['app'](skip=True)
             else:
                 print('[⚠️] Try to register again until you get your login details right!')
         elif(register=='Exit Application'):
@@ -92,7 +83,7 @@ def app(skip:bool=False) -> None:
     #Already registered -> login to user screen
     else:
         #show registered users
-        login_options = [u.name for u in users.users] + ['[Exit]']
+        login_options = [u.name for u in state['users'].users] + ['[Exit]']
         selected_username = quest.select('The following users are registered to the application, please choose your username.', login_options ).ask()
 
         if(selected_username) == '[Exit]': 
@@ -100,60 +91,83 @@ def app(skip:bool=False) -> None:
             sleep(2)
             exit()
         
-        while(not login):
+        while(not state['login']):
             #input user password
             provided_password = quest.password('Enter your password:').ask()
             
+            #set user_index to 0
+            state["user_index"] = 0
+
             #set active user
-            for u in users.users:
+            for u in state['users'].users:
                 if u.name == selected_username:
-                    active_user = u
+                    state['active_user'] = u
                 else:
-                    pass
+                    #If user to login is not the one in the list then increment the index which is used for easy reference to state["users"].users[index]
+                    state['user_index'] += 1
+
             
             #check if password is valid else retry
-            if(active_user.auth(provided_password)):
+            if(state['active_user'].auth(provided_password)):
                 #If user data is available in DB load it into memory
                 try:
                     #Load all user data from db into the memory as classes.
-                    load_user_data(users,active_user.user_id)
+                    load_user_data(state['users'],state['active_user'].user_id)
                     
                     #Set login true and show the user screen.
-                    login = True
-                    user_screen(active_user,app)
+                    state['login'] = True
+                    state['user_screen'](state)
                 except Exception as e:
                     print('[❌] Error in app() authentication user:',e)
             else:
-                login = False
+                state['login'] = False
                 ans = quest.select('The password you entered seems to be incorrect. Would you like to try again or go back to the start screen?',['Try again','Return to Start Screen']).ask()
                 if(ans == 'Return to Start Screen'):
-                    sleep(1*SLEEP_SPEED)
+                    sleep(1*state['SLEEP_SPEED'])
                     clear()
                     print('\n[↩️] Going back to Start Screen...\n')
-                    sleep(1*SLEEP_SPEED)
+                    sleep(1*state['SLEEP_SPEED'])
                     app()
                 else:
                     pass
+
+#Application State
+state = {
+    'users': Users(),
+    'active_user': None,
+    'user_index':0,
+    'login': False,
+    'SLEEP_SPEED':1,
+    'app':app,
+    'user_screen': user_screen
+}
 
 #Start habit tracker application
 if __name__ == "__main__": 
     try:
         print("[🔎] Starting Habit Tracker and checking if database already exists...")
         api.db_exists()
+
         #Create Example Data from Classes
-        load_users(users)
+        load_users(state['users'])
         clear()
-        for line in banner(users):
+
+        for line in banner(state['users']):
             print(line)
-            sleep(0.04*SLEEP_SPEED)
+            sleep(0.04*state['SLEEP_SPEED'])
         print('\n')
-        app()
+
+        #Ask whether one wants to create a new account or not.
+        app(skip=False)
+
     except KeyboardInterrupt as e:
         print('\n\nYou have terminated the application with Ctrl+C!')
         exit()
+
     except ValueError as e:
         print('\n[❌] Wrong value was given!',e)
         traceback.print_exc()
+
     except TypeError as e:
         print('[❌] TypeError:',e)
         traceback.print_exc()

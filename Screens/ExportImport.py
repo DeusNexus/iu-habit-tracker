@@ -9,9 +9,7 @@ clear = lambda : os.system('tput reset')
 #Database for Export or Importing
 from Database import db_api as api
 
-from Constants import SLEEP_SPEED
-
-def export_import(active_user,user_screen,app):
+def export_import(state):
     '''The export/import screen is used for importing or exporting a user account using json files. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[Export/Import Screen]\n')
@@ -25,17 +23,17 @@ def export_import(active_user,user_screen,app):
     #Export
     if(ans==questions[0]):
         
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
 
         print('Attempting to creat JSON file for export..')
 
         try:
             #Retrieve all database tables for the user_id
-            user_obj = api.db_export(active_user.user_id)
+            user_obj = api.db_export(state["active_user"].user_id)
             # print('User_obj from database: ',user_obj,'\n')
 
             #Write the file out with formatting and json extension
-            with open(f'./EXPORT/habit_tracker-{active_user.name}-{active_user.user_id}.json',mode='w') as file:
+            with open(f'./EXPORT/habit_tracker-{state["active_user"].name}-{state["active_user"].user_id}.json',mode='w') as file:
                 json_formatted = json.dumps(user_obj)
                 # print('JSON Formatted: ',json_formatted)
                 file.write(json_formatted)
@@ -43,15 +41,15 @@ def export_import(active_user,user_screen,app):
         except Exception as e:
             print('[!] Something went wrong while exporting the user: ',e)
 
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         print('[!] Returning to User Screen...')
-        sleep(2*SLEEP_SPEED)
+        sleep(2*state["SLEEP_SPEED"])
         clear()
-        user_screen(active_user,app)
+        state["user_screen"](state)
 
     #Import
     elif(ans==questions[1]):
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         print('NOT IMPLEMENTED')
 
         #Look at files in current dir
@@ -74,16 +72,16 @@ def export_import(active_user,user_screen,app):
         else:
             print('No .json files found in IMPORT_EXPORT folder.')
 
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         print('[!] Returning to User Screen...')
-        sleep(2*SLEEP_SPEED)
+        sleep(2*state["SLEEP_SPEED"])
         clear()
-        user_screen(active_user,app)
+        state["user_screen"](state)
 
     #Return
     elif(ans==questions[2]):
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         print('[!] Returning to User Screen...')
-        sleep(2*SLEEP_SPEED)
+        sleep(2*state["SLEEP_SPEED"])
         clear()
-        user_screen(active_user,app)
+        state["user_screen"](state)

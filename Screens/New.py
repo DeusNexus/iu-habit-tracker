@@ -5,14 +5,10 @@ from datetime import datetime
 from Database import db_api as api
 from Utils import interval_to_seconds
 
-from Constants import SLEEP_SPEED
-
-SLEEP_SPEED*5
-
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
-def new(active_user,user_screen,app):
+def new(state):
     '''The new screen is used for creating new habits, which can be normal or dynamic. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
     print('[New Screen]')
@@ -91,13 +87,13 @@ def new(active_user,user_screen,app):
 
         #Create habit with user input
         try:
-            habit_index = len(active_user.habits)
+            habit_index = len(state["active_user"].habits)
             #When habit_id = None is passed it automatically generates one.
-            active_user.create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline,None)
+            state["active_user"].create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline,None)
             api.db_habits_insert([
                 {
-                    'user_id':active_user.user_id,
-                    'habit_id':active_user.habits[habit_index].habit_id,
+                    'user_id':state["active_user"].user_id,
+                    'habit_id':state["active_user"].habits[habit_index].habit_id,
                     'title':title,
                     'description':description,
                     'interval':interval,
@@ -111,15 +107,15 @@ def new(active_user,user_screen,app):
                     'milestone_streak':milestone,
                     'is_dynamic':is_dynamic,
                     'checkin_num_before_deadline':checkin_num_before_deadline,
-                    'dynamic_count':active_user.habits[habit_index].dynamic_count,
-                    'created_on':active_user.habits[habit_index].created_on,
-                    'prev_deadline':active_user.habits[habit_index].prev_deadline,
-                    'next_deadline':active_user.habits[habit_index].next_deadline,
-                    'streak':active_user.habits[habit_index].streak,
-                    'success':active_user.habits[habit_index].success,
-                    'fail':active_user.habits[habit_index].fail,
-                    'cost':active_user.habits[habit_index].cost,
-                    'cost_accum':active_user.habits[habit_index].cost_accum
+                    'dynamic_count':state["active_user"].habits[habit_index].dynamic_count,
+                    'created_on':state["active_user"].habits[habit_index].created_on,
+                    'prev_deadline':state["active_user"].habits[habit_index].prev_deadline,
+                    'next_deadline':state["active_user"].habits[habit_index].next_deadline,
+                    'streak':state["active_user"].habits[habit_index].streak,
+                    'success':state["active_user"].habits[habit_index].success,
+                    'fail':state["active_user"].habits[habit_index].fail,
+                    'cost':state["active_user"].habits[habit_index].cost,
+                    'cost_accum':state["active_user"].habits[habit_index].cost_accum
                 }
             ])
             print('[*] Added your habit!')
@@ -130,31 +126,31 @@ def new(active_user,user_screen,app):
     
     #Regular habit
     if(ans == questions[0]):
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         is_dynamic = False
         questionary(is_dynamic)
 
         #Show habit before submit? Then return to user screen
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         print('[!] Returning back to User Screen...')
-        sleep(1*SLEEP_SPEED)
-        user_screen(active_user,app)
+        sleep(1*state["SLEEP_SPEED"])
+        state["user_screen"](state)
 
     #Dynamic Habit
     elif(ans == questions[1]):
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         is_dynamic = True
         questionary(is_dynamic)
 
         #Show habit before submit? Then return to user screen
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         print('[!] Returning back to User Screen...')
-        sleep(1*SLEEP_SPEED)
-        user_screen(active_user,app)
+        sleep(1*state["SLEEP_SPEED"])
+        state["user_screen"](state)
 
     elif(ans == 'Go Back to User Screen'):
         clear()
-        sleep(1*SLEEP_SPEED)
+        sleep(1*state["SLEEP_SPEED"])
         print('[!] Returning back to User Screen...')
-        sleep(1*SLEEP_SPEED)
-        user_screen(active_user,app)
+        sleep(1*state["SLEEP_SPEED"])
+        state["user_screen"](state)
