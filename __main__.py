@@ -95,7 +95,10 @@ def app(skip:bool=False) -> None:
         login_options = [u.name for u in users.users] + ['[Exit]']
         selected_username = quest.select('The following users are registered to the application, please choose your username.', login_options ).ask()
 
-        if(selected_username) == '[Exit]': exit()
+        if(selected_username) == '[Exit]': 
+            print("Goodbye! Terminating application...")
+            sleep(2)
+            exit()
         
         while(not login):
             #input user password

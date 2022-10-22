@@ -38,3 +38,4 @@ def stylize(src: str, style:str = 'bold') -> str:
     if style not in styles: raise ValueError('Style is not available in styles!')
 
     return styles[style]+src+styles['end']
+    

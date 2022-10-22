@@ -38,7 +38,7 @@ def user_screen(active_user,app):
         print(f'\nPlease select one of the menu options to interact with the habit tracker.\n')
         
         #Screens
-        option = quest.select('[User Screen Options]', ['View','New','Edit','Delete','Export/Import','Reset','See Credits','Logout & Exit']).ask()
+        option = quest.select('[User Screen Options]', ['View','New','Edit','Delete','Export/Import','Reset','See Credits','Logout']).ask()
 
         if(option == 'View'):
             view(active_user,user_screen,app)
@@ -54,7 +54,7 @@ def user_screen(active_user,app):
             reset(active_user,user_screen,app)
         elif(option == 'See Credits'):
             credits(active_user,user_screen,app)
-        elif(option == 'Logout & Exit'):
+        elif(option == 'Logout'):
             logout(active_user,app)
             
     except Exception as e:
