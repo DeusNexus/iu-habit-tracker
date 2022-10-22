@@ -319,6 +319,24 @@ def db_checkins_insert(checkins) -> None:
     conn.commit()
     conn.close()
 
+#Delete checkins for habit_id
+def db_checkins_delete(habit_id) -> None:
+    """"Deletes checkins for the provided habit_id"""
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+
+    #habit examples
+    def delete_checkin(habit_id):
+        c.execute("""DELETE FROM checkins WHERE habit_id IS :habit_id""",{"habit_id":habit_id})
+
+    delete_checkin(habit_id)
+
+    # c.execute("""SELECT * FROM checkins""")
+    # print(c.fetchall())
+
+    conn.commit()
+    conn.close()
+
 def db_update_habit(habit_id, attr, val) -> None:
     """Update habit attribute by providing the habit_id, the attribute name to change and the new value."""
     conn = sqlite3.connect(DB_FILE)
