@@ -2,6 +2,7 @@ import sqlite3
 from urllib.request import pathname2url
 
 from time import sleep
+import Load
 
 DB_FILE = 'Database/app.db'
 
@@ -493,6 +494,34 @@ def db_reset_user_full(user_id:str) -> None:
         c.execute("""DELETE FROM habits WHERE user_id IS :user_id""",{"user_id":user_id})
         conn.commit()
         conn.close()
+        print('[*] User account successfully completed a full reset')
+        
+    except Exception as e:
+        print('db_reset_user_full error:',e)
+        conn.commit()
+        conn.close()
+        sleep(2)
+
+def db_reset_user_example_data(user_id:str) -> None:
+    '''Reset the user and insert example data (habits and checkins).'''
+    
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+
+        print(('Removing all checkins for user...'))
+        c.execute("""DELETE FROM checkins WHERE user_id IS :user_id""",{"user_id":user_id})
+        print('Removing all habits for user...')
+        c.execute("""DELETE FROM habits WHERE user_id IS :user_id""",{"user_id":user_id})
+
+        conn.commit()
+        conn.close()
+
+        habits, checkins = Load.default_example_data(user_id)
+        print('Inserting example habits for user...')
+        db_habits_insert(habits)
+        print('Inserting corresponding example checkins for user...')
+        db_checkins_insert(checkins)
         print('[*] User account successfully completed a full reset')
         
     except Exception as e:

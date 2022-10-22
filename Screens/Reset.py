@@ -22,6 +22,19 @@ def reset(state):
     #Full Reset with Example Data
     if(ans==questions[0]):
         sleep(1*state["SLEEP_SPEED"])
+        api.db_reset_user_example_data(state["active_user"].user_id)
+        sleep(1)
+        print('Reloading application, please login again to your fully resetted account.')
+        sleep(3)
+        clear()
+
+        #Clear out the in-memory objects, user will get their data loaded when they successfully login.
+        state["active_user"] = None
+        for u in state["users"].users:
+            u.habits = []
+        
+        #Return to login-screen to load resetted user from database so in-memory is consistent with db.
+        state["app"](skip=True)
         pass
 
     #Full Reset withou Example Data

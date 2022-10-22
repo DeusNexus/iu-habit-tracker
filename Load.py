@@ -3,6 +3,7 @@ from Database import db_api as api
 from Classes.CheckIn import CheckIn
 import traceback
 from time import sleep
+from shortuuid import ShortUUID
 
 SLEEP_SPEED=0
 
@@ -82,29 +83,135 @@ def load_users(users):
     sleep(2*SLEEP_SPEED)
     
 
-def default_example_data():
-    '''Return example data to a provided user when resetting!'''
-    # [ title:str,
-    # description:str,
-    # interval:str,
-    # active:bool,
-    # start_from:datetime,
-    # difficulity:int,
-    # category:str,
-    # moto:str,
-    # importance:int,
-    # milestone:int,
-    # style:int,
-    # is_dynamic:bool,
-    # checkin_num_before_deadline:int,
-    # habit_id: str]
-    return [
-        [
-           'Cardio Workout', 'Cardio Activities','3D',True,None,1,'Sport','To become lean and more stamina',5,5,0,False,0,'1thyr'
-        ],[
-           'Weight Lifting', 'Muscle workout','2D',True,None,4,'Sport','For power in body',5,5,0,False,0,'2trsr'
-        ]
+def default_example_data(user_id) -> tuple:
+    '''Generates example data for a user_id so that it is unique and returns the habits and checkins as a tuple.!'''
+    habits = [
+                {
+                    'user_id':user_id,
+                    'habit_id':ShortUUID().random(length=5).lower(),
+                    'title':'Example Habit 1',
+                    'description':'description_good for my mind',
+                    'interval':'1D',
+                    'active':'True',
+                    'start_from':'',
+                    'difficulity':5,
+                    'category':'Eduction',
+                    'moto':'The more you learn the better',
+                    'importance':5,
+                    'style':1,
+                    'milestone_streak':30,
+                    'is_dynamic':'False',
+                    'checkin_num_before_deadline':0,
+                    'dynamic_count':0,
+                    'created_on':'2022-05-11 05:12:43.0',
+                    'prev_deadline':'2022-05-11 05:12:43.0',
+                    'next_deadline':'2022-05-12 05:12:43.0',
+                    'streak':0,
+                    'success':0,
+                    'fail':0,
+                    'cost':0,
+                    'cost_accum':0
+                },
+                {
+                    'user_id':user_id,
+                    'habit_id':ShortUUID().random(length=5).lower(),
+                    'title':'Example Habit 2',
+                    'description':'Why not?',
+                    'interval':'1D',
+                    'active':'True',
+                    'start_from':'',
+                    'difficulity':1,
+                    'category':'Mental Health',
+                    'moto':'More joy is better',
+                    'importance':5,
+                    'style':1,
+                    'milestone_streak':365,
+                    'is_dynamic':'False',
+                    'checkin_num_before_deadline':0,
+                    'dynamic_count':0,
+                    'created_on':'2022-05-13 05:12:43.0',
+                    'prev_deadline':'2022-05-14 05:12:43.0',
+                    'next_deadline':'2022-05-15 05:12:43.0',
+                    'streak':1,
+                    'success':1,
+                    'fail':0,
+                    'cost':0,
+                    'cost_accum':0
+                },
+                {
+                    'user_id':user_id,
+                    'habit_id':ShortUUID().random(length=5).lower(),
+                    'title':'Example Habit 3',
+                    'description':'Movie night',
+                    'interval':'1W',
+                    'active':'True',
+                    'start_from':'',
+                    'difficulity':1,
+                    'category':'Entertainment',
+                    'moto':'To get inspired',
+                    'importance':2,
+                    'style':1,
+                    'milestone_streak':4,
+                    'is_dynamic':'False',
+                    'checkin_num_before_deadline':0,
+                    'dynamic_count':0,
+                    'created_on':'2022-06-13 05:12:43.0',
+                    'prev_deadline':'2022-06-13 05:12:43.0',
+                    'next_deadline':'2022-06-20 05:12:43.0',
+                    'streak':0,
+                    'success':1,
+                    'fail':0,
+                    'cost':4.95,
+                    'cost_accum':0
+                },
+            ]
+
+    checkins = [
+        {
+            'user_id':user_id,
+            'habit_id':habits[0]['habit_id'],
+            'checkin_id':ShortUUID().random(length=5).lower(),
+            'checkin_datetime':'2022-05-11 05:12:43.0',
+            'deadline':'2022-05-12 05:12:43.0',
+            'success':'True',
+            'note':'Great work',
+            'rating':4,
+            'cost':0,
+            'cost_accum':0,
+            'dynamic':'False',
+            'dynamic_count':0
+        },
+        {
+            'user_id':user_id,
+            'habit_id':habits[0]['habit_id'],
+            'checkin_id':ShortUUID().random(length=5).lower(),
+            'checkin_datetime':'2022-05-11 05:12:43.0',
+            'deadline':'2022-05-13 05:12:43.0',
+            'success':'True',
+            'note':'Wow',
+            'rating':5,
+            'cost':0,
+            'cost_accum':0,
+            'dynamic':'False',
+            'dynamic_count':0
+        },
+        {
+            'user_id':user_id,
+            'habit_id':habits[0]['habit_id'],
+            'checkin_id':ShortUUID().random(length=5).lower(),
+            'checkin_datetime':'2022-05-13 05:12:43.0',
+            'deadline':'2022-05-14 05:12:43.0',
+            'success':'True',
+            'note':'Amazing',
+            'rating':4,
+            'cost':0,
+            'cost_accum':0,
+            'dynamic':'False',
+            'dynamic_count':0
+        },
     ]
+
+    return (habits, checkins)
 
 def load_user_data(users,user_id):
     '''The load_user_data function receives the loggedin user and then fetches the latest local database to insert users habits and checkins. Its main purpose is to load data from storage to memory while the program operates.'''
