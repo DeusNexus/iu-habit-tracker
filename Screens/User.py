@@ -8,6 +8,7 @@ import traceback
 
 #Screens
 from Screens.View import view
+from Screens.Habit_Checkin import habit_checkin
 from Screens.New import new
 from Screens.Edit import edit
 from Screens.Delete import delete
@@ -36,10 +37,12 @@ def user_screen(state):
         print(f'\nPlease select one of the menu options to interact with the habit tracker.\n')
         
         #Screens
-        option = quest.select('[User Screen Options]', ['View','New','Edit','Delete','Export/Import','Reset','See Credits','Logout']).ask()
+        option = quest.select('[User Screen Options]', ['View','Checkin','New','Edit','Delete','Export/Import','Reset','See Credits','Logout']).ask()
 
         if(option == 'View'):
             view(state)
+        elif(option == 'Checkin'):
+            habit_checkin(state)
         elif(option == 'New'):
             new(state)
         elif(option == 'Edit'):

@@ -149,7 +149,7 @@ class Habit:
             raise ValueError('Tried to checkin with regular checkin method for a dynamic habit!')
         #Check if deadline is success or failed
         now = datetime.now() #.strftime('%Y-%m-%d %H:%M:%S.%f')
-        #print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now)
+        print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now)
         if(now <= self.next_deadline):
             #Insert successful checkin to checkins list
             self.checkins.append(CheckIn(self.next_deadline,True,note,rating,self.cost,self.cost_accum))
@@ -201,7 +201,12 @@ class Habit:
 
     def info_habit(self) -> None:
         '''Used for debugging to print Habit information to the terminal.'''
-        return print(f'[{self.title}: {self.description}] \nCreated on: {self.created_on} \nDeadline: {self.next_deadline}')
+        habit_type = '[]'
+        if self.is_dynamic:
+            habit_type = '[ Dynamic ]'
+        else:
+            habit_type = '[ Regular ]'
+        return print(f'[{self.title}: {self.description}] {habit_type}\nCreated on: {self.created_on} \nDeadline: {self.next_deadline}')
 
     def info_checkins(self) -> None:
         '''Used for debugging, iterates over the checkins of a habit and prints information out for each checkin.'''

@@ -69,10 +69,9 @@ def edit(state):
 
                 if(anw_attr == '[Return]'):
                     editing = False
-                    print('[!] Returning to User Screen...')
-                    sleep(2*state["SLEEP_SPEED"])
                     clear()
-                    state["user_screen"](state)
+                    #Go back to edit
+                    edit(state)
 
                 ## Attributes to edit and update in database / in-memory
                 if(anw_attr == 'title'):

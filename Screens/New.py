@@ -127,8 +127,7 @@ def new(state):
     #Regular habit
     if(ans == questions[0]):
         sleep(1*state["SLEEP_SPEED"])
-        is_dynamic = False
-        questionary(is_dynamic)
+        questionary(is_dynamic=False)
 
         #Show habit before submit? Then return to user screen
         sleep(1*state["SLEEP_SPEED"])
@@ -139,8 +138,7 @@ def new(state):
     #Dynamic Habit
     elif(ans == questions[1]):
         sleep(1*state["SLEEP_SPEED"])
-        is_dynamic = True
-        questionary(is_dynamic)
+        questionary(is_dynamic=True)
 
         #Show habit before submit? Then return to user screen
         sleep(1*state["SLEEP_SPEED"])
