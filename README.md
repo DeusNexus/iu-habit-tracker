@@ -21,8 +21,9 @@ Users can easily track their habits by creating or logging in to their own user-
 ## Dependencies
 Python 3.7+
 ## Installation Instruction
+`pip3 install -r requirements.txt`
 ## Run The Application
-Use docker? Or use python __main__.py?
+`python __main__.py`
 
 # User interface
 ## Welcome Screen

@@ -1,0 +1,5 @@
+bcrypt==4.0.1
+prompt-toolkit==3.0.31
+questionary==1.10.0
+shortuuid==1.0.9
+wcwidth==0.2.5

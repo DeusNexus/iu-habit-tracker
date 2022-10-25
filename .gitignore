@@ -11,3 +11,4 @@ htmlcov
 .coverage
 *.db
 /EXPORT/*.json
+habit-tracker-virtual-env
