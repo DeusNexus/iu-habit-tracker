@@ -51,7 +51,7 @@ def new(state):
         #No optional questions -> Fill default values
         if(not optional):
             active = True
-            start_from = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+            start_from = datetime.now()
             difficulity = None
             category = None
             moto = None
@@ -64,7 +64,7 @@ def new(state):
             active = quest.confirm("Do you directly want to set the habit to active?").ask()
 
             if(active):
-                start_from = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+                start_from = datetime.now()
             else:
                 start_from = quest.text('Provide a start date when you want it to become active? Please follow the format YYYY/MM/DD HH:mm, e.g. 2050/03/28 15:35.').ask()
 
@@ -97,7 +97,7 @@ def new(state):
                     'title':title,
                     'description':description,
                     'interval':interval,
-                    'active':active,
+                    'active':'True' if active else 'False',
                     'start_from':start_from,
                     'difficulity':difficulity,
                     'category':category,
@@ -105,7 +105,7 @@ def new(state):
                     'importance':importance,
                     'style':style,
                     'milestone_streak':milestone,
-                    'is_dynamic':is_dynamic,
+                    'is_dynamic':'True' if is_dynamic else 'False',
                     'checkin_num_before_deadline':checkin_num_before_deadline,
                     'dynamic_count':state["active_user"].habits[habit_index].dynamic_count,
                     'created_on':state["active_user"].habits[habit_index].created_on,

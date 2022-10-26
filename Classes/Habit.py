@@ -94,7 +94,7 @@ class Habit:
         self.title:str = title
         self.description:str = description
         self.interval:str = interval
-        self.active:bool = bool(active)
+        self.active:bool = True if active == 'True' else False
         self.start_from:datetime = datetime.strptime(start_from, "%Y-%m-%d %H:%M:%S.%f") if not start_from == '' else None
         self.difficulity:int = difficulity
         self.category:str = category
@@ -102,7 +102,7 @@ class Habit:
         self.importance:int = importance
         self.milestone_streak:int = milestone_streak
         self.style:int = style
-        self.is_dynamic:bool = bool(is_dynamic)
+        self.is_dynamic:bool = True if is_dynamic == 'True' else False
         self.checkin_num_before_deadline:int = checkin_num_before_deadline
         self.habit_id:str = habit_id if habit_id else ShortUUID().random(length=5).lower()
         self.dynamic_count:int = dynamic_count

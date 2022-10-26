@@ -12,7 +12,7 @@ def reset(state):
     print('[Reset Screen]')
     print('In case that you would like to completely reset your account then you can make use of this menu.\n')
     sleep(1*state["SLEEP_SPEED"])
-    print('You have two options, either delete all your creation date, login time, habits and then have example habit data loaded again \n')
+    print('You have two options, either delete all your habits and checkins and then have example habit data loaded again \n')
     sleep(1*state["SLEEP_SPEED"])
     print('or everything gets reset like stated above and no example data is added so you can start with your own personal journey.')
     sleep(1*state["SLEEP_SPEED"])

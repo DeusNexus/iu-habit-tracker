@@ -23,7 +23,7 @@ Python 3.7+
 ## Installation Instruction
 `pip3 install -r requirements.txt`
 ## Run The Application
-`python __main__.py`
+`python3 __main__.py`
 
 # User interface
 ## Welcome Screen

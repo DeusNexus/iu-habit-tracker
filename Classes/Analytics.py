@@ -74,14 +74,16 @@ def most_late(habits:list) -> int:
     #Store habit and avg time remaining in dict and find min avg (least time remains) and return the habit with its details
     #Make sure it's a pure function!
     try:
-        least_time_remain_sec = 1000000000000000000000
+        least_time_remain_sec = 100000000000000000000000000
         most_late_habit = None
         current_remain = 0
 
         #!!!! Make sure that avg time left until deadline for each habit is calculated and based on that see which is most late!
         for habit in habits:
             for checkin in habit.checkins:
+                print('Current remaining: ',current_remain)
                 current_remain = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
+                print('Current remaining: ',current_remain)
                 if current_remain < least_time_remain_sec and least_time_remain_sec != 0:
                     least_time_remain_sec = current_remain
                     most_late_habit = habit

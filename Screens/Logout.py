@@ -11,7 +11,7 @@ def logout(state):
         sleep(2*state["SLEEP_SPEED"])
         print('Logging out ...')
         for i in range(3):
-            sleep(1*state["SLEEP_SPEED"])
             print(f'.... in {3-i} ....')
+            sleep(1*state["SLEEP_SPEED"])
         clear()
         state["app"](skip=True)

@@ -50,7 +50,6 @@ def export_import(state):
     #Import
     elif(ans==questions[1]):
         sleep(1*state["SLEEP_SPEED"])
-        print('NOT IMPLEMENTED')
 
         #Look at files in current dir
         files = list(filter(lambda name: str.__contains__(name,".json"), os.listdir('./IMPORT')))
