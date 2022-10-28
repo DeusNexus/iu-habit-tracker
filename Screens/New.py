@@ -8,10 +8,14 @@ from Utils import interval_to_seconds
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
+#Text Styling
+from Utils import style
+
 def new(state):
     '''The new screen is used for creating new habits, which can be normal or dynamic. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
-    print('[New Screen]')
+    print(style('[New Screen]','UNDERLINE'))
+    print('Create new habits; give them a proper title, description and interval. Optionally you can add more details if you wish which can be used to filter the habit.\n')
     questions = ['Regular Habit - Fixed Deadlines','Dynamic Habit - Specify how often to check in before deadline'] + ['Go Back to User Screen']
     ans = quest.select('Choose what kind of Habit you want to create:', questions).ask()
 
@@ -20,15 +24,18 @@ def new(state):
         title_ask = interval_ask = milestone_ask = checkin_num_before_deadline_ask = True
 
         while(title_ask):
+            #Test user input
             title = quest.text('What will be the title of the new habit? E.g. Gym Workout').ask()
             if len(title) > 2: 
                 title_ask = False
             else:
                 print('Please use 3 or more characters for a title!')
 
+        #Test user input
         description = quest.text('Provide a description? E.g. Leg day').ask()
 
         while(interval_ask):
+            #Test user input
             interval = quest.text('Define an interval for the habit. You can use any whole number followed by m/H/D/W/M/Y; e.g. 3D or 1W or 30m').ask()
             try :
                 interval_to_seconds(interval)
@@ -38,13 +45,24 @@ def new(state):
 
         if(is_dynamic):
             while(checkin_num_before_deadline_ask):
+                #Test user input
                 checkin_num_before_deadline = quest.text('How often do you want to perform the habit before a deadline? Type an integer numer; e.g. 1, 3, 5').ask()
+                
+                #If number in string is a valid int
                 if(type(int(checkin_num_before_deadline)) == int):
-                    checkin_num_before_deadline_ask = False
+                    #When int is < 0, try again.
+                    if(int(checkin_num_before_deadline) < 1 ):
+                        print('Please provide a integer larger than 0!')
+                    #When valid, set loop to false and continue outer code
+                    else:
+                        checkin_num_before_deadline_ask = False
+                
+                #If string does not represent a valid int, ask again (return to top of while-loop)
                 else:
                     print('Please use an integer value for how many times you need to checkin before the deadline. E.g. 1, 3, 10')
         else:
-            checkin_num_before_deadline = 1
+            #If its not dynamic, set None value
+            checkin_num_before_deadline = None
 
         optional = quest.confirm("Fill out optional fields? E.g. active, difficulity, category, moto, importance, milestone target.").ask()
 
@@ -66,17 +84,21 @@ def new(state):
             if(active):
                 start_from = datetime.now()
             else:
+                #Test user input
                 start_from = quest.text('Provide a start date when you want it to become active? Please follow the format YYYY/MM/DD HH:mm, e.g. 2050/03/28 15:35.').ask()
 
             difficulity = quest.select("How difficult do you find it to perform?",['1','2','3','4','5']).ask()
 
+            #Test user input
             category = quest.text('Do you want to assign this habit to a common category? Similar habits will be grouped together. E.g.: Eduction, Sport, Hobby').ask()
 
+            #Test user input
             moto = quest.text('What is your moto you would like to remind yourself of to keep doing the habit?').ask()
 
             importance = quest.select("How important do you find it to perform?",['1','2','3','4','5']).ask()
 
             while(milestone_ask):
+                #Test user input
                 milestone = quest.text("Set milestone target for multiple successes. E.g. 5 for 5 consequent succesfull checkins!").ask()
                 if(type(int(milestone)) == int):
                     milestone_ask = False

@@ -6,15 +6,18 @@ clear = lambda : os.system('tput reset')
 
 from Database import db_api as api
 
+#Text Styling
+from Utils import style
+
 def reset(state):
     '''The reset screen is used for resetting the user to various default states. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
-    print('[Reset Screen]')
-    print('In case that you would like to completely reset your account then you can make use of this menu.\n')
+    print(style('[Reset Screen]','UNDERLINE'))
+    print(style('In case that you would like to completely reset your account then you can make use of this menu.','RED'))
     sleep(1*state["SLEEP_SPEED"])
-    print('You have two options, either delete all your habits and checkins and then have example habit data loaded again \n')
+    print(style('You have two options, either delete all your habits and checkins and then have example habit data loaded again','RED'))
     sleep(1*state["SLEEP_SPEED"])
-    print('or everything gets reset like stated above and no example data is added so you can start with your own personal journey.')
+    print(style('or everything gets reset like stated above and no example data is added so you can start with your own personal journey.\n','RED'))
     sleep(1*state["SLEEP_SPEED"])
     questions = ['Full Reset with Example Data', 'Full Reset without Example Data', 'Go Back to User Screen']
     ans = quest.select('What would you like to do?',questions).ask()

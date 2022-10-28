@@ -27,15 +27,23 @@ def add_streak_to_deadline(deadline: datetime, seconds: int) -> datetime:
     
     return datetime.fromtimestamp((seconds + deadline.timestamp()))
 
-def stylize(src: str, style:str = 'bold') -> str:
+def style(src: str, style:str = 'BOLD') -> str:
     '''Receives text as string, a pre-defined style and then decorates the string with the style codes and returns the styled string as string.'''
     
     styles = {
-        'bold': '\033[1m',
-        'end': '\033[0m'
+        'PURPLE': '\033[95m',
+        'CYAN': '\033[96m',
+        'DARKCYAN': '\033[36m',
+        'BLUE': '\033[94m',
+        'GREEN': '\033[92m',
+        'YELLOW': '\033[93m',
+        'RED': '\033[91m',
+        'BOLD': '\033[1m',
+        'UNDERLINE': '\033[4m',
+        'END': '\033[0m'
     }
 
     if style not in styles: raise ValueError('Style is not available in styles!')
 
-    return styles[style]+src+styles['end']
+    return styles[style]+src+styles['END']
     

@@ -4,6 +4,7 @@ from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 from Database import db_api as api
+from datetime import datetime
 
 def habit_checkin(state):
         '''Generates screen for all available habit checkins. Lists habits available to checkin, whether deadline is due or still on-time and updates the database and in-memory objects accordingly.'''
@@ -25,17 +26,18 @@ def habit_checkin(state):
             habits:list = [habit for habit in state["active_user"].habits if habit.active]
 
             print('Total Available Habits for Checkin: ',len(habits))
-            habit_strings:list =  [habit.title for habit in habits] + ['Go Back to User Screen']
+            habit_strings:list =  [
+                f'{idx+1} [{"Dynamic" if habit.is_dynamic else "Regular"}]'+ 
+                f'[{"DEADLINE DUE" if datetime.now() > habit.next_deadline else "IN TIME"}] {habit.title} - '+ 
+                f'Streak: {habit.streak} - '+
+                f'Deadline: {habit.next_deadline.strftime("%Y-%m-%d %H:%M")}\n'
+                for idx,habit in enumerate(habits)] + ['Go Back to User Screen']
             ans = quest.select('Which habit would you like to checkin for?', habit_strings).ask()
 
-            h2c = None
-            
-            for habit in habits:
-                #Set variable to reference the habit in question to checkin to.
-                if habit.title == ans:
-                    h2c = habit
-                else:
-                    pass
+            #First check if we don't want to return (last element in list) since that one doesn't have an index (this could have been done in a better way, but for simplicity of program should be fine.)            
+            if(ans != habit_strings[-1]):
+                #Indexes are not starting from 0 so we substract 1
+                h2c = habits[int(ans[0])-1]
             
             #Option Return
             if(ans == 'Go Back to User Screen'):

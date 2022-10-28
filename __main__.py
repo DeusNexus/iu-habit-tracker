@@ -29,16 +29,27 @@ from Screens.Reset import reset
 from Screens.Credits import credits
 from Screens.Logout import logout
 
+#Text Styling
+from Utils import style
+
 def app(skip:bool=False) -> None:
     '''The main application, receives whether to skip as boolean the question whether to create a new user if user just created an account and directly goes to the user list to login.'''
-    global state
+    
+    #Application State
+    state = {
+        'users': Users(),
+        'active_user': None,
+        'user_index':0,
+        'login': False,
+        'SLEEP_SPEED':1,
+        'app':app,
+        'user_screen': user_screen
+    }
 
-    #Reset in case we logout from a user  and return to this app
-    state['login'] = False
-    state['active_user'] = None
+    load_users(state['users'])
 
     if(not skip):
-        print('[START SCREEN]')
+        print(style('\n[START SCREEN]','UNDERLINE'))
         start = quest.confirm("Are you a new user?").ask()
     else:
         start = False
@@ -131,31 +142,11 @@ def app(skip:bool=False) -> None:
                 else:
                     pass
 
-#Application State
-state = {
-    'users': Users(),
-    'active_user': None,
-    'user_index':0,
-    'login': False,
-    'SLEEP_SPEED':1,
-    'app':app,
-    'user_screen': user_screen
-}
-
 #Start habit tracker application
 if __name__ == "__main__": 
     try:
-        print("[🔎] Starting Habit Tracker and checking if database already exists...")
+        print(style("[🔎] Starting Habit Tracker and checking if database already exists...",'BLUE'))
         api.db_exists()
-
-        #Create Example Data from Classes
-        load_users(state['users'])
-        clear()
-
-        for line in banner(state['users']):
-            print(line)
-            sleep(0.04*state['SLEEP_SPEED'])
-        print('\n')
 
         #Ask whether one wants to create a new account or not.
         app(skip=False)
@@ -167,6 +158,7 @@ if __name__ == "__main__":
     except ValueError as e:
         print('\n[❌] Wrong value was given!',e)
         traceback.print_exc()
+        pass
 
     except TypeError as e:
         print('[❌] TypeError:',e)

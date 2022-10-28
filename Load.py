@@ -4,6 +4,7 @@ from Classes.CheckIn import CheckIn
 import traceback
 from time import sleep
 from shortuuid import ShortUUID
+from Utils import style
 
 SLEEP_SPEED=0
 
@@ -68,10 +69,11 @@ def load_users(users):
     '''Creates Example Users, Habits and Check-ins in memory from database.'''
     api.db_view()
     db_users = api.db_get_users()
-    print(f'[🔍] Loaded {len(db_users)} available users from sqlite3 database...')
+    print(style(f'[🔍] Loaded {len(db_users)} available users from sqlite3 database...','GREEN'))
     #[('userid_1', 'salt24662', 'Jim', 'pass1', '2022-06-27 06:59:59', '2022-09-28 14:29:00'),...]    
     # print(db_users)
     #For each user in the database, create a user class in memory and then overwrite with database values.
+
     index=0
     for u in db_users:
         print(f'[⏳] Initializing {index+1} of {len(db_users)}...')
@@ -79,7 +81,7 @@ def load_users(users):
         users.create(um['name'],um['password'])
         users.users[index].overwrite(um['user_id'],um['salt'],um['name'],um['password'],um['created'],um['last_login'])
         index += 1
-    print(f'[✔️] Habit Tracker fully initialized!')
+    print(style(f'[✔️] Habit Tracker fully initialized!','GREEN'))
     sleep(2*SLEEP_SPEED)
     
 

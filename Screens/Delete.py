@@ -5,10 +5,14 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 from Database import db_api as api
 
+#Text Styling
+from Utils import style
+
 def delete(state):
         '''The delete screen is used for deleting habits. Habits list is printed and user can select which one to permanently remove. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
-        print('[Delete Screen]')
+        print(style('[Delete Screen]','UNDERLINE'))
+        print(style('\nBe careful, deleting a habit will PERMANENTLY remove it. There is no way to recover it later on!','RED'))
 
         #In case no habits are available, show message and return to user_screen
         if( len(state["active_user"].habits) == 0 ): 
@@ -22,7 +26,7 @@ def delete(state):
         #If user has habits, show the list of titles so one can be selected for deletion.
         else:
             habits:list = state["active_user"].habits
-            print('Total Available Habits: ',len(habits))
+            print(style(f'Total Available Habits: {len(habits)}\n','CYAN'))
             habit_strings:list =  [habit.title for habit in habits] + ['Go Back to User Screen']
             ans = quest.select('Be careful, which habit would you like to permanently delete?', habit_strings).ask()
             
