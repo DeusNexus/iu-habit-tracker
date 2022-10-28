@@ -122,6 +122,16 @@ class Habit:
         old_deadline = self.prev_deadline
         self.prev_deadline: datetime = self.next_deadline
         self.next_deadline: datetime = add_streak_to_deadline(self.prev_deadline, interval_to_seconds(self.interval))
+        print(f'Old Deadline: {old_deadline}   New Deadline: {self.next_deadline}   Interval: {self.interval}')
+
+    def update_deadlines_failed(self) -> None:
+        '''Updates the previous_deadline to the current and sets the next_deadline to current deadline based on date in the future plus the interval.'''
+        old_deadline = self.prev_deadline
+        self.prev_deadline: datetime = self.next_deadline
+
+        #Add interval to now instead of old deadline (can be far in the past and give a new deadline in the past).
+        self.next_deadline: dattime = add_streak_to_deadline(datetime.now(), interval_to_seconds(self.interval))
+        print(f'Old Deadline: {old_deadline}   New Deadline: {self.next_deadline}   Interval: {self.interval}')
 
     def incr_streak(self) -> None:
         '''Increases the habit streak by 1'''
@@ -152,7 +162,19 @@ class Habit:
         print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now)
         if(now <= self.next_deadline):
             #Insert successful checkin to checkins list
-            self.checkins.append(CheckIn(self.next_deadline,True,note,rating,self.cost,self.cost_accum))
+            self.checkins.append(
+                CheckIn(
+                    user_id=self.user_id,
+                    habit_id=self.habit_id,
+                    checkin_id='', #Generated instead
+                    deadline=self.next_deadline,
+                    success=True,   #Deadline was met
+                    note=note,
+                    rating=rating,
+                    cost=self.cost,
+                    cost_accum=self.cost_accum,
+                    dynamic=False,
+                    dynamic_count=0))
             #success checkin before deadline
             self.incr_streak()
             self.update_deadlines()
@@ -160,10 +182,22 @@ class Habit:
         else:
             #failed checkin
             #Insert failed checkin to checkins list
-            self.checkins.append(CheckIn(self.next_deadline,False,note,rating,self.cost,self.cost_accum))
-
+            self.checkins.append(
+                CheckIn(
+                    user_id=self.user_id,
+                    habit_id=self.habit_id,
+                    checkin_id='', #Generated instead
+                    deadline=self.next_deadline,
+                    success=False,   #Deadline was met
+                    note=note,
+                    rating=rating,
+                    cost=self.cost,
+                    cost_accum=self.cost_accum,
+                    dynamic=False,
+                    dynamic_count=0)
+                    )
             self.reset_streak()
-            self.update_deadlines()
+            self.update_deadlines_failed()
             
 
     def dynamic_checkin(self,note:str,rating:int):
@@ -173,17 +207,43 @@ class Habit:
             raise ValueError('Tried to checkin with dynamic checkin method for a regular habit!')
         #Compare if we haven't exceeded deadline yet with less than required checkins
         now = datetime.now() #.strftime('%Y-%m-%d %H:%M:%S.%f')
-        print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now, ' Checkin Target:', self.checkin_num_before_deadline)
+        
         if(now <= self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline):
             #success dynamic checkin before deadline
             self.dynamic_incr()
             #Insert successful checkin to checkins list
-            self.checkins.append(CheckIn(self.next_deadline,True,note,rating,self.cost,self.cost_accum,True,self.dynamic_count))
+            self.checkins.append(
+                CheckIn(
+                    user_id=self.user_id,
+                    habit_id=self.habit_id,
+                    checkin_id='',
+                    deadline=self.next_deadline,
+                    success=True,   #Dynamic (partial) deadline was met
+                    note=note,
+                    rating=rating,
+                    cost=self.cost,
+                    cost_accum=self.cost_accum,
+                    dynamic=True,
+                    dynamic_count=self.dynamic_count)
+            )
 
         #Still before deadline but this checkin target is met and therefor the dynamic habit has completed its goal for current deadline!    
         elif(now <= self.next_deadline and self.dynamic_count >= self.checkin_num_before_deadline):
             #Insert final checkin to checkins list before resetting the habit counters
-            self.checkins.append(CheckIn(self.next_deadline,True,note,rating,self.cost,self.cost_accum,True,self.dynamic_count))
+            self.checkins.append(
+                CheckIn(
+                    user_id=self.user_id,
+                    habit_id=self.habit_id,
+                    checkin_id='',
+                    deadline=self.next_deadline,
+                    success=True,   #Deadline was met
+                    note=note,
+                    rating=rating,
+                    cost=self.cost,
+                    cost_accum=self.cost_accum,
+                    dynamic=True,
+                    dynamic_count=self.dynamic_count)
+            )
             #Reset counter for next deadline
             self.dynamic_reset()
             #Update deadline to next interval
@@ -192,11 +252,24 @@ class Habit:
         #Failed checkins, deadline is met but dynamic checkin count hasn't meet target
         elif(now > self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline):
             #Insert failed checkin to checkins list
-            self.checkins.append(CheckIn(self.next_deadline,False,note,rating,self.cost,self.cost_accum,True,self.dynamic_count))
+            self.checkins.append(
+                CheckIn(
+                    user_id=self.user_id,
+                    habit_id=self.habit_id,
+                    checkin_id='',
+                    deadline=self.next_deadline,
+                    success=False,   #Deadline failed
+                    note=note,
+                    rating=rating,
+                    cost=self.cost,
+                    cost_accum=self.cost_accum,
+                    dynamic=True,
+                    dynamic_count=self.dynamic_count)
+            )
              #failed checkin
             self.reset_streak()
-            self.update_deadlines()
-            self.dynamic_reset()            
+            self.update_deadlines_failed()
+            self.dynamic_reset()        
 
 
     def info_habit(self) -> None:

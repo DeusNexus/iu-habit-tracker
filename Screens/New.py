@@ -112,6 +112,7 @@ def new(state):
             habit_index = len(state["active_user"].habits)
             #When habit_id = None is passed it automatically generates one.
             state["active_user"].create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline,None)
+            #Insert the habit into the db
             api.db_habits_insert([
                 {
                     'user_id':state["active_user"].user_id,

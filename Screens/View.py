@@ -28,14 +28,14 @@ def view(state):
         if(ans == options[0]):
             for habit in state["active_user"].habits:
                 habit.info_habit()
-                print('Streak:',habit.streak)
-                print('Highest Streak for Habit: ', Analytics.habit_longest_streak(habit.checkins))
+                print(f'Streak: {habit.streak}')
+                print(f'Highest Streak for Habit: {Analytics.habit_longest_streak(habit.checkins)}')
                 print('\n')
 
             print('[All Habit Statistics]')
-            print('longest_streak: ', Analytics.total_longest_streak(state["active_user"].habits))
-            print('most_punctual_sec: ', Analytics.most_punctual(state["active_user"].habits))
-            print('most_late_sec: ', Analytics.most_late(state["active_user"].habits))
+            print(f'longest_streak: {Analytics.total_longest_streak(state["active_user"].habits)}')
+            print(f'most_punctual_sec:  {Analytics.most_punctual(state["active_user"].habits)}')
+            print(f'most_late_sec: {Analytics.most_late(state["active_user"].habits)}')
             
             ao2 = ['Page 2','[Return]']
             interact = quest.select('See more?',ao2).ask()

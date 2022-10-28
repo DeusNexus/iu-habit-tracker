@@ -27,21 +27,21 @@ def habit_longest_streak(checkins:list) -> int:
 
         return longest_streak_habit
     except Exception as e:
-        print(e)
+        print('habit_longest_streak error:',e)
 
 def most_success(habits:list) -> int:
     '''Receives habits list and finds the max value of success and then returns this highest success as integer.'''
     try:
         return max(habit.success for habit in habits)
     except Exception as e:
-        print(e)
+        print('most_success error:',e)
 
 def most_fail(habits:list) -> int:
     '''Receives habits list and then finds the max value of fail and then returns this highest fail as integer.'''
     try:
         return max(habit.fail for habit in habits)
     except Exception as e:
-        print(e)
+        print('most_fail error:',e)
 
 def most_punctual(habits:list) -> int:
     '''Receives habits list and for each habit in habits looks which has most time remaining on average per checkin until the deadline when the habit was checked in.'''
@@ -52,20 +52,27 @@ def most_punctual(habits:list) -> int:
     try:
         most_time_remain_sec = 0
         most_punctual_habit = None
-        current_remain = 0
 
         #!!!! Make sure that avg time left until deadline for each habit is calculated and based on that see which is most punctual!
         for habit in habits:
+            # print(habit.title)
             for checkin in habit.checkins:
+
+                current_remain = 0
                 current_remain = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
+                print('Current remaining: ',current_remain)
+
+                #Compare current remaining against most_time_remain for previous habits, it it has high time remaining it is more punctual.
                 if current_remain > most_time_remain_sec:
                     most_time_remain_sec = current_remain
                     most_punctual_habit = habit
 
+        #Return the value of most punctual habit
         print('Most punctual habit: ',habit.title)
         return most_time_remain_sec
+        
     except Exception as e:
-        print(e)
+        print('most_punctual error:',e)
 
 def most_late(habits:list) -> int:
     '''Receives habits list and for each habit in habits looks which has least time remaining on average per checkin until the deadline when the habit was checked in.'''
@@ -76,21 +83,26 @@ def most_late(habits:list) -> int:
     try:
         least_time_remain_sec = 100000000000000000000000000
         most_late_habit = None
-        current_remain = 0
 
         #!!!! Make sure that avg time left until deadline for each habit is calculated and based on that see which is most late!
         for habit in habits:
             for checkin in habit.checkins:
-                print('Current remaining: ',current_remain)
+                current_remain = 0
                 current_remain = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
                 print('Current remaining: ',current_remain)
-                if current_remain < least_time_remain_sec and least_time_remain_sec != 0:
+                
+                #Compare the current least_time_remain from all previous habits with current_remain of habit, if it is less then update this to be a more late habit (less time left until deadline)
+                if current_remain < least_time_remain_sec and current_remain > 0:
                     least_time_remain_sec = current_remain
                     most_late_habit = habit
+                    print('Found habit with less time remaining (updated least_time_remain & most_late_habit): ',least_time_remain_sec)
+
+        #After all habits return the value of most_late habit
         print('Most late habit: ',habit.title)
         return least_time_remain_sec
+
     except Exception as e:
-        print(e)
+        print('most_late error:',e)
 
 def total_longest_streak(habits:list):
     '''Receives habits list and returns the habit with the highest streak.'''
@@ -98,14 +110,14 @@ def total_longest_streak(habits:list):
     try:
         return max(habit.streak for habit in habits)
     except Exception as e:
-        print(e)
+        print('total_longest_streak error:',e)
 
 def total_success(habits:list) -> int:
     '''Receives habits list and counts the total success sum across all habits.'''
     try:
         return sum(habit.success for habit in habits)
     except Exception as e:
-        print(e)
+        print('total_success error:',e)
     pass
 
 def total_fail(habits:list) -> int:
@@ -113,7 +125,7 @@ def total_fail(habits:list) -> int:
     try:
         return sum(habit.fail for habit in habits)
     except Exception as e:
-        print(e)
+        print('total_fail error:',e)
     pass
 
 def best_performing_category(habits:list) -> str:
