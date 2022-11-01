@@ -12,24 +12,24 @@ users = [
         'salt':"b'$2b$14$bjwObtQ6eROB8au4gaquLu'",
         'name':'<Example> Jim - pw:pass1',
         'password':"b'$2b$14$bjwObtQ6eROB8au4gaquLuhBljuja6D649YEtMfIfw8HAlrMGGdH2'",
-        'created':'2022-06-27 06:59:59.0',
-        'last_login':'2022-09-28 14:29:00.0',
+        'created':'2022-06-27 06:59:59.1',
+        'last_login':'2022-09-28 14:29:00.1',
     },
     {
         'user_id':'qpiqk',
         'salt':"b'$2b$14$Xt4xMz37x9NqP7d9sIUFlO'",
         'name':'<Example> Rick - pw:pass2',
         'password':"b'$2b$14$Xt4xMz37x9NqP7d9sIUFlOSFVMVDKU.GtTUW/gGbSbVAP/7vmqqlK'",
-        'created':'2022-03-27 10:10:34.0',
-        'last_login':'2022-10-4 15:32:03.0',
+        'created':'2022-03-27 10:10:34.1',
+        'last_login':'2022-10-4 15:32:03.1',
     },
     {
         'user_id':'bw8tg',
         'salt':"b'$2b$14$8uNhMbB6dmvvMg5JKzF.3u'",
         'name':'<Example> Tom - pw:pass3',
         'password':"b'$2b$14$8uNhMbB6dmvvMg5JKzF.3uWOCIJvW7XWv4JaQTgM4G1m9n7iGNgrO'",
-        'created':'2022-02-11 05:12:43.0',
-        'last_login':'2022-05-15 19:54:15.0',
+        'created':'2022-02-11 05:12:43.1',
+        'last_login':'2022-05-15 19:54:15.1',
     },
 ]
 
@@ -51,9 +51,9 @@ habits = [
         'is_dynamic':'False',
         'checkin_num_before_deadline':0,
         'dynamic_count':0,
-        'created_on':'2022-05-11 05:12:43.0',
-        'prev_deadline':'2022-05-11 05:12:43.0',
-        'next_deadline':'2022-05-12 05:12:43.0',
+        'created_on':'2022-05-11 05:12:43.1',
+        'prev_deadline':'2022-05-11 05:12:43.1',
+        'next_deadline':'2022-05-12 05:12:43.1',
         'streak':0,
         'success':0,
         'fail':0,
@@ -77,9 +77,9 @@ habits = [
         'is_dynamic':'False',
         'checkin_num_before_deadline':0,
         'dynamic_count':0,
-        'created_on':'2022-05-13 05:12:43.0',
-        'prev_deadline':'2022-05-14 05:12:43.0',
-        'next_deadline':'2022-05-15 05:12:43.0',
+        'created_on':'2022-05-13 05:12:43.1',
+        'prev_deadline':'2022-05-14 05:12:43.1',
+        'next_deadline':'2022-05-15 05:12:43.1',
         'streak':1,
         'success':1,
         'fail':0,
@@ -103,9 +103,9 @@ habits = [
         'is_dynamic':'False',
         'checkin_num_before_deadline':0,
         'dynamic_count':0,
-        'created_on':'2022-06-13 05:12:43.0',
-        'prev_deadline':'2022-06-13 05:12:43.0',
-        'next_deadline':'2022-06-20 05:12:43.0',
+        'created_on':'2022-06-13 05:12:43.1',
+        'prev_deadline':'2022-06-13 05:12:43.1',
+        'next_deadline':'2022-06-20 05:12:43.1',
         'streak':0,
         'success':1,
         'fail':0,
@@ -119,8 +119,8 @@ checkins = [
         'user_id':'4z6cr',
         'habit_id':'6tryr',
         'checkin_id':'hed69',
-        'checkin_datetime':'2022-05-11 05:12:43.0',
-        'deadline':'2022-05-12 05:12:43.0',
+        'checkin_datetime':'2022-05-11 05:12:43.1',
+        'deadline':'2022-05-12 05:12:43.1',
         'success':'True',
         'note':'Great work',
         'rating':4,
@@ -133,8 +133,8 @@ checkins = [
         'user_id':'4z6cr',
         'habit_id':'6tryr',
         'checkin_id':'9luhm',
-        'checkin_datetime':'2022-05-11 05:12:43.0',
-        'deadline':'2022-05-13 05:12:43.0',
+        'checkin_datetime':'2022-05-11 05:12:43.1',
+        'deadline':'2022-05-13 05:12:43.1',
         'success':'True',
         'note':'Wow',
         'rating':5,
@@ -147,8 +147,8 @@ checkins = [
         'user_id':'4z6cr',
         'habit_id':'6tryr',
         'checkin_id':'cg3yacl',
-        'checkin_datetime':'2022-05-13 05:12:43.0',
-        'deadline':'2022-05-14 05:12:43.0',
+        'checkin_datetime':'2022-05-13 05:12:43.1',
+        'deadline':'2022-05-14 05:12:43.1',
         'success':'True',
         'note':'Amazing',
         'rating':4,
@@ -332,6 +332,58 @@ def db_checkins_delete(habit_id) -> None:
     delete_checkin(habit_id)
 
     # c.execute("""SELECT * FROM checkins""")
+    # print(c.fetchall())
+
+    conn.commit()
+    conn.close()
+
+def db_update_habit_checkin(habit) -> None:
+    """Update habit when a checkin happens by providing the changed habit as an object."""
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+
+    #habit examples
+    def update_habit(habit):
+        # user_id text,
+        # habit_id text,
+        # title text,
+        # description text,
+        # interval text,
+        # active text,
+        # start_from text,
+        # difficulity integer,
+        # category text,
+        # moto text,
+        # importance integer,
+        # style integer,
+        ## milestone_streak integer,
+        # is_dynamic text,
+        ## checkin_num_before_deadline integer,
+        ## dynamic_count integer,
+        # created_on text,
+        ## prev_deadline text,
+        ## next_deadline text,
+        ## streak integer,
+        ## success integer,
+        ## fail integer,
+        ## cost real,
+        ## cost_accum real
+
+        #Update all attributes involved with checkin
+        c.execute(f"""UPDATE habits SET milestone_streak = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.milestone_streak})
+        c.execute(f"""UPDATE habits SET checkin_num_before_deadline = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.checkin_num_before_deadline})
+        c.execute(f"""UPDATE habits SET dynamic_count = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.dynamic_count})
+        c.execute(f"""UPDATE habits SET prev_deadline = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.prev_deadline})
+        c.execute(f"""UPDATE habits SET next_deadline = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.next_deadline})
+        c.execute(f"""UPDATE habits SET streak = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.streak})
+        c.execute(f"""UPDATE habits SET success = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.success})
+        c.execute(f"""UPDATE habits SET fail = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.fail})
+        c.execute(f"""UPDATE habits SET cost = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.cost})
+        c.execute(f"""UPDATE habits SET cost_accum = :val WHERE habit_id IS :habit_id""", {"habit_id":habit.habit_id,"val":habit.cost_accum})
+
+    update_habit(habit)
+
+    # c.execute("""SELECT * FROM habits""")
     # print(c.fetchall())
 
     conn.commit()

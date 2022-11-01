@@ -5,7 +5,7 @@ from shortuuid import ShortUUID
 from Classes.CheckIn import CheckIn
 
 #Functions
-from Utils import interval_to_seconds, add_streak_to_deadline, interval_to_seconds
+from Utils import interval_to_seconds, add_streak_to_deadline, interval_to_seconds, style
 
 class Habit:
     def __init__(
@@ -24,6 +24,7 @@ class Habit:
             is_dynamic:bool=False,
             checkin_num_before_deadline:int=1,
             habit_id:str=None,
+            user_id: str=None
             ) -> None:
 
         '''Initializes a new Habit instance with the supplied arguments, can be normal or dynamic which indicate how the streak habit is interpreted and deadline met.'''
@@ -47,7 +48,8 @@ class Habit:
  
         #Datetime now for all initial variables
         date = datetime.now()
-
+        
+        self.user_id = user_id
         self.habit_id:str = habit_id if habit_id else ShortUUID().random(length=5).lower()
         self.created_on:datetime = date
         self.prev_deadline: datetime = date
@@ -100,12 +102,12 @@ class Habit:
         self.category:str = category
         self.moto:str = moto
         self.importance:int = importance
-        self.milestone_streak:int = milestone_streak
+        self.milestone_streak:int = int(milestone_streak) if(milestone_streak) else 1
         self.style:int = style
         self.is_dynamic:bool = True if is_dynamic == 'True' else False
-        self.checkin_num_before_deadline:int = checkin_num_before_deadline
+        self.checkin_num_before_deadline:int = int(checkin_num_before_deadline) if checkin_num_before_deadline else 1
         self.habit_id:str = habit_id if habit_id else ShortUUID().random(length=5).lower()
-        self.dynamic_count:int = dynamic_count
+        self.dynamic_count:int = int(dynamic_count) if dynamic_count else 0
         self.created_on:datetime = datetime.strptime(created_on, "%Y-%m-%d %H:%M:%S.%f")
         self.prev_deadline: datetime = datetime.strptime(prev_deadline, "%Y-%m-%d %H:%M:%S.%f")
         self.next_deadline: datetime = datetime.strptime(next_deadline,  "%Y-%m-%d %H:%M:%S.%f")
@@ -119,19 +121,33 @@ class Habit:
 
     def update_deadlines(self) -> None:
         '''Updates the previous_deadline to the current and sets the next_deadline to current deadline plus habit interval length.'''
-        old_deadline = self.prev_deadline
         self.prev_deadline: datetime = self.next_deadline
         self.next_deadline: datetime = add_streak_to_deadline(self.prev_deadline, interval_to_seconds(self.interval))
-        print(f'Old Deadline: {old_deadline}   New Deadline: {self.next_deadline}   Interval: {self.interval}')
+        print(style(f'Updating your deadline to new one based on your given habit interval!','GREEN'))
+        print(
+            '\nOld Deadline: '+
+            style(f'{self.prev_deadline.strftime("%Y-%m-%d %H:%M")}', 'CYAN') +   
+            '\nNew Deadline: ' + 
+            style(f'{self.next_deadline.strftime("%Y-%m-%d %H:%M")}','YELLOW') +
+            '\nInterval: ' +
+            style(f'{self.interval}','BLUE')+
+            '\nNew Streak: '+
+            style(f'{self.streak}','BOLD'))
 
     def update_deadlines_failed(self) -> None:
         '''Updates the previous_deadline to the current and sets the next_deadline to current deadline based on date in the future plus the interval.'''
-        old_deadline = self.prev_deadline
         self.prev_deadline: datetime = self.next_deadline
-
         #Add interval to now instead of old deadline (can be far in the past and give a new deadline in the past).
         self.next_deadline: dattime = add_streak_to_deadline(datetime.now(), interval_to_seconds(self.interval))
-        print(f'Old Deadline: {old_deadline}   New Deadline: {self.next_deadline}   Interval: {self.interval}')
+        print(style(f'You failed to meet your habit checkin deadline! This means that your current streak is reset back to 0. \nSince your deadline is in the past the new deadline will be based on current date plus your specified interval.','RED'))
+        print(
+            '\nOld Deadline: '+
+            style(f'{self.prev_deadline.strftime("%Y-%m-%d %H:%M")}', 'CYAN') +   
+            '\nNew Deadline: ' + 
+            style(f'{self.next_deadline.strftime("%Y-%m-%d %H:%M")}','YELLOW') +
+            '\nInterval: ' +
+            style(f'{self.interval}','BLUE')+
+            style(f'\nNew Streak: {self.streak}','BOLD'))
 
     def incr_streak(self) -> None:
         '''Increases the habit streak by 1'''
@@ -159,7 +175,7 @@ class Habit:
             raise ValueError('Tried to checkin with regular checkin method for a dynamic habit!')
         #Check if deadline is success or failed
         now = datetime.now() #.strftime('%Y-%m-%d %H:%M:%S.%f')
-        print('\n[CHECKIN] Next Deadline: ',self.next_deadline,' Now:' ,now)
+
         if(now <= self.next_deadline):
             #Insert successful checkin to checkins list
             self.checkins.append(
@@ -177,6 +193,7 @@ class Habit:
                     dynamic_count=0))
             #success checkin before deadline
             self.incr_streak()
+            self.incr_success()
             self.update_deadlines()
             
         else:
@@ -197,6 +214,7 @@ class Habit:
                     dynamic_count=0)
                     )
             self.reset_streak()
+            self.incr_fail()
             self.update_deadlines_failed()
             
 
@@ -226,6 +244,7 @@ class Habit:
                     dynamic=True,
                     dynamic_count=self.dynamic_count)
             )
+            print(f'You successfully checked in before the deadline of your dynamic habit. You current checkin target is now {self.dynamic_count}, your streak is {self.streak} and next (current) deadline still on {self.next_deadline}.')
 
         #Still before deadline but this checkin target is met and therefor the dynamic habit has completed its goal for current deadline!    
         elif(now <= self.next_deadline and self.dynamic_count >= self.checkin_num_before_deadline):
@@ -246,8 +265,11 @@ class Habit:
             )
             #Reset counter for next deadline
             self.dynamic_reset()
+            self.incr_success()
             #Update deadline to next interval
             self.update_deadlines()
+            print(f'You successfully checked in before the deadline of your dynamic habit and you have reached your checkin goal! This means you increment your habit streak by one and have a new deadline to meet. You current checkin target is now {self.dynamic_count}, your streak is {self.streak} and next deadline still on {self.next_deadline}.')
+
         
         #Failed checkins, deadline is met but dynamic checkin count hasn't meet target
         elif(now > self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline):
@@ -268,8 +290,11 @@ class Habit:
             )
              #failed checkin
             self.reset_streak()
+            self.incr_fail()
             self.update_deadlines_failed()
-            self.dynamic_reset()        
+            self.dynamic_reset()    
+            print(f'You failed to checked in before the deadline of your dynamic habit therefor lose your streak! A new deadline is created and you need to start over with your checkin target for the provided interval. You current checkin target is now {self.dynamic_count}, your streak is {self.streak} and new deadline is on {self.next_deadline}.')
+    
 
 
     def info_habit(self) -> None:

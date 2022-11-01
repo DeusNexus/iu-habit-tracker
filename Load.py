@@ -82,7 +82,6 @@ def load_users(users):
         users.users[index].overwrite(um['user_id'],um['salt'],um['name'],um['password'],um['created'],um['last_login'])
         index += 1
     print(style(f'[✔️] Habit Tracker fully initialized!','GREEN'))
-    sleep(2*SLEEP_SPEED)
     
 
 def default_example_data(user_id) -> tuple:
@@ -105,9 +104,9 @@ def default_example_data(user_id) -> tuple:
                     'is_dynamic':'False',
                     'checkin_num_before_deadline':0,
                     'dynamic_count':0,
-                    'created_on':'2022-05-11 05:12:43.0',
-                    'prev_deadline':'2022-05-11 05:12:43.0',
-                    'next_deadline':'2022-05-12 05:12:43.0',
+                    'created_on':'2022-05-11 05:12:43.1',
+                    'prev_deadline':'2022-05-11 05:12:43.1',
+                    'next_deadline':'2022-05-12 05:12:43.1',
                     'streak':0,
                     'success':0,
                     'fail':0,
@@ -131,9 +130,9 @@ def default_example_data(user_id) -> tuple:
                     'is_dynamic':'False',
                     'checkin_num_before_deadline':0,
                     'dynamic_count':0,
-                    'created_on':'2022-05-13 05:12:43.0',
-                    'prev_deadline':'2022-05-14 05:12:43.0',
-                    'next_deadline':'2022-05-15 05:12:43.0',
+                    'created_on':'2022-05-13 05:12:43.1',
+                    'prev_deadline':'2022-05-14 05:12:43.1',
+                    'next_deadline':'2022-05-15 05:12:43.1',
                     'streak':1,
                     'success':1,
                     'fail':0,
@@ -157,9 +156,9 @@ def default_example_data(user_id) -> tuple:
                     'is_dynamic':'False',
                     'checkin_num_before_deadline':0,
                     'dynamic_count':0,
-                    'created_on':'2022-06-13 05:12:43.0',
-                    'prev_deadline':'2022-06-13 05:12:43.0',
-                    'next_deadline':'2022-06-20 05:12:43.0',
+                    'created_on':'2022-06-13 05:12:43.1',
+                    'prev_deadline':'2022-06-13 05:12:43.1',
+                    'next_deadline':'2022-06-20 05:12:43.1',
                     'streak':0,
                     'success':1,
                     'fail':0,
@@ -173,8 +172,8 @@ def default_example_data(user_id) -> tuple:
             'user_id':user_id,
             'habit_id':habits[0]['habit_id'],
             'checkin_id':ShortUUID().random(length=5).lower(),
-            'checkin_datetime':'2022-05-11 05:12:43.0',
-            'deadline':'2022-05-12 05:12:43.0',
+            'checkin_datetime':'2022-05-11 05:12:43.1',
+            'deadline':'2022-05-12 05:12:43.1',
             'success':'True',
             'note':'Great work',
             'rating':4,
@@ -187,8 +186,8 @@ def default_example_data(user_id) -> tuple:
             'user_id':user_id,
             'habit_id':habits[0]['habit_id'],
             'checkin_id':ShortUUID().random(length=5).lower(),
-            'checkin_datetime':'2022-05-11 05:12:43.0',
-            'deadline':'2022-05-13 05:12:43.0',
+            'checkin_datetime':'2022-05-11 05:12:43.1',
+            'deadline':'2022-05-13 05:12:43.1',
             'success':'True',
             'note':'Wow',
             'rating':5,
@@ -201,8 +200,8 @@ def default_example_data(user_id) -> tuple:
             'user_id':user_id,
             'habit_id':habits[0]['habit_id'],
             'checkin_id':ShortUUID().random(length=5).lower(),
-            'checkin_datetime':'2022-05-13 05:12:43.0',
-            'deadline':'2022-05-14 05:12:43.0',
+            'checkin_datetime':'2022-05-13 05:12:43.1',
+            'deadline':'2022-05-14 05:12:43.1',
             'success':'True',
             'note':'Amazing',
             'rating':4,
@@ -225,24 +224,20 @@ def load_user_data(users,user_id):
     #Get the checkins of the active user_id
     checkins = api.db_get_checkins(user_id)
 
-    #Now we need to got the the correct index in users.users where our active user is located.
-    #h_index will be at which habit we are of the active user, e.g. if there are 4 habits we will add the habit and then add all checkins, then move to the next habit until all are added.
-    h_index = 0
-    c_index = 0
-    
+    #Now we need to got the the correct index in users.users where our active user is located.    
     try:
         for u in users.users:
             #Find the user that is logging in
             if(user_id == u.user_id):
 
                 #Go over all habits that got send from the database for this user
-                for h in habits:
+                for hidx, h in enumerate(habits):
                     #The database sends them in a list, for convenience the list is parsed into a dict model for easier access to the different attributes
                     hm = Habit_Model(h)
                     #Create new habit but then use overwrite to fill out all database values, basically a temporary place holder.
-                    u.create_habit(hm['title'],hm['description'],hm['interval'],hm['active'],hm['start_from'],hm['difficulity'],hm['category'],hm['moto'],hm['importance'],hm['milestone_streak'],hm['style'],hm['is_dynamic'],hm['checkin_num_before_deadline'],hm['habit_id'])
+                    u.create_habit(hm['title'],hm['description'],hm['interval'],hm['active'],hm['start_from'],hm['difficulity'],hm['category'],hm['moto'],hm['importance'],hm['milestone_streak'],hm['style'],hm['is_dynamic'],hm['checkin_num_before_deadline'],hm['habit_id'],hm['user_id'])
                     #Overwrite the habit instance with current db values
-                    u.habits[h_index].overwrite(
+                    u.habits[hidx].overwrite(
                         user_id=hm['user_id'],
                         habit_id=hm['habit_id'],
                         title=hm['title'],
@@ -268,21 +263,18 @@ def load_user_data(users,user_id):
                         cost=hm['cost'],
                         cost_accum=hm['cost_accum'])
 
-                    # CheckIn(user_id,'habit_id1','checkin_id1','2020-06-06 12:15:20',True,'Good',5,0,0,False,0)
-
-                    #While still on current habit, lets load all the available checkins from the database and add them to the habits checkins list.
-                    for c in checkins:
+                # CheckIn(user_id,'habit_id1','checkin_id1','2020-06-06 12:15:20',True,'Good',5,0,0,False,0)
+                #While still on current habit, lets load all the available checkins from the database and add them to the habits checkins list.
+                for cidx, c in enumerate(checkins):
+                    for hidx, h in enumerate(u.habits):
                         #Convert the database tuple into a dict using the model
                         cm = Checkin_Model(c)
-                        if cm['habit_id'] == u.habits[h_index].habit_id:
+                        if h.habit_id == cm['habit_id']:                        
                             #Create placeholder checkin
-                            u.habits[h_index].checkins.append(CheckIn(cm['user_id'],cm['habit_id'],cm['checkin_id'],cm['deadline'],cm['success'],cm['note'],cm['rating'],cm['cost'],cm['cost_accum'],cm['dynamic'],cm['dynamic_count']))
-                            u.habits[h_index].checkins[c_index].overwrite(cm['user_id'],cm['habit_id'],cm['checkin_id'],cm['checkin_datetime'],cm['deadline'],cm['success'],cm['note'],cm['rating'],cm['cost_accum'],cm['dynamic'],cm['dynamic_count'])
-                        c_index += 1
-
-                    #Increas h_index and move to next habit for user
-                    h_index += 1
+                            h.checkins.append(CheckIn(cm['user_id'],cm['habit_id'],cm['checkin_id'],cm['deadline'],cm['success'],cm['note'],cm['rating'],cm['cost'],cm['cost_accum'],cm['dynamic'],cm['dynamic_count']))
+                            h.checkins[-1].overwrite(cm['user_id'],cm['habit_id'],cm['checkin_id'],cm['checkin_datetime'],cm['deadline'],cm['success'],cm['note'],cm['rating'],cm['cost_accum'],cm['dynamic'],cm['dynamic_count'])
 
     except Exception as e:
         print("[❌] Fail in load_user_data: ",e)
         traceback.print_exc()
+        sleep(30)

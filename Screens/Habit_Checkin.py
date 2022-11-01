@@ -58,7 +58,7 @@ def habit_checkin(state):
                 #If dynamic habit, use the dynamic_checkin method of the habit instance
                 if(h2c.is_dynamic):
                     sleep(1*state["SLEEP_SPEED"])
-                    print('Checking in for Dynamic Habit...')
+                    print('\nChecking in for Dynamic Habit...')
                     
                     #Checkin to the habit, creates new checkin instance for the habit in habit.checkins[]
                     h2c.dynamic_checkin(note,rating)
@@ -67,7 +67,7 @@ def habit_checkin(state):
                         #Insert the checkin to the db
                         latest_checkin = h2c.checkins[-1]
                         
-                        print('lastest checkin: ',latest_checkin)
+                        # print('lastest checkin: ',latest_checkin)
 
                         api.db_checkins_insert([
                             {
@@ -85,18 +85,21 @@ def habit_checkin(state):
                                 'dynamic_count':latest_checkin.dynamic_count
                             }
                         ])
+
+                        #Update the habit in the database with the new checkin values!
+                        api.db_update_habit_checkin(h2c)
                         
                     except Exception as e:
                         print('Failed to insert dynamic checkin: ',e)
 
-                    sleep(10*state["SLEEP_SPEED"])
+                    sleep(2*state["SLEEP_SPEED"])
                     print('[DYNAMIC CHECKIN DID WE MEET DEADLINE GOAL YET, DID WE FAIL OR STILL TARGET NOT MET AND DEADLINE NOT DUE. ]')
                     sleep(1*state["SLEEP_SPEED"])
-                    print('Checkin registered and new deadline generated based on your interval.')
+                    quest.select('To continue please select "okay" and press enter.', ['Okay']).ask()
 
                 #If regular habit, use normal checkin method
                 else:
-                    print('Checking in for Regular Habit...')
+                    print('\nChecking in for Regular Habit...')
                     sleep(1*state["SLEEP_SPEED"])
                     
                     #Checkin to habit, creates new checkin instance for the habit in habit.checkins[]
@@ -106,7 +109,7 @@ def habit_checkin(state):
                         #Insert the checkin to the db
                         latest_checkin = h2c.checkins[-1]
 
-                        print('lastest checkin: ',latest_checkin)
+                        # print('lastest checkin: ',latest_checkin)
 
                         api.db_checkins_insert([
                             {
@@ -125,11 +128,14 @@ def habit_checkin(state):
                             }
                         ])
 
+                        #Update the habit in the database with the new checkin values!
+                        api.db_update_habit_checkin(h2c)
+
                     except Exception as e:
                         print('Failed to insert regular checkin: ',e)
 
-                    sleep(10*state["SLEEP_SPEED"])
-                    print('Checkin registered and new deadline generated based on your interval.')
+                    sleep(2*state["SLEEP_SPEED"])
+                    quest.select('\nTo continue please select "okay" and press enter.', ['Okay']).ask()
 
                 #Return to checkin list
                 habit_checkin(state)
