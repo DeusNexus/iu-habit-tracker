@@ -6,6 +6,20 @@ clear = lambda : os.system('tput reset')
 
 import Classes.Analytics as Analytics
 
+def return_user_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning back to User Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    state["user_screen"](state)
+
+def return_view_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning to View Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    view(state)
+
 def view(state):
     '''The view screen is used to display habits of the user and give various options to see all, an individual or filtered habits. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
@@ -13,12 +27,7 @@ def view(state):
     
     if( len(state["active_user"].habits) == 0 ): 
         print('You currently do not have any habits to view!')
-        sleep(1*state["SLEEP_SPEED"])
-        print('[!] Returning to User Screen...')
-        sleep(2*state["SLEEP_SPEED"])
-        clear()
-        state["user_screen"](state)
-        pass
+        return_user_screen(state)
 
     else:
         options = ['All Habits','Individual Habit', 'Filter Criteria','Go Back to User Screen']
@@ -27,11 +36,17 @@ def view(state):
         #All Habits
         if(ans == options[0]):
             for habit in state["active_user"].habits:
-                habit.info_habit()
-                print(f'Streak: {habit.streak}')
-                print(f'Highest Streak for Habit: {Analytics.habit_longest_streak(habit.checkins)}')
-                print('\n')
-
+                #Only show active habits
+                if habit.active:
+                    habit.info_habit()
+                    print(f'Streak: {habit.streak}')
+                    print(f'Highest Streak for Habit: {Analytics.habit_longest_streak(habit.checkins)}')
+                    print('\n')
+                #Do nothing for inactive habits
+                else:
+                    pass
+            
+            #Print general overview after each habit was displayed
             print('[All Habit Statistics]')
             print(f'longest_streak: {Analytics.total_longest_streak(state["active_user"].habits)}')
             print(f'most_punctual_sec:  {Analytics.most_punctual(state["active_user"].habits)}')
@@ -47,10 +62,7 @@ def view(state):
                 clear()
                 view(state)
 
-            sleep(1*state["SLEEP_SPEED"])
-            clear()
-            view(state)
-            pass
+            return_view_screen(state)
         
         #Individual Habit
         elif(ans == options[1]):
@@ -58,7 +70,7 @@ def view(state):
             selected_habit = quest.select('Which habit would you like to individually inspect?', choices).ask()
 
             for habit in state["active_user"].habits:
-                if habit.title == selected_habit:
+                if habit.title == selected_habit and habit.active:
                     #Now give detailed overview of the habits. Add more individual view options? View Checkins in paginated form?
                     print(f'Viewing habit: {selected_habit}')
                     print(f'Total Successful Checkins: {habit.success}')
@@ -77,32 +89,16 @@ def view(state):
                 print('PAGE 2')
                 print('NOT IMPLEMENTED')
             elif(interact == io2[1]):
-                clear()
-                view(state)
+                return_view_screen(state)
 
-            sleep(1*state["SLEEP_SPEED"])
-            clear()
-            view(state)
-            pass
+            return_view_screen(state)
         
         #Filter Criteria
         elif(ans == options[2]):
             criteria = ['interval','difficulity','category','importance','streak','success','fail','cost','cost_accum']
             ans = quest.select('Which filter criteria would you like to use?',criteria).ask()
-
-            sleep(2*state["SLEEP_SPEED"])
-            print('[!] Returning to User Screen...')
-            sleep(1*state["SLEEP_SPEED"])
-            clear()
-            view(state)
-            pass
+            return_view_screen(state)
         
         #Return to user screen
         elif(ans == options[3]):
-            clear()
-            sleep(1*state["SLEEP_SPEED"])
-            print('[!] Returning back to User Screen...')
-            sleep(1*state["SLEEP_SPEED"])
-            state["user_screen"](state)
-            pass
-        
+            return_user_screen(state)

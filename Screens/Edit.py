@@ -5,6 +5,13 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 from Database.db_api import db_update_habit
 
+def return_user_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning back to User Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    state["user_screen"](state)
+
 def edit(state):
         '''The edit screen is used for editing habits. Habits can be set to active or inactive, and have their unique details changed. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
@@ -13,21 +20,14 @@ def edit(state):
         #User has no habits, so return back to user screen.
         if( len(state["active_user"].habits) == 0 ): 
             print('You currently do not have any habits to edit!')
-            sleep(1*state["SLEEP_SPEED"])
-            print('[!] Returning to User Screen...')
-            sleep(2*state["SLEEP_SPEED"])
-            clear()
-            state["user_screen"](state)
+            return_user_screen(state)
 
         #User has habits, show list of habits to edit.
         else:
             ans = quest.select('Which habit would you like to edit?', [habit.title for habit in state["active_user"].habits] + ['Go Back to User Screen']).ask()
             
             if(ans == 'Go Back to User Screen'):
-                print('[!] Returning to User Screen...')
-                sleep(2*state["SLEEP_SPEED"])
-                clear()
-                state["user_screen"](state)
+                return_user_screen(state)
 
             #Make variable for current habit for easy access
             curr_habit = None

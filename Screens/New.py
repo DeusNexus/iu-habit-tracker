@@ -11,6 +11,13 @@ clear = lambda : os.system('tput reset')
 #Text Styling
 from Utils import style
 
+def return_user_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning back to User Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    state["user_screen"](state)
+
 def new(state):
     '''The new screen is used for creating new habits, which can be normal or dynamic. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
@@ -145,7 +152,6 @@ def new(state):
         except Exception as e:
             print('[!] Failed to add habit, an error occured!')
             print(e)
-
     
     #Regular habit
     if(ans == questions[0]):
@@ -153,10 +159,7 @@ def new(state):
         questionary(is_dynamic=False)
 
         #Show habit before submit? Then return to user screen
-        sleep(1*state["SLEEP_SPEED"])
-        print('[!] Returning back to User Screen...')
-        sleep(1*state["SLEEP_SPEED"])
-        state["user_screen"](state)
+        return_user_screen(state)
 
     #Dynamic Habit
     elif(ans == questions[1]):
@@ -164,14 +167,7 @@ def new(state):
         questionary(is_dynamic=True)
 
         #Show habit before submit? Then return to user screen
-        sleep(1*state["SLEEP_SPEED"])
-        print('[!] Returning back to User Screen...')
-        sleep(1*state["SLEEP_SPEED"])
-        state["user_screen"](state)
+        return_user_screen(state)
 
     elif(ans == 'Go Back to User Screen'):
-        clear()
-        sleep(1*state["SLEEP_SPEED"])
-        print('[!] Returning back to User Screen...')
-        sleep(1*state["SLEEP_SPEED"])
-        state["user_screen"](state)
+        return_user_screen(state)

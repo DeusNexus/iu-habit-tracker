@@ -9,6 +9,13 @@ from Database import db_api as api
 #Text Styling
 from Utils import style
 
+def return_user_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning back to User Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    state["user_screen"](state)
+
 def reset(state):
     '''The reset screen is used for resetting the user to various default states. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
@@ -38,7 +45,6 @@ def reset(state):
         
         #Return to login-screen to load resetted user from database so in-memory is consistent with db.
         state["app"](skip=True)
-        pass
 
     #Full Reset withou Example Data
     elif(ans==questions[1]):
@@ -56,13 +62,7 @@ def reset(state):
         
         #Return to login-screen to load resetted user from database so in-memory is consistent with db.
         state["app"](skip=True)
-        pass
 
     #Go back to user screen
     elif(ans==questions[2]):
-        clear()
-        sleep(1*state["SLEEP_SPEED"])
-        print('[!] Returning back to User Screen...')
-        sleep(1*state["SLEEP_SPEED"])
-        state["user_screen"](state)
-        pass
+        return_user_screen(state)

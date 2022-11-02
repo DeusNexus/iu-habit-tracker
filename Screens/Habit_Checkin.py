@@ -6,6 +6,20 @@ clear = lambda : os.system('tput reset')
 from Database import db_api as api
 from datetime import datetime
 
+def return_user_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning back to User Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    state["user_screen"](state)
+
+def return_checkin_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning to Checkin Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    habit_checkin(state)
+
 def habit_checkin(state):
         '''Generates screen for all available habit checkins. Lists habits available to checkin, whether deadline is due or still on-time and updates the database and in-memory objects accordingly.'''
         clear()
@@ -14,11 +28,7 @@ def habit_checkin(state):
         #In case no habits are available, show message and return to user_screen
         if( len(state["active_user"].habits) == 0 ): 
             print('You currently do not have any habits to checkin to!')
-            sleep(1*state["SLEEP_SPEED"])
-            print('[!] Returning to User Screen...')
-            sleep(2*state["SLEEP_SPEED"])
-            clear()
-            state["user_screen"](state)
+            return_user_screen(state)
 
         #If user has habits, show the list of titles so one can be selected for deletion.
         else:
@@ -41,11 +51,7 @@ def habit_checkin(state):
             
             #Option Return
             if(ans == 'Go Back to User Screen'):
-                sleep(1*state["SLEEP_SPEED"])
-                print('[!] Returning to User Screen...')
-                sleep(2*state["SLEEP_SPEED"])
-                clear()
-                state['user_screen'](state)
+                return_user_screen(state)
             
             #If a habit title is selected, continue to delete habit.
             else:
@@ -88,6 +94,8 @@ def habit_checkin(state):
 
                         #Update the habit in the database with the new checkin values!
                         api.db_update_habit_checkin(h2c)
+
+                        print(f'Dynamic Habit Check-in complete. ')
                         
                     except Exception as e:
                         print('Failed to insert dynamic checkin: ',e)
@@ -138,6 +146,5 @@ def habit_checkin(state):
                     quest.select('\nTo continue please select "okay" and press enter.', ['Okay']).ask()
 
                 #Return to checkin list
-                habit_checkin(state)
-                pass
+                return_checkin_screen(state)
 

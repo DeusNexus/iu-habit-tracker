@@ -9,6 +9,13 @@ clear = lambda : os.system('tput reset')
 #Database for Export or Importing
 from Database import db_api as api
 
+def return_user_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning back to User Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    state["user_screen"](state)
+
 def export_import(state):
     '''The export/import screen is used for importing or exporting a user account using json files. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
@@ -41,11 +48,7 @@ def export_import(state):
         except Exception as e:
             print('[!] Something went wrong while exporting the user: ',e)
 
-        sleep(1*state["SLEEP_SPEED"])
-        print('[!] Returning to User Screen...')
-        sleep(2*state["SLEEP_SPEED"])
-        clear()
-        state["user_screen"](state)
+        return_user_screen(state)
 
     #Import
     elif(ans==questions[1]):
@@ -71,16 +74,8 @@ def export_import(state):
         else:
             print('No .json files found in IMPORT_EXPORT folder.')
 
-        sleep(1*state["SLEEP_SPEED"])
-        print('[!] Returning to User Screen...')
-        sleep(2*state["SLEEP_SPEED"])
-        clear()
-        state["user_screen"](state)
+        return_user_screen(state)
 
     #Return
     elif(ans==questions[2]):
-        sleep(1*state["SLEEP_SPEED"])
-        print('[!] Returning to User Screen...')
-        sleep(2*state["SLEEP_SPEED"])
-        clear()
-        state["user_screen"](state)
+        return_user_screen(state)

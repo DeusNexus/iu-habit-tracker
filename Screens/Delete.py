@@ -8,6 +8,13 @@ from Database import db_api as api
 #Text Styling
 from Utils import style
 
+def return_user_screen(state):
+    sleep(1*state["SLEEP_SPEED"])
+    print('[!] Returning back to User Screen...')
+    sleep(1*state["SLEEP_SPEED"])
+    clear()
+    state["user_screen"](state)
+
 def delete(state):
         '''The delete screen is used for deleting habits. Habits list is printed and user can select which one to permanently remove. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
@@ -17,11 +24,7 @@ def delete(state):
         #In case no habits are available, show message and return to user_screen
         if( len(state["active_user"].habits) == 0 ): 
             print('You currently do not have any habits to delete!')
-            sleep(1*state["SLEEP_SPEED"])
-            print('[!] Returning to User Screen...')
-            sleep(2*state["SLEEP_SPEED"])
-            clear()
-            state["user_screen"](state)
+            return_user_screen(state)
 
         #If user has habits, show the list of titles so one can be selected for deletion.
         else:
@@ -32,11 +35,7 @@ def delete(state):
             
             #Option Return
             if(ans == 'Go Back to User Screen'):
-                sleep(1*state["SLEEP_SPEED"])
-                print('[!] Returning to User Screen...')
-                sleep(2*state["SLEEP_SPEED"])
-                clear()
-                state["user_screen"](state)
+                return_user_screen(state)
             
             #If a habit title is selected, continue to delete habit.
             else:
@@ -70,9 +69,5 @@ def delete(state):
                 api.db_checkins_delete(h2d.habit_id)
 
                 #state["active_user"].delete_habit(habit_id)
-                sleep(1*state["SLEEP_SPEED"])
-                print('[!] Returning to User Screen...')
-                sleep(2*state["SLEEP_SPEED"])
-                clear()
-                state["user_screen"](state)
+                return_user_screen(state)
 
