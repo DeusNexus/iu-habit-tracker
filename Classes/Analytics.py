@@ -4,11 +4,26 @@ from Classes.Habit import Habit
 
 def active_habits(habits:list) -> list:
     '''Receives habits list and returns only the active habits as a list.'''
-    pass
+    total_active = 0
+
+    #For each habit increment if it is active
+    for habit in habits:
+        if(habit.active):
+            total_active += 1
+    
+    return total_active
 
 def same_period(habits:list, interval:str) -> list:
-    '''Receives habits list and returns all habits with the given interval,e.g. 1W.'''
-    pass
+    '''Receives habits list and returns all habits with the given interval in a list,e.g. 1W.'''
+    
+    same_interval = []
+
+    #For each habit increment if it has same interval
+    for habit in habits:
+        if(habit.interval == interval):
+            same_interval.append(habit)
+    
+    return same_interval
 
 def habit_longest_streak(checkins:list) -> int:
     '''Receives checkins list and counts what the longest uninterrupted streak is of the habit and returns the streak as integer.'''
@@ -130,15 +145,89 @@ def total_fail(habits:list) -> int:
 
 def best_performing_category(habits:list) -> str:
     '''Receives habits list and checks, when category is provided, which has the best success/fail ratio and returns the category label as string.'''
-    pass
+    #Get all unique categories
+    categories = {}
+
+    for habit in habits:
+        #If category not yet found in categories dict then create a new one with a nesteded dict containing the current habit success and fail
+        if(habit.category and habit.category.lower() not in categories.keys()):
+            categories[habit.category.lower()] = {'success':habit.success, 'fail':habit.fail, 'ratio':0}
+        #If category already exists then add the success and fails to the category from the current habit
+        elif(habit.category):
+            categories[habit.category.lower()]['success'] += habit.success
+            categories[habit.category.lower()]['fail'] += habit.fail
+        #If no category then skip the habit
+        else:
+            pass
+    
+     #Init counter variable and best_category
+    best_ratio = 0
+    best_category = ''
+
+    #For each category key, add the success and fail to the dict and calulcate the ratio
+    for category in categories.keys():
+        success = categories[category]['success']
+        fail = categories[category]['fail']
+        categories[category]['ratio'] = success/fail
+        
+        #If we can find a newer better success ratio for habit category then update the best
+        if(categories[category]['ratio'] > best_ratio):
+            best_ratio = categories[category]['ratio']
+            best_category = category
+        else:
+            pass
+    
+    return best_category    
 
 def best_performing_interval(habits:list) -> str:
     '''Receives habits list and checks which interval has the best success/fail ratio and returns the interval label as string.'''
-    pass
+    #Get all unique intervals
+    intervals = {}
+
+    for habit in habits:
+        #If interval not yet found in intervals dict then create a new one with a nesteded dict containing the current habit success and fail
+        if(habit.interval not in intervals.keys()):
+            intervals[habit.interval] = {'success':habit.success, 'fail':habit.fail, 'ratio':0}
+        #If interval already exists then add the success and fails to the interval from the current habit
+        elif(habit.interval not in intervals.keys()):
+            intervals[habit.interval]['success'] += habit.success
+            intervals[habit.interval]['fail'] += habit.fail
+        #If no interval then skip the habit (should never be the case)
+        else:
+            pass
+    
+    #Init counter variable and best_interval
+    best_ratio = 0
+    best_interval = ''
+
+    #For each interval key, add the success and fail to the dict and calulcate the ratio
+    for interval in intervals.keys():
+        success = intervals[interval]['success']
+        fail = intervals[interval]['fail']
+        intervals[interval]['ratio'] = success/fail
+        
+        #Now look for best ratio
+        #If we can find a newer better success ratio for habit category then update the best
+        if(intervals[interval]['ratio'] > best_ratio):
+            best_ratio = intervals[interval]['ratio']
+            best_interval = interval
+        else:
+            pass
+    
+    #Return the best interval
+    return best_interval   
 
 def avg_total_streak(habits:list) -> int:
     '''Receives habits list and calculates the avg streak across all habits.'''
-    pass
+    total_habits = len(habits)
+    total_streak = 0
+
+    #For each habit add the streak to total_streak
+    for habit in habits:
+        total_streak += habit.streak
+    
+    #Return avg total streak
+    return total_streak / total_habits
 
 def avg_break_streak(habits:list) -> int:
     '''Receives habits list and calculates ....?'''
@@ -146,7 +235,22 @@ def avg_break_streak(habits:list) -> int:
 
 def avg_time_left(habits:list) -> int:
     '''Receives habits list and calculates the avg time left until deadlines are due and returns this value as seconds in int.'''
-    pass
+
+    #Counters
+    total_checkins = 0
+    total_time_left = 0
+
+    for habit in habits:
+        #Add to total amount of checkins
+        total_checkins += len(habit.checkins)
+
+        #For each checkin calculate the time difference between deadline and checkin time
+        for checkin in habit.checkins:
+            time_left_before_deadline = checkin.deadline - checkin.checkin_datetime
+            total_time_left += time_left_before_deadline
+    
+    #Return the average time left
+    return total_time_left / total_checkins
 
 def earliest(habits:list) -> Habit:
     '''Receives habits and checks which habit has the most early deadline to be met and the habit is returned.'''

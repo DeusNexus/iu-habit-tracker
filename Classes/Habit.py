@@ -24,7 +24,8 @@ class Habit:
             is_dynamic:bool=False,
             checkin_num_before_deadline:int=1,
             habit_id:str=None,
-            user_id: str=None
+            user_id: str=None,
+            cost:float = 0
             ) -> None:
 
         '''Initializes a new Habit instance with the supplied arguments, can be normal or dynamic which indicate how the streak habit is interpreted and deadline met.'''

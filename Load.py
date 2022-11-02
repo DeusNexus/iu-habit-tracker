@@ -235,7 +235,7 @@ def load_user_data(users,user_id):
                     #The database sends them in a list, for convenience the list is parsed into a dict model for easier access to the different attributes
                     hm = Habit_Model(h)
                     #Create new habit but then use overwrite to fill out all database values, basically a temporary place holder.
-                    u.create_habit(hm['title'],hm['description'],hm['interval'],hm['active'],hm['start_from'],hm['difficulity'],hm['category'],hm['moto'],hm['importance'],hm['milestone_streak'],hm['style'],hm['is_dynamic'],hm['checkin_num_before_deadline'],hm['habit_id'],hm['user_id'])
+                    u.create_habit(hm['title'],hm['description'],hm['interval'],hm['active'],hm['start_from'],hm['difficulity'],hm['category'],hm['moto'],hm['importance'],hm['milestone_streak'],hm['style'],hm['is_dynamic'],hm['checkin_num_before_deadline'],hm['habit_id'],hm['user_id'],hm['cost'])
                     #Overwrite the habit instance with current db values
                     u.habits[hidx].overwrite(
                         user_id=hm['user_id'],
@@ -272,7 +272,7 @@ def load_user_data(users,user_id):
                         if h.habit_id == cm['habit_id']:                        
                             #Create placeholder checkin
                             h.checkins.append(CheckIn(cm['user_id'],cm['habit_id'],cm['checkin_id'],cm['deadline'],cm['success'],cm['note'],cm['rating'],cm['cost'],cm['cost_accum'],cm['dynamic'],cm['dynamic_count']))
-                            h.checkins[-1].overwrite(cm['user_id'],cm['habit_id'],cm['checkin_id'],cm['checkin_datetime'],cm['deadline'],cm['success'],cm['note'],cm['rating'],cm['cost_accum'],cm['dynamic'],cm['dynamic_count'])
+                            h.checkins[-1].overwrite(cm['user_id'],cm['habit_id'],cm['checkin_id'],cm['checkin_datetime'],cm['deadline'],cm['success'],cm['note'],cm['rating'],cm['cost'],cm['cost_accum'],cm['dynamic'],cm['dynamic_count'])
 
     except Exception as e:
         print("[❌] Fail in load_user_data: ",e)

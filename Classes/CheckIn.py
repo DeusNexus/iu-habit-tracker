@@ -12,7 +12,7 @@ class CheckIn:
         self.success:bool = success
         self.note:str = note
         self.rating:int = rating
-        self.cost:int = cost
+        self.cost:float = float(cost)
         self.cost_accum:float = cost_accum + cost
         self.dynamic:bool = dynamic
         self.dynamic_count:int = dynamic_count
@@ -40,8 +40,8 @@ class CheckIn:
         self.success:bool = bool(success)
         self.note:str = note
         self.rating:int = rating
-        self.cost: int = cost
-        self.cost_accum:float = cost_accum
+        self.cost: float = float(cost)
+        self.cost_accum:float = float(cost_accum)
         self.dynamic:bool = bool(dynamic)
         self.dynamic_count:int = dynamic_count
     

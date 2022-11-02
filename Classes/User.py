@@ -65,7 +65,8 @@ class User:
                     is_dynamic=False,
                     checkin_num_before_deadline=1,
                     habit_id='',
-                    user_id='')
+                    user_id='',
+                    cost=0)
                 
                 print('*habit.values(): ',*habit.values())
                 self.habits[indx].overwrite(*habit.values())
@@ -106,11 +107,12 @@ class User:
         is_dynamic:bool,
         checkin_num_before_deadline:int,
         habit_id: str,
-        user_id: str
+        user_id: str,
+        cost: float
         ) -> None:
         '''Creates a new Habit for the user and appends it to the users's habits list.'''
         #Instantiate a habit and put it in the user habits list
-        self.habits.append(Habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline, habit_id, user_id))
+        self.habits.append(Habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline, habit_id, user_id, cost))
     
     def delete_habit(self,habit_id:str) -> None:
         '''Delete a habit from the user's habits list by providing the habit_id of the habit to be removed.'''

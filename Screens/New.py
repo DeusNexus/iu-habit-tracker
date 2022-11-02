@@ -28,7 +28,7 @@ def new(state):
 
     def questionary(is_dynamic:bool):
         #user input
-        title_ask = interval_ask = milestone_ask = checkin_num_before_deadline_ask = True
+        title_ask = interval_ask = milestone_ask = checkin_num_before_deadline_ask = cost_ask = True
 
         while(title_ask):
             #Test user input
@@ -83,6 +83,7 @@ def new(state):
             importance = None
             milestone = None
             style = 0
+            cost = 0
 
         #If optional is True, fill out more details
         else:
@@ -112,13 +113,28 @@ def new(state):
                 else:
                     print("Use an integer to specify the milestone target.")
             
+            
+            use_cost = quest.confirm("Would you like to associate a cost for the habit? E.g. the habit will calculate the total spend cost each time you checked in.").ask()
+            
+            if(use_cost):
+                while(cost_ask):
+                    #Test user input
+                    cost = quest.text("Please specify how much the habit costs per time you do it/check in.").ask()
+                    if(type(float(cost)) == float):
+                        cost_ask = False
+                    else:
+                        print("Use a correct float number to define your habit cost! E.g.: 1, 2.50, 9.99")
+            #Dont use cost, set to default of 0
+            else:
+                cost = 0
+
             style = 0
 
         #Create habit with user input
         try:
             habit_index = len(state["active_user"].habits)
             #When habit_id = None is passed it automatically generates one.
-            state["active_user"].create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline,None,state["active_user"].user_id)
+            state["active_user"].create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline,None,state["active_user"].user_id,cost)
             #Insert the habit into the db
             api.db_habits_insert([
                 {

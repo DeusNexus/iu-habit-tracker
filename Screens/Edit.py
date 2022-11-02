@@ -48,6 +48,7 @@ def edit(state):
                 "importance",
                 "milestone_streak",
                 "style",
+                "cost"
             ]
 
             dynamic_attr = [
@@ -129,7 +130,14 @@ def edit(state):
                     curr_habit.style = ans_style
                     db_update_habit(curr_habit.habit_id,anw_attr,ans_style)
 
+                elif(anw_attr == 'cost'):
+                    ans_cost = quest.text('What will be the new cost for your habit? Accumulated value does not change but new cost value will be added.').ask()
+                    curr_habit.cost = ans_cost
+                    db_update_habit(curr_habit.habit_id,anw_attr,ans_cost)
+
                 elif(anw_attr == 'checkin_num_before_deadline' and habit.is_dynamic):
                     ans_checkin_num_before_deadline = quest.text('What dynamic checking target would you like to set for this habit?').ask()
                     curr_habit.checkin_num_before_deadline = ans_checkin_num_before_deadline
                     db_update_habit(curr_habit.habit_id,anw_attr,ans_checkin_num_before_deadline)
+                
+                
