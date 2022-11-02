@@ -49,7 +49,7 @@ class Habit:
         #Datetime now for all initial variables
         date = datetime.now()
         
-        self.user_id = user_id
+        self.user_id:str = user_id
         self.habit_id:str = habit_id if habit_id else ShortUUID().random(length=5).lower()
         self.created_on:datetime = date
         self.prev_deadline: datetime = date
@@ -93,11 +93,12 @@ class Habit:
 
         """The function is used in combination with user_id to overwrite values of internal user class when a user already exists in DB"""
         self.user_id:str = user_id
+        self.habit_id:str = habit_id if habit_id else ShortUUID().random(length=5).lower()
         self.title:str = title
         self.description:str = description
         self.interval:str = interval
         self.active:bool = True if active == 'True' else False
-        self.start_from:datetime = datetime.strptime(start_from, "%Y-%m-%d %H:%M:%S.%f") if not start_from == '' else None
+        self.start_from = datetime.now() if start_from == '' else datetime.strptime(start_from, "%Y-%m-%d %H:%M:%S.%f")
         self.difficulity:int = difficulity
         self.category:str = category
         self.moto:str = moto
@@ -106,7 +107,6 @@ class Habit:
         self.style:int = style
         self.is_dynamic:bool = True if is_dynamic == 'True' else False
         self.checkin_num_before_deadline:int = int(checkin_num_before_deadline) if checkin_num_before_deadline else 1
-        self.habit_id:str = habit_id if habit_id else ShortUUID().random(length=5).lower()
         self.dynamic_count:int = int(dynamic_count) if dynamic_count else 0
         self.created_on:datetime = datetime.strptime(created_on, "%Y-%m-%d %H:%M:%S.%f")
         self.prev_deadline: datetime = datetime.strptime(prev_deadline, "%Y-%m-%d %H:%M:%S.%f")

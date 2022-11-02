@@ -49,7 +49,14 @@ def test_load_user_data():
     assert users.users[0].habits[0].checkins[0], 'No checkins were found for habit[0], make sure first user in db does have a habit with checkin to check for!'
 
 def test_default_example_data():
-    for example_habit in Load.default_example_data():
-        #Create Habit takes 14 arguments
-        print(example_habit)
-        assert len(example_habit) == 14, 'The function did not provide the correct amount of arguments to create habits.'
+    (habits, checkins) = Load.default_example_data('test_id_tests')
+
+    for habit in habits:
+        #Overwriting habit takes 24 default arguments that will overwrite a initialized habit with the example values.
+        print(habit)
+        assert len(habit.keys()) == 24, 'The function did not provide the correct amount of arguments to create habits.'
+
+    for checkin in checkins:
+        #Overwriting checkin takes 12 default arguments that will overwrite a initialized checkin with the example values.
+        print(checkin)
+        assert len(checkin.keys()) == 12

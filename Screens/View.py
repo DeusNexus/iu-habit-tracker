@@ -25,7 +25,7 @@ def view(state):
     clear()
     print('[View Screen]')
     
-    if( len(state["active_user"].habits) == 0 ): 
+    if( len(state["active_user"].habits) == 0 or len([habit for habit in state["active_user"].habits if habit.active == True]) < 1): 
         print('You currently do not have any habits to view!')
         return_user_screen(state)
 

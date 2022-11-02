@@ -98,6 +98,10 @@ def app(skip:bool=False) -> None:
             login_options = [u.name for u in state['users'].users] + ['[Exit]']
             selected_username = quest.select('The following users are registered to the application, please choose your username.', login_options ).ask()
 
+            if(not selected_username):
+                print('No username was selected, assuming that user tried to cancel action with cntrl + c, terminating application...')
+                exit()
+
             if(selected_username) == '[Exit]': 
                 print("Goodbye! Terminating application...")
                 sleep(2)

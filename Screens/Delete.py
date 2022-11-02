@@ -42,31 +42,26 @@ def delete(state):
                 print('Showing each habit: ...')
                 #Habit to Delete
                 h2d = None
-                index = 0
                 #Go over the habits until we find the user specified title (take note that habits with same title would always delete the first one!)
-                for habit in state["active_user"].habits:
+                
+                for index, habit in enumerate(state["active_user"].habits):
                     if ans == habit.title:
                         h2d = habit
-                        print('Habit at Index: ',index)
-                        #Exit the loop so we don't increment the index further.
-                        break
-                    else:
-                        #If habit title not yet equal, increment index and compare next one in list.
-                        index += 1
+                        print('Habit at Index: ', index)
 
-                sleep(1*state["SLEEP_SPEED"])
-                print(f'Deleting "{h2d.title}" habit with id: {h2d.habit_id}...')
+                        sleep(1*state["SLEEP_SPEED"])
+                        print(f'Deleting "{h2d.title}" habit with id: {h2d.habit_id}...')
 
-                #Remove habit from memory, since habit instance also includes the checkins list we don't have to remove these specifically from memory.
-                state["active_user"].habits.pop(index)
+                        #Remove habit from memory, since habit instance also includes the checkins list we don't have to remove these specifically from memory.
+                        state["active_user"].habits.pop(index)
 
-                #Habit to remove from db
-                print('Deleting habits from database..')
-                api.db_habits_delete(h2d.habit_id)
+                        #Habit to remove from db
+                        print('Deleting habits from database..')
+                        api.db_habits_delete(h2d.habit_id)
 
-                #Remove all checkins for the habit_id
-                print('Deleting checkins for habit from database...')
-                api.db_checkins_delete(h2d.habit_id)
+                        #Remove all checkins for the habit_id
+                        print('Deleting checkins for habit from database...')
+                        api.db_checkins_delete(h2d.habit_id)
 
                 #state["active_user"].delete_habit(habit_id)
                 return_user_screen(state)

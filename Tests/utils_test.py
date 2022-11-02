@@ -23,6 +23,6 @@ def test_interval_to_seconds():
 
 def test_stylize():
     with pytest.raises(ValueError):
-        Utils.stylize('test','invalid')
+        Utils.style('test','invalid')
     src = 'test'
-    assert Utils.stylize(src,'bold') == f'\033[1m{src}\033[0m'
+    assert Utils.style(src,'BOLD') == f'\033[1m{src}\033[0m'

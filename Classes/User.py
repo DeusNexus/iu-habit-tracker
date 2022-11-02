@@ -48,10 +48,32 @@ class User:
         #default reset with example data
         if(type==0):
             self.habits = [] #insert example habits!!
-            examples = default_example_data()
-            for example in examples:
-                print('*example: ',*example)
-                self.create_habit(*example)
+            (habits, checkins) = default_example_data(self.user_id)
+            for indx, habit in enumerate(habits):
+                self.create_habit(
+                    title='',
+                    description='',
+                    interval='1D',
+                    active=True,
+                    start_from='',
+                    difficulity=5,
+                    category='',
+                    moto='',
+                    importance=5,
+                    milestone=31,
+                    style=0,
+                    is_dynamic=False,
+                    checkin_num_before_deadline=1,
+                    habit_id='',
+                    user_id='')
+                
+                print('*habit.values(): ',*habit.values())
+                self.habits[indx].overwrite(*habit.values())
+                
+                for indx2, checkin in enumerate(checkins):
+                    print('*checkin.values(): ',*checkin.values())
+                    self.habits[indx].checkin('test_note',5)
+                    self.habits[indx].checkins[indx2].overwrite(*checkin.values())
             
         #clean all habits and don't add example data
         elif(type==1):
@@ -74,7 +96,7 @@ class User:
         description:str,
         interval:str,
         active:bool,
-        start_from:datetime,
+        start_from:str,
         difficulity:int,
         category:str,
         moto:str,
