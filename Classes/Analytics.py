@@ -75,7 +75,7 @@ def most_punctual(habits:list) -> int:
 
                 current_remain = 0
                 current_remain = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
-                print('Current remaining: ',current_remain)
+                print('Most Punctual Current remaining: ',current_remain)
 
                 #Compare current remaining against most_time_remain for previous habits, it it has high time remaining it is more punctual.
                 if current_remain > most_time_remain_sec:
@@ -104,7 +104,7 @@ def most_late(habits:list) -> int:
             for checkin in habit.checkins:
                 current_remain = 0
                 current_remain = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
-                print('Current remaining: ',current_remain)
+                print('Most Late Current remaining: ',current_remain)
                 
                 #Compare the current least_time_remain from all previous habits with current_remain of habit, if it is less then update this to be a more late habit (less time left until deadline)
                 if current_remain < least_time_remain_sec and current_remain > 0:

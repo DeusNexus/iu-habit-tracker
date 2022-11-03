@@ -175,7 +175,7 @@ class Habit:
         if self.is_dynamic:
             raise ValueError('Tried to checkin with regular checkin method for a dynamic habit!')
         #Check if deadline is success or failed
-        now = datetime.now() #.strftime('%Y-%m-%d %H:%M:%S.%f')
+        now = datetime.now()
 
         if(now <= self.next_deadline):
             #Insert successful checkin to checkins list
@@ -225,9 +225,11 @@ class Habit:
         if not self.is_dynamic:
             raise ValueError('Tried to checkin with dynamic checkin method for a regular habit!')
         #Compare if we haven't exceeded deadline yet with less than required checkins
-        now = datetime.now() #.strftime('%Y-%m-%d %H:%M:%S.%f')
+        now = datetime.now()
         
-        if(now <= self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline):
+        #Target of 3
+        #Current is 2
+        if(now <= self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline - 1):
             #success dynamic checkin before deadline
             self.dynamic_incr()
             #Insert successful checkin to checkins list
@@ -245,10 +247,21 @@ class Habit:
                     dynamic=True,
                     dynamic_count=self.dynamic_count)
             )
-            print(f'You successfully checked in before the deadline of your dynamic habit. You current checkin target is now {self.dynamic_count}, your streak is {self.streak} and next (current) deadline still on {self.next_deadline}.')
+            print(
+                '\nYou '+
+                style('successfully','GREEN')+
+                ' checked in before the deadline of your dynamic habit. '+
+                '\nYou current checkin target is now '+
+                style(f'{self.dynamic_count}','CYAN')+
+                ' of '+
+                style(f'{self.checkin_num_before_deadline}','PURPLE')+
+                ', your streak is '+
+                style(f'{self.streak}','BOLD')+
+                ' and next (current) deadline still on '+
+                style(f'{self.next_deadline.strftime("%Y-%m-%d %H:%M")}.','YELLOW'))
 
         #Still before deadline but this checkin target is met and therefor the dynamic habit has completed its goal for current deadline!    
-        elif(now <= self.next_deadline and self.dynamic_count >= self.checkin_num_before_deadline):
+        elif(now <= self.next_deadline and self.dynamic_count >= self.checkin_num_before_deadline - 1):
             #Insert final checkin to checkins list before resetting the habit counters
             self.checkins.append(
                 CheckIn(
@@ -266,11 +279,23 @@ class Habit:
             )
             #Reset counter for next deadline
             self.dynamic_reset()
+            self.incr_streak()
             self.incr_success()
             #Update deadline to next interval
             self.update_deadlines()
-            print(f'You successfully checked in before the deadline of your dynamic habit and you have reached your checkin goal! This means you increment your habit streak by one and have a new deadline to meet. You current checkin target is now {self.dynamic_count}, your streak is {self.streak} and next deadline still on {self.next_deadline}.')
-
+            print(
+                '\nYou '+
+                style('successfully','GREEN')+
+                ' checked in before the deadline of your dynamic habit and you have reached your checkin goal! '+
+                'This means you increment your habit streak by one and have a new deadline to meet. '+
+                '\nYou current checkin target is now '+
+                style(f'{self.dynamic_count}','CYAN')+
+                ' of '+
+                style(f'{self.checkin_num_before_deadline}','PURPLE')+
+                ', your streak is '+
+                style(f'{self.streak}','BOLD')+
+                ' and new deadline is on '+
+                style(f'{self.next_deadline.strftime("%Y-%m-%d %H:%M")}.','YELLOW'))
         
         #Failed checkins, deadline is met but dynamic checkin count hasn't meet target
         elif(now > self.next_deadline and self.dynamic_count < self.checkin_num_before_deadline):
@@ -289,23 +314,40 @@ class Habit:
                     dynamic=True,
                     dynamic_count=self.dynamic_count)
             )
-             #failed checkin
+            
+            #failed checkin
             self.reset_streak()
             self.incr_fail()
+            self.dynamic_reset()
+            #Update failed deadline to by in future
             self.update_deadlines_failed()
-            self.dynamic_reset()    
-            print(f'You failed to checked in before the deadline of your dynamic habit therefor lose your streak! A new deadline is created and you need to start over with your checkin target for the provided interval. You current checkin target is now {self.dynamic_count}, your streak is {self.streak} and new deadline is on {self.next_deadline}.')
-    
-
+            print(
+                '\nYou '+
+                style('failed','RED')+
+                ' to checked in before the deadline of your dynamic habit therefor lose your streak! A new deadline is created and you need to start over with your checkin target for the provided interval. '+
+                '\nYou current checkin target is now '+
+                style(f'{self.dynamic_count}','CYAN')+
+                ' of '+
+                style(f'{self.checkin_num_before_deadline}','PURPLE')+
+                ', your streak is '+
+                style(f'{self.streak}','BOLD')+
+                ' and new deadline is on '+
+                style(f'{self.next_deadline.strftime("%Y-%m-%d %H:%M")}.','YELLOW'))
 
     def info_habit(self) -> None:
         '''Used for debugging to print Habit information to the terminal.'''
         habit_type = '[]'
         if self.is_dynamic:
-            habit_type = '[ Dynamic ]'
+            habit_type = '[Dynamic]'
         else:
-            habit_type = '[ Regular ]'
-        return print(f'[{self.title}: {self.description}] {habit_type}\nCreated on: {self.created_on} \nDeadline: {self.next_deadline}')
+            habit_type = '[Regular]'
+        return print(
+            f'{habit_type} '+
+            style(f'[{self.title}: {self.description}] ','BLUE')+
+            '\nCreated on: '+
+            style(f'{self.created_on.strftime("%Y-%m-%d %H:%M")}','CYAN')+
+            ' \nCurrent Deadline: '+
+            style(f'{self.next_deadline.strftime("%Y-%m-%d %H:%M")}','YELLOW'))
 
     def info_checkins(self) -> None:
         '''Used for debugging, iterates over the checkins of a habit and prints information out for each checkin.'''

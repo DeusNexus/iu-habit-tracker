@@ -5,6 +5,7 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 from Database import db_api as api
 from datetime import datetime
+from Utils import style
 
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
@@ -35,12 +36,14 @@ def habit_checkin(state):
             #List all active habits ready to checkin to.
             habits:list = [habit for habit in state["active_user"].habits if habit.active]
 
-            print('Total Available Habits for Checkin: ',len(habits))
+            print('\nTotal Available Habits for Checkin: ',len(habits))
             habit_strings:list =  [
                 f'{idx+1} [{"Dynamic" if habit.is_dynamic else "Regular"}]'+ 
                 f'[{"DEADLINE DUE" if datetime.now() > habit.next_deadline else "IN TIME"}] {habit.title} - '+ 
                 f'Streak: {habit.streak} - '+
-                f'Deadline: {habit.next_deadline.strftime("%Y-%m-%d %H:%M")}\n'
+                f'Deadline: {habit.next_deadline.strftime("%Y-%m-%d %H:%M")} '+
+                (f' - Number of checkins out of goal: {habit.dynamic_count}/{habit.checkin_num_before_deadline}' if habit.is_dynamic else '') +
+                '\n'
                 for idx,habit in enumerate(habits)] + ['Go Back to User Screen']
             ans = quest.select('Which habit would you like to checkin for?', habit_strings).ask()
 
@@ -95,15 +98,12 @@ def habit_checkin(state):
                         #Update the habit in the database with the new checkin values!
                         api.db_update_habit_checkin(h2c)
 
-                        print(f'Dynamic Habit Check-in complete. ')
+                        print(style(f'\nDynamic Habit Check-in complete.\n','GREEN'))
                         
                     except Exception as e:
                         print('Failed to insert dynamic checkin: ',e)
 
-                    sleep(2*state["SLEEP_SPEED"])
-                    print('[DYNAMIC CHECKIN DID WE MEET DEADLINE GOAL YET, DID WE FAIL OR STILL TARGET NOT MET AND DEADLINE NOT DUE. ]')
-                    sleep(1*state["SLEEP_SPEED"])
-                    quest.select('To continue please select "okay" and press enter.', ['Okay']).ask()
+                    quest.select('Presse Enter to continue.', ['Okay']).ask()
 
                 #If regular habit, use normal checkin method
                 else:
@@ -139,11 +139,13 @@ def habit_checkin(state):
                         #Update the habit in the database with the new checkin values!
                         api.db_update_habit_checkin(h2c)
 
+                        print(style(f'\nRegular Habit Check-in complete.\n','GREEN'))
+
                     except Exception as e:
                         print('Failed to insert regular checkin: ',e)
 
                     sleep(2*state["SLEEP_SPEED"])
-                    quest.select('\nTo continue please select "okay" and press enter.', ['Okay']).ask()
+                    quest.select('Presse Enter to continue.', ['Okay']).ask()
 
                 #Return to checkin list
                 return_checkin_screen(state)
