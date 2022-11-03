@@ -1,10 +1,13 @@
 import os
 import questionary as quest
 from time import sleep
+from datetime import datetime
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
 import Classes.Analytics as Analytics
+from Database import db_api as api
+from Load import Habit_Model
 
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
@@ -97,6 +100,35 @@ def view(state):
         elif(ans == options[2]):
             criteria = ['interval','difficulity','category','importance','streak','success','fail','cost','cost_accum']
             ans = quest.select('Which filter criteria would you like to use?',criteria).ask()
+
+            if(ans == 'interval'):
+                interval = quest.text('Write the interval which you would like to use a filter for you habits? E.g. 1D, 4H').ask()
+                
+                if(interval):
+                    try:
+                        interval_habits = api.db_get_habits_interval(state["active_user"].user_id, interval)
+                        print('\n')
+
+                        for habit in interval_habits:
+                            #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                            hm = Habit_Model(habit)
+                            print(
+                                f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get interval: ",e)
+                        traceback.print_exc()
+                        sleep(10)
+
+                pass
+
             return_view_screen(state)
         
         #Return to user screen

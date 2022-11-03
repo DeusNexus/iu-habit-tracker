@@ -35,14 +35,14 @@ class CheckIn:
         self.user_id:str = user_id
         self.habit_id:str = habit_id
         self.checkin_id:str = checkin_id if checkin_id else ShortUUID().random(length=5).lower()
-        self.checkin_datetime:datetime = datetime.strptime(checkin_datetime, "%Y-%m-%d %H:%M:%S.%f")
-        self.deadline:datetime = datetime.strptime(deadline, "%Y-%m-%d %H:%M:%S.%f")
-        self.success:bool = bool(success)
+        self.checkin_datetime:datetime = checkin_datetime
+        self.deadline:datetime = deadline
+        self.success:bool = success
         self.note:str = note
         self.rating:int = rating
-        self.cost: float = float(cost)
-        self.cost_accum:float = float(cost_accum)
-        self.dynamic:bool = bool(dynamic)
+        self.cost: float = cost
+        self.cost_accum:float = cost_accum
+        self.dynamic:bool = dynamic
         self.dynamic_count:int = dynamic_count
     
     def info_checkin(self) -> None:

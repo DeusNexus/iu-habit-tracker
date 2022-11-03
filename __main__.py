@@ -148,6 +148,7 @@ def app(skip:bool=False) -> None:
     
     except Exception as e:
         print('Error occured: ',e)
+        traceback.print_exc()
         sleep(10)
     except KeyboardInterrupt as e:
         print('\n\nYou have terminated the application with Ctrl+C!')

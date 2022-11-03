@@ -12,56 +12,56 @@ def User_Model(res):
     user = {
         'user_id':res[0],
         'salt':res[1],
-        'name':res[2],
+        'name':str(res[2]),
         'password':res[3],
-        'created':res[4],
-        'last_login':res[5],
+        'created':datetime.strptime(res[4], "%Y-%m-%d %H:%M:%S.%f"),
+        'last_login':datetime.strptime(res[5], "%Y-%m-%d %H:%M:%S.%f"),
     }
     return user
 
 def Habit_Model(res):
     habit = {
-        'user_id':res[0],
-        'habit_id':res[1],
-        'title':res[2],
-        'description':res[3],
-        'interval':res[4],
-        'active':res[5],
-        'start_from':res[6],
-        'difficulity':res[7],
-        'category':res[8],
-        'moto':res[9],
-        'importance':res[10],
-        'style':res[11],
-        'milestone_streak':res[12],
-        'is_dynamic':res[13],
-        'checkin_num_before_deadline':res[14],
-        'dynamic_count':res[15],
-        'created_on':res[16],
-        'prev_deadline':res[17],
-        'next_deadline':res[18],
-        'streak':res[19],
-        'success':res[20],
-        'fail':res[21],
-        'cost':res[22],
-        'cost_accum':res[23]
+        'user_id':str(res[0]),
+        'habit_id':str(res[1]),
+        'title':str(res[2]),
+        'description':str(res[3]),
+        'interval':str(res[4]),
+        'active': True if res[5] == 'True' else False,
+        'start_from':datetime.strptime(res[6], "%Y-%m-%d %H:%M:%S.%f"),
+        'difficulity':int(res[7]) if res[7] else 0,
+        'category':str(res[8]),
+        'moto':str(res[9]),
+        'importance':int(res[10]) if res[10] else 0,
+        'style':int(res[11]) if res[11] else 0,
+        'milestone_streak': int(res[12]) if(res[12]) else 0,
+        'is_dynamic': True if res[13] == 'True' else False,
+        'checkin_num_before_deadline': int(res[14]) if res[14] else 0,
+        'dynamic_count': int(res[15]) if res[15] else 0,
+        'created_on':datetime.strptime(res[16], "%Y-%m-%d %H:%M:%S.%f"),
+        'prev_deadline':datetime.strptime(res[17], "%Y-%m-%d %H:%M:%S.%f"),
+        'next_deadline':datetime.strptime(res[18], "%Y-%m-%d %H:%M:%S.%f"),
+        'streak':int(res[19]),
+        'success':int(res[20]),
+        'fail':int(res[21]),
+        'cost':float(res[22]) if res[22] else 0,
+        'cost_accum':float(res[23]) if res[23] else 0
     }
     return habit
 
 def Checkin_Model(res):
     checkin = {
-        'user_id':res[0],
-        'habit_id':res[1],
-        'checkin_id':res[2],
-        'checkin_datetime':res[3],
-        'deadline':res[4],
-        'success':res[5],
-        'note':res[6],
-        'rating':res[7],
-        'cost':res[8],
-        'cost_accum':res[9],
-        'dynamic':res[10],
-        'dynamic_count':res[11]
+        'user_id':str(res[0]),
+        'habit_id':str(res[1]),
+        'checkin_id':str(res[2]),
+        'checkin_datetime':datetime.strptime(res[3],"%Y-%m-%d %H:%M:%S.%f"),
+        'deadline':datetime.strptime(res[4], "%Y-%m-%d %H:%M:%S.%f"),
+        'success': True if res[5] == 'True' else False,
+        'note':str(res[6]),
+        'rating':int(res[7]) if res[7] else 0,
+        'cost':float(res[8]) if res[8] else 0,
+        'cost_accum':float(res[9]) if res[9] else 0,
+        'dynamic': True if res[10] == 'True' else False,
+        'dynamic_count':int(res[11]) if res[11] else 0
     }
     return checkin
 

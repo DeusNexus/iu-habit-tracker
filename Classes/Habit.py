@@ -98,20 +98,20 @@ class Habit:
         self.title:str = title
         self.description:str = description
         self.interval:str = interval
-        self.active:bool = True if active == 'True' else False
-        self.start_from = datetime.now() if start_from == '' else datetime.strptime(start_from, "%Y-%m-%d %H:%M:%S.%f")
+        self.active:bool = active
+        self.start_from = datetime.now() if start_from == '' else start_from
         self.difficulity:int = difficulity
         self.category:str = category
         self.moto:str = moto
         self.importance:int = importance
-        self.milestone_streak:int = int(milestone_streak) if(milestone_streak) else 1
+        self.milestone_streak:int = milestone_streak
         self.style:int = style
-        self.is_dynamic:bool = True if is_dynamic == 'True' else False
-        self.checkin_num_before_deadline:int = int(checkin_num_before_deadline) if checkin_num_before_deadline else 1
-        self.dynamic_count:int = int(dynamic_count) if dynamic_count else 0
-        self.created_on:datetime = datetime.strptime(created_on, "%Y-%m-%d %H:%M:%S.%f")
-        self.prev_deadline: datetime = datetime.strptime(prev_deadline, "%Y-%m-%d %H:%M:%S.%f")
-        self.next_deadline: datetime = datetime.strptime(next_deadline,  "%Y-%m-%d %H:%M:%S.%f")
+        self.is_dynamic:bool = is_dynamic
+        self.checkin_num_before_deadline:int = checkin_num_before_deadline
+        self.dynamic_count:int = dynamic_count
+        self.created_on:datetime = created_on
+        self.prev_deadline: datetime = prev_deadline
+        self.next_deadline: datetime = next_deadline
         self.streak:int = streak
         self.success:int = success
         self.fail:int = fail
