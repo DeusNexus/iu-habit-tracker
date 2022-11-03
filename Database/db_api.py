@@ -255,10 +255,18 @@ def db_get_habits(user_id:str) -> list:
     close_connection(conn)
     return habits
 
-def db_get_habits_interval(user_id:str, interval:str) -> list:
-    """Returns all habits for a user_id and interval from the database table habits"""
+def db_get_habits_by_attr(user_id:str, attr:str, value:str) -> list:
+    """Returns all habits for a user_id and attribute with given value from the database table habits"""
     c, conn = open_connection()
-    c.execute("""SELECT * FROM habits WHERE user_id IS :user_id AND interval IS :interval""",{"user_id":user_id, "interval":interval})
+    c.execute(f"""SELECT * FROM habits WHERE user_id IS :user_id AND {attr} IS :value""",{"user_id":user_id, "value":value})
+    habits = c.fetchall()
+    close_connection(conn)
+    return habits
+
+def db_get_habits_by_attr_operator(user_id:str, attr:str, value:str, operator:str) -> list:
+    """Returns all habits for a user_id and attribute with given value using a comparison operator from the database table habits"""
+    c, conn = open_connection()
+    c.execute(f"""SELECT * FROM habits WHERE user_id IS :user_id AND {attr} {operator} :value""",{"user_id":user_id, "value":value})
     habits = c.fetchall()
     close_connection(conn)
     return habits

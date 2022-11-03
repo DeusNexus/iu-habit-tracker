@@ -106,9 +106,15 @@ def view(state):
                 
                 if(interval):
                     try:
-                        interval_habits = api.db_get_habits_interval(state["active_user"].user_id, interval)
+                        interval_habits = api.db_get_habits_by_attr(state["active_user"].user_id, 'interval', interval)
+                        
+                        if(len(interval_habits) < 1):
+                            print('No habits found for your specified filter criteria.')
+                            print('Returning to View screen...')
+                            sleep(2)
+                            return_view_screen(state)
+                        
                         print('\n')
-
                         for habit in interval_habits:
                             #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
                             hm = Habit_Model(habit)
@@ -127,7 +133,261 @@ def view(state):
                         traceback.print_exc()
                         sleep(10)
 
-                pass
+            elif(ans == 'difficulity'):
+                    difficulity = quest.select('Select the difficulity that you want to use to filter your habits?', ['1','2','3','4','5']).ask()
+                    
+                    try:
+                        if(difficulity):
+                            difficulity_habits = api.db_get_habits_by_attr(state["active_user"].user_id, 'difficulity', difficulity)
+
+                            if(len(difficulity_habits) < 1):
+                                print('No habits found for your specified filter criteria.')
+                                print('Returning to View screen...')
+                                sleep(2)
+                                return_view_screen(state)
+
+                            print('\n')
+                            for habit in difficulity_habits:
+                                    #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                                    hm = Habit_Model(habit)
+                                    print(
+                                        f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                        f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                        (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                        f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                        f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                        )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get difficulity: ",e)
+                        traceback.print_exc()
+                        sleep(10)
+
+            elif(ans =='category'):
+                    category = quest.text('Provide the category you want to use as a filter, note it is case-sensitive how you defined it! E.g. Sport, Food, Education..?').ask()
+                    
+                    try:
+                        if(category):
+                            category_habits = api.db_get_habits_by_attr(state["active_user"].user_id, 'category', category)
+
+                            if(len(category_habits) < 1):
+                                print('No habits found for your specified filter criteria.')
+                                print('Returning to View screen...')
+                                sleep(2)
+                                return_view_screen(state)
+
+                            print('\n')
+                            for habit in category_habits:
+                                    #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                                    hm = Habit_Model(habit)
+                                    print(
+                                        f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                        f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                        (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                        f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                        f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                        )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get difficulity: ",e)
+                        traceback.print_exc()
+                        sleep(10)
+            
+            elif(ans =='importance'):
+                    importance = quest.select('Select the importance that you want to use to filter your habits?', ['1','2','3','4','5']).ask()
+                    
+                    try:
+                        if(importance):
+                            importance_habits = api.db_get_habits_by_attr(state["active_user"].user_id, 'importance', importance)
+
+                            if(len(importance_habits) < 1):
+                                print('No habits found for your specified filter criteria.')
+                                print('Returning to View screen...')
+                                sleep(2)
+                                return_view_screen(state)
+
+                            print('\n')
+                            for habit in importance_habits:
+                                    #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                                    hm = Habit_Model(habit)
+                                    print(
+                                        f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                        f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                        (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                        f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                        f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                        )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get difficulity: ",e)
+                        traceback.print_exc()
+                        sleep(10)
+            
+            elif(ans =='streak'):
+                    operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: streak <= 5, streak > 7', ['>','>=','=','<','<=']).ask()
+                    comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
+                    try:
+                        if(operator and comparison_val):
+                            streak_habits = api.db_get_habits_by_attr_operator(state["active_user"].user_id, 'streak', comparison_val, operator)
+
+                            if(len(streak_habits) < 1):
+                                print('No habits found for your specified filter criteria.')
+                                print('Returning to View screen...')
+                                sleep(2)
+                                return_view_screen(state)
+
+                            print('\n')
+                            for habit in streak_habits:
+                                    #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                                    hm = Habit_Model(habit)
+                                    print(
+                                        f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                        f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                        (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                        f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                        f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                        )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get difficulity: ",e)
+                        traceback.print_exc()
+                        sleep(10)
+            
+            elif(ans =='success'):
+                    operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: success <= 5, success > 7', ['>','>=','=','<','<=']).ask()
+                    comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
+                    try:
+                        if(operator and comparison_val):
+                            success_habits = api.db_get_habits_by_attr_operator(state["active_user"].user_id, 'success', comparison_val, operator)
+
+                            if(len(success_habits) < 1):
+                                print('No habits found for your specified filter criteria.')
+                                print('Returning to View screen...')
+                                sleep(2)
+                                return_view_screen(state)
+
+                            print('\n')
+                            for habit in success_habits:
+                                    #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                                    hm = Habit_Model(habit)
+                                    print(
+                                        f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                        f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                        (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                        f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                        f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                        )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get difficulity: ",e)
+                        traceback.print_exc()
+                        sleep(10)
+            
+            elif(ans =='fail'):
+                    operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: fail <= 5, fail > 7', ['>','>=','=','<','<=']).ask()
+                    comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
+                    try:
+                        if(operator and comparison_val):
+                            fail_habits = api.db_get_habits_by_attr_operator(state["active_user"].user_id, 'fail', comparison_val, operator)
+
+                            if(len(fail_habits) < 1):
+                                print('No habits found for your specified filter criteria.')
+                                print('Returning to View screen...')
+                                sleep(2)
+                                return_view_screen(state)
+
+                            print('\n')
+                            for habit in fail_habits:
+                                    #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                                    hm = Habit_Model(habit)
+                                    print(
+                                        f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                        f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                        (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                        f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                        f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                        )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get difficulity: ",e)
+                        traceback.print_exc()
+                        sleep(10)
+            
+            elif(ans =='cost'):
+                    operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: fail <= 5, fail > 7', ['>','>=','=','<','<=']).ask()
+                    comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
+                    try:
+                        if(operator and comparison_val):
+                            cost_habits = api.db_get_habits_by_attr_operator(state["active_user"].user_id, 'cost', comparison_val, operator)
+
+                            if(len(cost_habits) < 1):
+                                print('No habits found for your specified filter criteria.')
+                                print('Returning to View screen...')
+                                sleep(2)
+                                return_view_screen(state)
+
+                            print('\n')
+                            for habit in cost_habits:
+                                    #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                                    hm = Habit_Model(habit)
+                                    print(
+                                        f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                        f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                        (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                        f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                        f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                        )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get difficulity: ",e)
+                        traceback.print_exc()
+                        sleep(10)
+                
+            elif(ans =='cost_accum'):
+                    operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: cost_accum <= 5, cost_accum > 7', ['>','>=','=','<','<=']).ask()
+                    comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
+                    try:
+                        if(operator and comparison_val):
+                            cost_accum_habits = api.db_get_habits_by_attr_operator(state["active_user"].user_id, 'cost_accum', comparison_val, operator)
+
+                            if(len(cost_accum_habits) < 1):
+                                print('No habits found for your specified filter criteria.')
+                                print('Returning to View screen...')
+                                sleep(2)
+                                return_view_screen(state)
+
+                            print('\n')
+                            for habit in cost_hcost_accum_habitsabits:
+                                    #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
+                                    hm = Habit_Model(habit)
+                                    print(
+                                        f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
+                                        f"\nCategory: {hm['category']} | Difficulity: {hm['difficulity']} | Importance: {hm['importance']} | Milestone Streak: {hm['milestone_streak']}"+
+                                        (f"\n{'Required # of Checkins before Deadline:' + str(hm['checkin_num_before_deadline'])} | {'Current # of Checkins before Deadline:' + str(hm['dynamic_count'])}" if hm['is_dynamic']==True else '') +
+                                        f"\nStreak: {hm['streak']} | Success:{hm['success']} | Fail: {hm['fail']} | Cost: {hm['cost']}  |  Accumulated Cost: {hm['cost_accum']}"+
+                                        f"\nDeadline Due: {hm['next_deadline'].strftime('%Y-%m-%d %H:%M')} |  Created: {hm['created_on'].strftime('%Y-%m-%d %H:%M')}\n"
+                                        )
+
+                        print('\n')
+                        quest.select('Press Enter to Continue',['Okay']).ask()
+                    except Exception as e:
+                        print("Failed to get difficulity: ",e)
+                        traceback.print_exc()
+                        sleep(10)
 
             return_view_screen(state)
         
