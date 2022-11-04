@@ -119,11 +119,42 @@ def most_late(habits:list) -> int:
     except Exception as e:
         print('most_late error:',e)
 
-def total_longest_streak(habits:list):
-    '''Receives habits list and returns the habit with the highest streak.'''
+
+def most_expensive(habits:list) -> float:
+    '''Receives list of habits and returns the highest accumulated cost for a habit'''
+    highest_cost = 0
+
+    for habit in habits:
+        if habit.cost_accum > highest_cost:
+            highest_cost = habit.cost_accum
+    
+    return highest_cost
+
+def total_longest_current_streak(habits:list):
+    '''Receives habits list and returns the highest active streak.'''
     #check for highest streak among habits
     try:
         return max(habit.streak for habit in habits)
+    except Exception as e:
+        print('total_longest_streak error:',e)
+
+def total_longest_running_streak(habits:list):
+    '''Receives habits list and returns the highest running streak.'''
+    #check for highest streak among habits
+    try:
+        highest_running_streak = 0
+        current_streak = 0
+
+        for habit in habits:
+            for checkin in habit.checkins:
+                if checkin.success:
+                    current_streak += 1
+                    if current_streak > highest_running_streak:
+                        highest_running_streak = current_streak
+                else:
+                    current_streak = 0
+
+        return highest_running_streak
     except Exception as e:
         print('total_longest_streak error:',e)
 
@@ -168,7 +199,7 @@ def best_performing_category(habits:list) -> str:
     for category in categories.keys():
         success = categories[category]['success']
         fail = categories[category]['fail']
-        categories[category]['ratio'] = success/fail
+        categories[category]['ratio'] = success/fail if fail else success
         
         #If we can find a newer better success ratio for habit category then update the best
         if(categories[category]['ratio'] > best_ratio):
@@ -230,11 +261,27 @@ def avg_total_streak(habits:list) -> int:
     return total_streak / total_habits
 
 def avg_break_streak(habits:list) -> int:
-    '''Receives habits list and calculates ....?'''
-    pass
+    '''Receives habits list and calculates how long on average the user keeps a failing streak in a row'''
+    #check for highest streak among habits
+    try:
+        highest_running_break_streak = 0
+        current_break_streak = 0
+
+        for habit in habits:
+            for checkin in habit.checkins:
+                if not checkin.success:
+                    current_break_streak += 1
+                    if current_break_streak > highest_running_break_streak:
+                        highest_running_break_streak = current_break_streak
+                else:
+                    current_break_streak = 0
+
+        return highest_running_break_streak
+    except Exception as e:
+        print('avg_break_streak error:',e)
 
 def avg_time_left(habits:list) -> int:
-    '''Receives habits list and calculates the avg time left until deadlines are due and returns this value as seconds in int.'''
+    '''Receives habits list and calculates the avg time left until deadlines are due, only checks for in-time deadlines, and returns this value as seconds in int.'''
 
     #Counters
     total_checkins = 0
@@ -246,8 +293,9 @@ def avg_time_left(habits:list) -> int:
 
         #For each checkin calculate the time difference between deadline and checkin time
         for checkin in habit.checkins:
-            time_left_before_deadline = checkin.deadline - checkin.checkin_datetime
-            total_time_left += time_left_before_deadline
+            if (checkin.deadline.timestamp() > checkin.checkin_datetime.timestamp()):
+                time_left_before_deadline = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
+                total_time_left += time_left_before_deadline
     
     #Return the average time left
     return total_time_left / total_checkins
@@ -255,3 +303,52 @@ def avg_time_left(habits:list) -> int:
 def earliest(habits:list) -> Habit:
     '''Receives habits and checks which habit has the most early deadline to be met and the habit is returned.'''
     return reduce(lambda x,y: x if x.next_deadline < y.next_deadline else y, habits)
+
+def indiv_max_streak(habit) -> int:
+    '''Receives a habit and returns the highest streak ever achieved for habit as int.'''
+    highest_streak = 0
+    current_streak = 0
+
+    for checkin in habit.checkins:
+        if checkin.success:
+            current_streak += 1
+            if current_streak > highest_streak:
+                highest_streak = current_streak
+        else:
+            current_streak = 0
+    
+    return highest_streak
+
+def indiv_avg_streak(habit) -> int:
+    '''Receives a habit and returns the avg streak for habit as float.'''
+    number_of_streaks = 0
+    streak_sum = 0
+    on_streak = False
+
+    for checkin in habit.checkins:
+        if checkin.success and not on_streak:
+            on_streak = True
+            streak_sum += 1
+            number_of_streaks += 1
+            # print('Streak Sum: ',streak_sum)
+        elif checkin.success and on_streak:
+            streak_sum += 1
+            # print('Streak Sum (on streak): ',streak_sum)
+        else:
+            on_streak = False
+    
+    #Prevent ZeroDivision
+    return float((streak_sum) / (number_of_streaks if number_of_streaks > 0 else 1))
+    
+
+def indiv_avg_rating(habit) -> float:
+    '''Receives a habit and calculates the average reported checkin rating for the user and returns it as a float.'''
+    tot_sum = 0
+    #Prevent ZeroDivision
+    tot_checkins = len(habit.checkins) if habit.checkins else 1
+    
+    for checkin in habit.checkins:
+        tot_sum += int(checkin.rating)
+    
+    return float(tot_sum / tot_checkins)
+

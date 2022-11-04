@@ -39,46 +39,46 @@ class User:
         '''Calling the function will update the last_login to the current datetime.'''
         self.last_login = datetime.now()
     
-    def reset(self,type:int=0) -> None:
+    def reset(self) -> None:
         '''Used to reset the user to initial state and depending on the provided type it will load example habits or leave the habits list empty.'''
         #reset to default OR clean without example data
-        self.created = datetime.now()
-        self.last_login = datetime.now()
 
-        #default reset with example data
-        if(type==0):
-            self.habits = [] #insert example habits!!
-            (habits, checkins) = default_example_data(self.user_id)
-            for indx, habit in enumerate(habits):
-                self.create_habit(
-                    title='',
-                    description='',
-                    interval='1D',
-                    active=True,
-                    start_from='',
-                    difficulity=5,
-                    category='',
-                    moto='',
-                    importance=5,
-                    milestone=31,
-                    style=0,
-                    is_dynamic=False,
-                    checkin_num_before_deadline=1,
-                    habit_id='',
-                    user_id='',
-                    cost=0)
+        self.habits = []
+
+        # #default reset with example data
+        # if(type==0):
+        #     self.habits = [] #insert example habits!!
+        #     (habits, checkins) = default_example_data(self.user_id)
+        #     for indx, habit in enumerate(habits):
+        #         self.create_habit(
+        #             title='',
+        #             description='',
+        #             interval='1D',
+        #             active=True,
+        #             start_from='',
+        #             difficulity=5,
+        #             category='',
+        #             moto='',
+        #             importance=5,
+        #             milestone=31,
+        #             style=0,
+        #             is_dynamic=False,
+        #             checkin_num_before_deadline=1,
+        #             habit_id='',
+        #             user_id='',
+        #             cost=0)
                 
-                print('*habit.values(): ',*habit.values())
-                self.habits[indx].overwrite(*habit.values())
+        #         print('*habit.values(): ',*habit.values())
+        #         self.habits[indx].overwrite(*habit.values())
                 
-                for indx2, checkin in enumerate(checkins):
-                    print('*checkin.values(): ',*checkin.values())
-                    self.habits[indx].checkin('test_note',5)
-                    self.habits[indx].checkins[indx2].overwrite(*checkin.values())
+        #         for indx2, checkin in enumerate(checkins):
+        #             print('*checkin.values(): ',*checkin.values())
+        #             self.habits[indx].checkin('test_note',5)
+        #             self.habits[indx].checkins[indx2].overwrite(*checkin.values())
             
-        #clean all habits and don't add example data
-        elif(type==1):
-            self.habits = []
+        # #clean all habits and don't add example data
+        # elif(type==1):
+        #     self.habits = []
 
     def info(self) -> None:
         '''Used for debugging and prints User data to the terminal.'''

@@ -132,6 +132,7 @@ def app(skip:bool=False) -> None:
                         #Set login true and show the user screen.
                         state['login'] = True
                         state['user_screen'](state)
+                        state['active_user'].set_last_login()
                     except Exception as e:
                         print('[❌] Error in app() authentication user:',e)
                 else:

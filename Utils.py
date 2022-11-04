@@ -22,6 +22,20 @@ def interval_to_seconds(intrv: str) -> int:
         
     return num * time[char]
 
+def seconds_to_timestring(sec:int) -> str:
+    day = sec // (24 * 3600)
+ 
+    sec = sec % (24 * 3600)
+    hour = sec // 3600
+ 
+    sec %= 3600
+    minutes = sec // 60
+ 
+    sec %= 60
+    seconds = sec
+     
+    return f'{int(day)}D:{int(hour)}H:{int(minutes)}M:{int(seconds)}s'
+
 def add_streak_to_deadline(deadline: datetime, seconds: int) -> datetime:
     '''Receives a deadline date and adds the number of seconds to the date to provide us with the new next deadline which is returned as datetime.'''
     

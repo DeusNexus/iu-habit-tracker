@@ -27,7 +27,7 @@ def Habit_Model(res):
         'description':str(res[3]),
         'interval':str(res[4]),
         'active': True if res[5] == 'True' else False,
-        'start_from':datetime.strptime(res[6], "%Y-%m-%d %H:%M:%S.%f"),
+        'start_from':datetime.strptime(res[6], "%Y-%m-%d %H:%M:%S.%f") if res[6] != '' else None,
         'difficulity':int(res[7]) if res[7] else 0,
         'category':str(res[8]),
         'moto':str(res[9]),
@@ -43,8 +43,8 @@ def Habit_Model(res):
         'streak':int(res[19]),
         'success':int(res[20]),
         'fail':int(res[21]),
-        'cost':float(res[22]) if res[22] else 0,
-        'cost_accum':float(res[23]) if res[23] else 0
+        'cost':res[22],
+        'cost_accum':res[23],
     }
     return habit
 
@@ -57,9 +57,9 @@ def Checkin_Model(res):
         'deadline':datetime.strptime(res[4], "%Y-%m-%d %H:%M:%S.%f"),
         'success': True if res[5] == 'True' else False,
         'note':str(res[6]),
-        'rating':int(res[7]) if res[7] else 0,
-        'cost':float(res[8]) if res[8] else 0,
-        'cost_accum':float(res[9]) if res[9] else 0,
+        'rating':int(res[7]),
+        'cost':float(res[8]),
+        'cost_accum':float(res[9]),
         'dynamic': True if res[10] == 'True' else False,
         'dynamic_count':int(res[11]) if res[11] else 0
     }

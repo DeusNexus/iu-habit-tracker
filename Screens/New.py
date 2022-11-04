@@ -160,8 +160,8 @@ def new(state):
                     'streak':state["active_user"].habits[habit_index].streak,
                     'success':state["active_user"].habits[habit_index].success,
                     'fail':state["active_user"].habits[habit_index].fail,
-                    'cost':state["active_user"].habits[habit_index].cost,
-                    'cost_accum':state["active_user"].habits[habit_index].cost_accum
+                    'cost':cost,
+                    'cost_accum':0
                 }
             ])
             print('[*] Added your habit!')

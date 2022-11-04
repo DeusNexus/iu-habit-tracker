@@ -16,6 +16,16 @@ def return_user_screen(state):
     clear()
     state["user_screen"](state)
 
+def return_app(state):
+    state["active_user"].reset()
+    sleep(1)
+    print('Reloading application, please login again to your resetted account.')
+    sleep(3)
+    clear()
+    
+    #Return to login-screen to load resetted user from database so in-memory is consistent with db.
+    state["app"](skip=True)
+
 def reset(state):
     '''The reset screen is used for resetting the user to various default states. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()
@@ -31,37 +41,15 @@ def reset(state):
     
     #Full Reset with Example Data
     if(ans==questions[0]):
-        sleep(1*state["SLEEP_SPEED"])
         api.db_reset_user_example_data(state["active_user"].user_id)
-        sleep(1)
-        print('Reloading application, please login again to your fully resetted account.')
-        sleep(3)
-        clear()
-
-        #Clear out the in-memory objects, user will get their data loaded when they successfully login.
-        state["active_user"] = None
-        for u in state["users"].users:
-            u.habits = []
-        
-        #Return to login-screen to load resetted user from database so in-memory is consistent with db.
-        state["app"](skip=True)
+        state["active_user"].reset()
+        return_app(state)
 
     #Full Reset withou Example Data
     elif(ans==questions[1]):
-        sleep(1*state["SLEEP_SPEED"])
         api.db_reset_user_full(state["active_user"].user_id)
-        sleep(1)
-        print('Reloading application, please login again to your fully resetted account.')
-        sleep(3)
-        clear()
-
-        #Clear out the in-memory objects, user will get their data loaded when they successfully login.
-        state["active_user"] = None
-        for u in state["users"].users:
-            u.habits = []
-        
-        #Return to login-screen to load resetted user from database so in-memory is consistent with db.
-        state["app"](skip=True)
+        state["active_user"].reset()
+        return_app(state)
 
     #Go back to user screen
     elif(ans==questions[2]):
