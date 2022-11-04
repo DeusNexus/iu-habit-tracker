@@ -58,7 +58,7 @@ def most_fail(habits:list) -> int:
     except Exception as e:
         print('most_fail error:',e)
 
-def most_punctual(habits:list) -> int:
+def most_punctual(habits:list) -> (int, str):
     '''Receives habits list and for each habit in habits looks which has most time remaining on average per checkin until the deadline when the habit was checked in.'''
 
     #Go through all available checkins and put the time remaining until deadline in a list, then calculate avg of list for habit
@@ -71,50 +71,63 @@ def most_punctual(habits:list) -> int:
         #!!!! Make sure that avg time left until deadline for each habit is calculated and based on that see which is most punctual!
         for habit in habits:
             # print(habit.title)
+            sum_of_time_left_till_deadline = 0
+            total_checkins_habit = len(habit.checkins) if habit.checkins else 1 #Prevent ZeroDivision if 0 habits
+            
+            #Add time left for each checkin to total sum of time remaining for habit.
             for checkin in habit.checkins:
+                sum_of_time_left_till_deadline += checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
+            
+            #Now calc average time left for habit
+            avg_time_left = sum_of_time_left_till_deadline / total_checkins_habit
+            
+            #If we indeed find avg that has more time remaining then update the most_time_remain to the value and set the most_punctual_habit to be the habit object.
+            if avg_time_left > most_time_remain_sec:
+                most_time_remain_sec = avg_time_left
+                most_punctual_habit = habit
 
-                current_remain = 0
-                current_remain = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
-                print('Most Punctual Current remaining: ',current_remain)
-
-                #Compare current remaining against most_time_remain for previous habits, it it has high time remaining it is more punctual.
-                if current_remain > most_time_remain_sec:
-                    most_time_remain_sec = current_remain
-                    most_punctual_habit = habit
+        # print('\nMost Punctual Habit: ',most_punctual_habit.title)
+        # print('Time Remaining on AVG: ',most_time_remain_sec)
 
         #Return the value of most punctual habit
-        print('Most punctual habit: ',habit.title)
-        return most_time_remain_sec
+        return most_time_remain_sec, most_punctual_habit.title
         
     except Exception as e:
         print('most_punctual error:',e)
 
-def most_late(habits:list) -> int:
+def most_late(habits:list) -> (int, str):
     '''Receives habits list and for each habit in habits looks which has least time remaining on average per checkin until the deadline when the habit was checked in.'''
 
     #Go through all available checkins and put the time remaining until deadline in a list, then calculate avg of list for habit
     #Store habit and avg time remaining in dict and find min avg (least time remains) and return the habit with its details
     #Make sure it's a pure function!
     try:
-        least_time_remain_sec = 100000000000000000000000000
+        least_time_remain_sec = 10000000000000000000000000   #Start big so no value is higher than this.
         most_late_habit = None
 
         #!!!! Make sure that avg time left until deadline for each habit is calculated and based on that see which is most late!
         for habit in habits:
+            # print(habit.title)
+            sum_of_time_left_till_deadline = 0
+            total_checkins_habit = len(habit.checkins) if habit.checkins else 1 #Prevent ZeroDivision if 0 habits
+            
+            #Add time left for each checkin to total sum of time remaining for habit.
             for checkin in habit.checkins:
-                current_remain = 0
-                current_remain = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
-                print('Most Late Current remaining: ',current_remain)
-                
-                #Compare the current least_time_remain from all previous habits with current_remain of habit, if it is less then update this to be a more late habit (less time left until deadline)
-                if current_remain < least_time_remain_sec and current_remain > 0:
-                    least_time_remain_sec = current_remain
-                    most_late_habit = habit
-                    print('Found habit with less time remaining (updated least_time_remain & most_late_habit): ',least_time_remain_sec)
+                sum_of_time_left_till_deadline += checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
+            
+            #Now calc average time left for habit
+            avg_time_left = sum_of_time_left_till_deadline / total_checkins_habit
+            
+            #If we indeed find avg that has more time remaining then update the most_time_remain to the value and set the most_punctual_habit to be the habit object.
+            if avg_time_left < least_time_remain_sec:
+                least_time_remain_sec = avg_time_left
+                most_late_habit = habit
 
-        #After all habits return the value of most_late habit
-        print('Most late habit: ',habit.title)
-        return least_time_remain_sec
+        # print('\nMost Late Habit: ',most_late_habit.title)
+        # print('Time Remaining on AVG: ',least_time_remain_sec)
+
+        #Return the value of most punctual habit
+        return least_time_remain_sec, most_late_habit.title
 
     except Exception as e:
         print('most_late error:',e)
