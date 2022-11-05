@@ -47,7 +47,6 @@ def edit(state):
                 "moto",
                 "importance",
                 "milestone_streak",
-                "style",
                 "cost"
             ]
 
@@ -124,11 +123,6 @@ def edit(state):
                     ans_milestone_streak = quest.text('What new milestone streak would you want to give to this habit? \nFor example you want to checkin daily, if you reach 30 milestone you have checked in successfully every day for 30 days.').ask()
                     curr_habit.milestone_streak = ans_milestone_streak
                     db_update_habit(curr_habit.habit_id,anw_attr,ans_milestone_streak)
-
-                elif(anw_attr == 'style'):
-                    ans_style = quest.select('What new style would you want to give to this habit?',['0','1']).ask()
-                    curr_habit.style = ans_style
-                    db_update_habit(curr_habit.habit_id,anw_attr,ans_style)
 
                 elif(anw_attr == 'cost'):
                     ans_cost = quest.text('What will be the new cost for your habit? Accumulated value does not change but new cost value will be added.').ask()

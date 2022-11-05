@@ -20,13 +20,36 @@ def test_init_no_args():
         Habit()
 
 def test_init_correct_args_all():
-    habit = Habit('testtitle','testdescription','1D',True,None,5,'testcategory','testmoto',5,False,10,0,False)
+    habit = Habit(
+        title='testtitle',
+        description='testdescription',
+        interval='1D',
+        active=True,
+        start_from='',
+        difficulity=5,
+        category='testcategory',
+        moto='testmoto',
+        importance=5,
+        milestone=10,
+        is_dynamic=False)
     assert type(habit) == Habit, 'No habit was init with correct values'
 
 def test_init_incorrect_args():
     with pytest.raises(ValueError):
         #Test 0D
-        Habit('testtitle','testdescription','0D',True,None,5,'testcategory','testmoto',5,False,10,0,False)
+        Habit(
+            title='testtitle',
+            description='testdescription',
+            interval='0D',
+            active=True,
+            start_from=None,
+            difficulity=5,
+            category='testcategory',
+            moto='testmoto',
+            importance=5,
+            milestone=10,
+            is_dynamic=False
+        )
 
 def test_update_deadlines(habit):
     prev_deadline = habit.prev_deadline

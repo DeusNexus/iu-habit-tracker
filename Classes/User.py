@@ -42,43 +42,7 @@ class User:
     def reset(self) -> None:
         '''Used to reset the user to initial state and depending on the provided type it will load example habits or leave the habits list empty.'''
         #reset to default OR clean without example data
-
         self.habits = []
-
-        # #default reset with example data
-        # if(type==0):
-        #     self.habits = [] #insert example habits!!
-        #     (habits, checkins) = default_example_data(self.user_id)
-        #     for indx, habit in enumerate(habits):
-        #         self.create_habit(
-        #             title='',
-        #             description='',
-        #             interval='1D',
-        #             active=True,
-        #             start_from='',
-        #             difficulity=5,
-        #             category='',
-        #             moto='',
-        #             importance=5,
-        #             milestone=31,
-        #             style=0,
-        #             is_dynamic=False,
-        #             checkin_num_before_deadline=1,
-        #             habit_id='',
-        #             user_id='',
-        #             cost=0)
-                
-        #         print('*habit.values(): ',*habit.values())
-        #         self.habits[indx].overwrite(*habit.values())
-                
-        #         for indx2, checkin in enumerate(checkins):
-        #             print('*checkin.values(): ',*checkin.values())
-        #             self.habits[indx].checkin('test_note',5)
-        #             self.habits[indx].checkins[indx2].overwrite(*checkin.values())
-            
-        # #clean all habits and don't add example data
-        # elif(type==1):
-        #     self.habits = []
 
     def info(self) -> None:
         '''Used for debugging and prints User data to the terminal.'''
@@ -103,7 +67,6 @@ class User:
         moto:str,
         importance:int,
         milestone:int,
-        style:int,
         is_dynamic:bool,
         checkin_num_before_deadline:int,
         habit_id: str,
@@ -112,7 +75,7 @@ class User:
         ) -> None:
         '''Creates a new Habit for the user and appends it to the users's habits list.'''
         #Instantiate a habit and put it in the user habits list
-        self.habits.append(Habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline, habit_id, user_id, cost))
+        self.habits.append(Habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, is_dynamic, checkin_num_before_deadline, habit_id, user_id, cost))
     
     def delete_habit(self,habit_id:str) -> None:
         '''Delete a habit from the user's habits list by providing the habit_id of the habit to be removed.'''

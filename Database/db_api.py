@@ -47,7 +47,6 @@ def db_init() -> None:
                     category text,
                     moto text,
                     importance integer,
-                    style integer,
                     milestone_streak integer,
                     is_dynamic text,
                     checkin_num_before_deadline integer,
@@ -123,7 +122,7 @@ def db_habits_insert(habits) -> None:
     def insert_habit(habit):
         c.execute("""INSERT INTO habits VALUES (:user_id,:habit_id,:title,
         :description,:interval,:active,:start_from,:difficulity,:category,:moto,:importance,
-        :style,:milestone_streak,:is_dynamic,:checkin_num_before_deadline,:dynamic_count,:created_on,:prev_deadline,
+        :milestone_streak,:is_dynamic,:checkin_num_before_deadline,:dynamic_count,:created_on,:prev_deadline,
         :next_deadline,:streak,:success,:fail,:cost,:cost_accum)""", habit)
 
     for h in habits:

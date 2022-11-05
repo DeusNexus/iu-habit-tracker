@@ -82,7 +82,6 @@ def new(state):
             moto = None
             importance = None
             milestone = None
-            style = 0
             cost = 0
 
         #If optional is True, fill out more details
@@ -128,13 +127,11 @@ def new(state):
             else:
                 cost = 0
 
-            style = 0
-
         #Create habit with user input
         try:
             habit_index = len(state["active_user"].habits)
             #When habit_id = None is passed it automatically generates one.
-            state["active_user"].create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, style, is_dynamic, checkin_num_before_deadline,None,state["active_user"].user_id,cost)
+            state["active_user"].create_habit(title, description, interval, active, start_from, difficulity, category, moto, importance, milestone, is_dynamic, checkin_num_before_deadline,None,state["active_user"].user_id,cost)
             #Insert the habit into the db
             api.db_habits_insert([
                 {
@@ -149,7 +146,6 @@ def new(state):
                     'category':category,
                     'moto':moto,
                     'importance':importance,
-                    'style':style,
                     'milestone_streak':milestone,
                     'is_dynamic':'True' if is_dynamic else 'False',
                     'checkin_num_before_deadline':checkin_num_before_deadline,

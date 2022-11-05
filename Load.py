@@ -32,19 +32,18 @@ def Habit_Model(res):
         'category':str(res[8]),
         'moto':str(res[9]),
         'importance':int(res[10]) if res[10] else 0,
-        'style':int(res[11]) if res[11] else 0,
-        'milestone_streak': int(res[12]) if(res[12]) else 0,
-        'is_dynamic': True if res[13] == 'True' else False,
-        'checkin_num_before_deadline': int(res[14]) if res[14] else 0,
-        'dynamic_count': int(res[15]) if res[15] else 0,
-        'created_on':datetime.strptime(res[16], "%Y-%m-%d %H:%M:%S.%f"),
-        'prev_deadline':datetime.strptime(res[17], "%Y-%m-%d %H:%M:%S.%f"),
-        'next_deadline':datetime.strptime(res[18], "%Y-%m-%d %H:%M:%S.%f"),
-        'streak':int(res[19]),
-        'success':int(res[20]),
-        'fail':int(res[21]),
-        'cost':res[22],
-        'cost_accum':res[23],
+        'milestone_streak': int(res[11]) if(res[11]) else 0,
+        'is_dynamic': True if res[12] == 'True' else False,
+        'checkin_num_before_deadline': int(res[13]) if res[13] else 0,
+        'dynamic_count': int(res[14]) if res[14] else 0,
+        'created_on':datetime.strptime(res[15], "%Y-%m-%d %H:%M:%S.%f"),
+        'prev_deadline':datetime.strptime(res[16], "%Y-%m-%d %H:%M:%S.%f"),
+        'next_deadline':datetime.strptime(res[17], "%Y-%m-%d %H:%M:%S.%f"),
+        'streak':int(res[18]),
+        'success':int(res[19]),
+        'fail':int(res[20]),
+        'cost':res[21],
+        'cost_accum':res[22],
     }
     return habit
 
@@ -99,7 +98,6 @@ def default_example_data(user_id) -> tuple:
                     'category':'Eduction',
                     'moto':'The more you learn the better',
                     'importance':5,
-                    'style':1,
                     'milestone_streak':30,
                     'is_dynamic':'False',
                     'checkin_num_before_deadline':0,
@@ -125,7 +123,6 @@ def default_example_data(user_id) -> tuple:
                     'category':'Mental Health',
                     'moto':'More joy is better',
                     'importance':5,
-                    'style':1,
                     'milestone_streak':365,
                     'is_dynamic':'False',
                     'checkin_num_before_deadline':0,
@@ -151,7 +148,6 @@ def default_example_data(user_id) -> tuple:
                     'category':'Entertainment',
                     'moto':'To get inspired',
                     'importance':2,
-                    'style':1,
                     'milestone_streak':4,
                     'is_dynamic':'False',
                     'checkin_num_before_deadline':0,
@@ -235,7 +231,7 @@ def load_user_data(users,user_id):
                     #The database sends them in a list, for convenience the list is parsed into a dict model for easier access to the different attributes
                     hm = Habit_Model(h)
                     #Create new habit but then use overwrite to fill out all database values, basically a temporary place holder.
-                    u.create_habit(hm['title'],hm['description'],hm['interval'],hm['active'],hm['start_from'],hm['difficulity'],hm['category'],hm['moto'],hm['importance'],hm['milestone_streak'],hm['style'],hm['is_dynamic'],hm['checkin_num_before_deadline'],hm['habit_id'],hm['user_id'],hm['cost'])
+                    u.create_habit(hm['title'],hm['description'],hm['interval'],hm['active'],hm['start_from'],hm['difficulity'],hm['category'],hm['moto'],hm['importance'],hm['milestone_streak'],hm['is_dynamic'],hm['checkin_num_before_deadline'],hm['habit_id'],hm['user_id'],hm['cost'])
                     #Overwrite the habit instance with current db values
                     u.habits[hidx].overwrite(
                         user_id=hm['user_id'],
@@ -250,7 +246,6 @@ def load_user_data(users,user_id):
                         moto=hm['moto'],
                         importance=hm['importance'],
                         milestone_streak=hm['milestone_streak'],
-                        style=hm['style'],
                         is_dynamic=hm['is_dynamic'],
                         checkin_num_before_deadline=hm['checkin_num_before_deadline'],
                         dynamic_count=hm['dynamic_count'],

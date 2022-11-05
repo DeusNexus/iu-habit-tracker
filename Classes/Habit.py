@@ -20,7 +20,6 @@ class Habit:
             moto:str=None,
             importance:int=None,
             milestone:int=None,
-            style:int=0,
             is_dynamic:bool=False,
             checkin_num_before_deadline:int=1,
             habit_id:str=None,
@@ -39,7 +38,6 @@ class Habit:
         self.category:str = category
         self.moto:str = moto
         self.importance:int = importance
-        self.style:int = style
         self.milestone_streak:int = milestone
         self.is_dynamic:bool = is_dynamic
         self.checkin_num_before_deadline:int = checkin_num_before_deadline
@@ -79,7 +77,6 @@ class Habit:
             moto:str,
             importance:int,
             milestone_streak:int,
-            style:int,
             is_dynamic:str,
             checkin_num_before_deadline:int,
             dynamic_count:int,
@@ -105,7 +102,6 @@ class Habit:
         self.moto:str = moto
         self.importance:int = importance
         self.milestone_streak:int = milestone_streak
-        self.style:int = style
         self.is_dynamic:bool = is_dynamic
         self.checkin_num_before_deadline:int = checkin_num_before_deadline
         self.dynamic_count:int = dynamic_count

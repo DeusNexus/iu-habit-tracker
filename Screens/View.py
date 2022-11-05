@@ -59,7 +59,7 @@ def view(state):
 
                 if(interact == ao2[0]):
                     clear()
-                    habits = state["active_user"].habits
+                    habits = [habit for habit in state["active_user"].habits if habit.active]
                     print(style('[Global Statistics for all habits]','UNDERLINE'))
                     print('\n')
                     print(style(f'Most Accumulated Cost ($) for a habit: {Analytics.most_expensive(habits)}','CYAN'))
