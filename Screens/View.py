@@ -381,7 +381,7 @@ def view(state):
                                     return_view_screen(state)
 
                                 print('\n')
-                                for habit in cost_hcost_accum_habitsabits:
+                                for habit in cost_accum_habits:
                                         #Converts a unnamed array given by SQLITE of habits to a dict with easy to access attributes
                                         hm = Habit_Model(habit)
                                         print_overview(hm)
