@@ -56,7 +56,7 @@ def edit(state):
             ]
 
             editing = True
-            while(editing):
+            while(editing and curr_habit):
                 clear()
                 print(f"[Overview of {'Dynamic' if curr_habit.is_dynamic else ''} Habit Attributes]")
                 if(habit.is_dynamic):

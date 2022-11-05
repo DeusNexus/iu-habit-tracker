@@ -58,7 +58,7 @@ def most_fail(habits:list) -> int:
     except Exception as e:
         print('most_fail error:',e)
 
-def most_punctual(habits:list) -> (int, str):
+def most_punctual(habits:list) -> [int, str]:
     '''Receives habits list and for each habit in habits looks which has most time remaining on average per checkin until the deadline when the habit was checked in.'''
 
     #Go through all available checkins and put the time remaining until deadline in a list, then calculate avg of list for habit
@@ -84,18 +84,24 @@ def most_punctual(habits:list) -> (int, str):
             #If we indeed find avg that has more time remaining then update the most_time_remain to the value and set the most_punctual_habit to be the habit object.
             if avg_time_left > most_time_remain_sec:
                 most_time_remain_sec = avg_time_left
-                most_punctual_habit = habit
+                most_punctual_habit = habit.title
 
-        # print('\nMost Punctual Habit: ',most_punctual_habit.title)
+       
+
+        if(not most_punctual_habit):
+            most_punctual_habit = 'Not enough data'
+            most_time_remain_sec = 0
+
+        # print('\nMost Punctual Habit: ',most_punctual_habit)
         # print('Time Remaining on AVG: ',most_time_remain_sec)
 
         #Return the value of most punctual habit
-        return most_time_remain_sec, most_punctual_habit.title
+        return [most_time_remain_sec, most_punctual_habit]
         
     except Exception as e:
         print('most_punctual error:',e)
 
-def most_late(habits:list) -> (int, str):
+def most_late(habits:list) -> [int, str]:
     '''Receives habits list and for each habit in habits looks which has least time remaining on average per checkin until the deadline when the habit was checked in.'''
 
     #Go through all available checkins and put the time remaining until deadline in a list, then calculate avg of list for habit
@@ -121,13 +127,18 @@ def most_late(habits:list) -> (int, str):
             #If we indeed find avg that has more time remaining then update the most_time_remain to the value and set the most_punctual_habit to be the habit object.
             if avg_time_left < least_time_remain_sec:
                 least_time_remain_sec = avg_time_left
-                most_late_habit = habit
+                most_late_habit = habit.title
 
-        # print('\nMost Late Habit: ',most_late_habit.title)
+
+        if(not most_late_habit):
+            most_late_habit = 'Not enough data'
+            least_time_remain_sec = 0
+
+        # print('\nMost Late Habit: ',most_late_habit)
         # print('Time Remaining on AVG: ',least_time_remain_sec)
 
         #Return the value of most punctual habit
-        return least_time_remain_sec, most_late_habit.title
+        return [least_time_remain_sec, most_late_habit]
 
     except Exception as e:
         print('most_late error:',e)
@@ -248,7 +259,7 @@ def best_performing_interval(habits:list) -> str:
     for interval in intervals.keys():
         success = intervals[interval]['success']
         fail = intervals[interval]['fail']
-        intervals[interval]['ratio'] = success/fail
+        intervals[interval]['ratio'] = success/fail if fail else success
         
         #Now look for best ratio
         #If we can find a newer better success ratio for habit category then update the best
@@ -270,8 +281,8 @@ def avg_total_streak(habits:list) -> int:
     for habit in habits:
         total_streak += habit.streak
     
-    #Return avg total streak
-    return total_streak / total_habits
+    #Return avg total streak, prevent ZeroDivision
+    return total_streak / total_habits if total_habits else total_streak
 
 def avg_break_streak(habits:list) -> int:
     '''Receives habits list and calculates how long on average the user keeps a failing streak in a row'''
@@ -310,8 +321,8 @@ def avg_time_left(habits:list) -> int:
                 time_left_before_deadline = checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
                 total_time_left += time_left_before_deadline
     
-    #Return the average time left
-    return total_time_left / total_checkins
+    #Return the average time left, prevent ZeroDivision
+    return total_time_left / total_checkins if total_checkins else total_time_left
 
 def earliest(habits:list) -> Habit:
     '''Receives habits and checks which habit has the most early deadline to be met and the habit is returned.'''
