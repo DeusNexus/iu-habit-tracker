@@ -52,9 +52,9 @@ def test_default_example_data():
     (habits, checkins) = Load.default_example_data('test_id_tests')
 
     for habit in habits:
-        #Overwriting habit takes 24 default arguments that will overwrite a initialized habit with the example values.
+        #Overwriting habit takes 23 default arguments that will overwrite a initialized habit with the example values.
         print(habit)
-        assert len(habit.keys()) == 24, 'The function did not provide the correct amount of arguments to create habits.'
+        assert len(habit.keys()) == 23, 'The function did not provide the correct amount of arguments to create habits.'
 
     for checkin in checkins:
         #Overwriting checkin takes 12 default arguments that will overwrite a initialized checkin with the example values.

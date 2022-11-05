@@ -48,28 +48,12 @@ def test_set_last_login_updates(tUser):
     tUser.set_last_login()
     assert last_login != tUser.last_login, "last_login did not update!"
 
-def test_reset_default(tUser,tUserHabits,tUserHabitsCheckins):
+def test_reset(tUser,tUserHabits,tUserHabitsCheckins):
     assert tUser.habits[0].checkins, "There are no checkins to test!"
     assert tUser.habits, "There are no habits to test!"
-    created = tUser.created
-    last_login = tUser.last_login
-    tUser.reset(0)
-    #Default should contain the example habits!
-    (habits, checkins) = default_example_data(tUser.user_id)
-    assert len(tUser.habits) == len(habits) and len(tUser.habits) != 0, "No example habits got inserted after reset!"
-    assert tUser.created != created, "Created was not reset to a new datetime"
-    assert tUser.last_login != last_login, "Last_login was not reset to a new datetime"
-
-def test_reset_full(tUser,tUserHabits,tUserHabitsCheckins):
-    assert tUser.habits[0].checkins, "There are no checkins to test!"
-    assert tUser.habits, "There are no habits to test!"
-    created = tUser.created
-    last_login = tUser.last_login
-    tUser.reset(1)
+    tUser.reset()
     #Full reset should have no habits
     assert len(tUser.habits) == 0, "Habits did not get assigned an empty list!"
-    assert tUser.created != created, "Created was not reset to a new datetime"
-    assert tUser.last_login != last_login, "Last_login was not reset to a new datetime"
 
 def test_auth(tUser):
     assert tUser.auth(bytes('testpass',encoding='utf8')), 'Correct password fails to login in auth'
