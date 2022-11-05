@@ -13,7 +13,9 @@ Users can easily track their habits by creating or logging in to their own user-
 ![Alt text](Images/UML.jpg?raw=true "UML Class Diagram")
 ### Revision
 28 September 2022: Removed functionality for email push notifications, for the scope of the project it would require daemon process to keep running in background to check if certain dates are already met and then send the push notifications. This however is no longer supported and can be considered removed.
+
 25 October 2022: Added Checkin to User screen for easier access of checkin in to habits.
+
 5 November 2022: Remove style attribute.
 ## Flow Diagram
 ![Alt text](Images/Flow-Diagram.jpg?raw=true "UML Flow Diagram")
