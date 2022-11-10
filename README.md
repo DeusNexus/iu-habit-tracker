@@ -24,9 +24,11 @@ Users can easily track their habits by creating or logging in to their own user-
 ## Dependencies
 Python 3.7+
 ## Installation Instruction
+`git clone https://github.com/DeusNexus/habit-tracker.git`
+`cd habit-tracker`
 `pip3 install -r requirements.txt`
 ## Run The Application
-`python3 __main__.py`
+`python3 main.py`
 ## To Delete Database (will reinit clean on start of habit tracker)
 `rm Database/app.db`
 

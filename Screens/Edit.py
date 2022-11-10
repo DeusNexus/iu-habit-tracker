@@ -5,6 +5,7 @@ from time import sleep
 clear = lambda : os.system('tput reset')
 from Database.db_api import db_update_habit
 
+#User to return to the user screen
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning back to User Screen...')
@@ -12,6 +13,7 @@ def return_user_screen(state):
     clear()
     state["user_screen"](state)
 
+#Print the edit information and options, go through questionary style input and check input values for validity.
 def edit(state):
         '''The edit screen is used for editing habits. Habits can be set to active or inactive, and have their unique details changed. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
         clear()
@@ -50,10 +52,12 @@ def edit(state):
                 "cost"
             ]
 
+            #unique attribute for dynamic habit
             dynamic_attr = [
                 "checkin_num_before_deadline"
             ]
-
+            
+            #Stay in the edit loop until edit is set to False
             editing = True
             while(editing and curr_habit):
                 clear()

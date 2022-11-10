@@ -4,6 +4,7 @@ from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
+#Logout the user and return to the login screen (while skipping to ask if you are new user skip=True)
 def logout(state):
         '''The logout screen exits the User screen and greets with a goodbye message and finally calls the app(skip=True) function that renders the login screen and skips asking to create a new user. It receives the User-object, active_user, and app to access the user data and start the application from the login screen.'''
         clear()

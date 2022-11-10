@@ -7,6 +7,7 @@ from Database import db_api as api
 from datetime import datetime
 from Utils import style
 
+#Returns to the user screen
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning back to User Screen...')
@@ -14,6 +15,7 @@ def return_user_screen(state):
     clear()
     state["user_screen"](state)
 
+#Returns to the checkin screen
 def return_checkin_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning to Checkin Screen...')
@@ -21,6 +23,7 @@ def return_checkin_screen(state):
     clear()
     habit_checkin(state)
 
+#Checkin to habit, display info and options. Either regular or dynamic and show different message depending on current state of the checkin (failed, in-time, dynamic goal met or still on-going)
 def habit_checkin(state):
         '''Generates screen for all available habit checkins. Lists habits available to checkin, whether deadline is due or still on-time and updates the database and in-memory objects accordingly.'''
         clear()
@@ -73,11 +76,9 @@ def habit_checkin(state):
                     h2c.dynamic_checkin(note,rating)
                     
                     try:
-                        #Insert the checkin to the db
+                        #Get the newly created checkin (last elem in the list)
                         latest_checkin = h2c.checkins[-1]
-                        
-                        # print('lastest checkin: ',latest_checkin)
-
+                        #Insert the checkin to the db
                         api.db_checkins_insert([
                             {
                                 'user_id':h2c.user_id,
@@ -114,11 +115,9 @@ def habit_checkin(state):
                     h2c.checkin(note,rating)
 
                     try:
-                        #Insert the checkin to the db
+                        #Get newly created checkin, last elem in the list.
                         latest_checkin = h2c.checkins[-1]
-
-                        # print('lastest checkin: ',latest_checkin)
-
+                        #Insert the checkin to the db
                         api.db_checkins_insert([
                             {
                                 'user_id':h2c.user_id,

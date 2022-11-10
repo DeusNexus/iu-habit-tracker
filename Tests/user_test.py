@@ -38,16 +38,19 @@ def test_create_user_empty() -> None:
     with pytest.raises(TypeError):
         user = User()
 
+#Check if user can be initiated
 @pytest.fixture
 def test_create_user_default(tCred) -> None:
     user = User(tCred.name,tCred.password)
     assert type(user) == User, "Failed to create user of type User!"
 
+#Check if login date gets updated
 def test_set_last_login_updates(tUser):
     last_login  = tUser.last_login
     tUser.set_last_login()
     assert last_login != tUser.last_login, "last_login did not update!"
 
+#Check if non-empty habits list gets reset to 0 habits (and thus no checkins)
 def test_reset(tUser,tUserHabits,tUserHabitsCheckins):
     assert tUser.habits[0].checkins, "There are no checkins to test!"
     assert tUser.habits, "There are no habits to test!"
@@ -55,10 +58,12 @@ def test_reset(tUser,tUserHabits,tUserHabitsCheckins):
     #Full reset should have no habits
     assert len(tUser.habits) == 0, "Habits did not get assigned an empty list!"
 
+#Check if we can authenticate the user and also reject if the password is wrong
 def test_auth(tUser):
     assert tUser.auth(bytes('testpass',encoding='utf8')), 'Correct password fails to login in auth'
     assert not tUser.auth(bytes('wrongpass',encoding='utf8')), 'Wrong password success to login in auth'
 
+#Check if we can create multiple habits, with unqiue values, that total length in habits is same and that each habit has the unique values when created.
 def test_create_habit(tUser):
     #Create 5 regular habits
     for x in range(5):
@@ -75,6 +80,7 @@ def test_create_habit(tUser):
         assert habit.moto == f'TestMoto{i}'
         i += 1
 
+#Check that we can delete a habit by habit_id
 def test_delete_habit(tUser,tUserHabits):
     habit_count_after_create_habit =  len(tUser.habits)
     assert habit_count_after_create_habit != 0, "There are no habits for user created!"
@@ -83,5 +89,6 @@ def test_delete_habit(tUser,tUserHabits):
     assert habit_count_after_create_habit != len(tUser.habits), "No habit got deleted!"
     assert habit_count_after_create_habit - 1 == len(tUser.habits), "More then one habit got deleted!"
 
+#Increase pytest coverage, but test_info does not return anything and purely for debugging.
 def test_info(tUser):
     assert tUser.info() == None, "Nothing should be returned from this debug function, it only prints to the console."

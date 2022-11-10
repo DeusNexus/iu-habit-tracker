@@ -9,6 +9,7 @@ clear = lambda : os.system('tput reset')
 #Database for Export or Importing
 from Database import db_api as api
 
+#Return to the user screen
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning back to User Screen...')
@@ -16,6 +17,7 @@ def return_user_screen(state):
     clear()
     state["user_screen"](state)
 
+#Do export/import printing and show choices.
 def export_import(state):
     '''The export/import screen is used for importing or exporting a user account using json files. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()

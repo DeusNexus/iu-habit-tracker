@@ -32,6 +32,7 @@ from Screens.Logout import logout
 #Text Styling
 from Utils import style
 
+#Main program entry
 def app(skip:bool=False) -> None:
     try:
         '''The main application, receives whether to skip as boolean the question whether to create a new user if user just created an account and directly goes to the user list to login.'''
@@ -47,8 +48,10 @@ def app(skip:bool=False) -> None:
             'user_screen': user_screen
         }
 
+        #Pass the state created above into load_users function that will insert database users into the state.
         load_users(state['users'])
 
+        #When app(skip=False) ask if they are new user else continue below.
         if(not skip):
             print(style('\n[START SCREEN]','UNDERLINE'))
             start = quest.confirm("Are you a new user?").ask()
@@ -156,24 +159,23 @@ def app(skip:bool=False) -> None:
         exit()
 
 #Start habit tracker application
-if __name__ == "__main__": 
-    try:
-        print(style("[🔎] Starting Habit Tracker and checking if database already exists...",'BLUE'))
-        api.db_exists()
+try:
+    print(style("[🔎] Starting Habit Tracker and checking if database already exists...",'BLUE'))
+    #Check if the database alreadt exist or init a new one
+    api.db_exists()
 
-        #Ask whether one wants to create a new account or not.
-        app(skip=False)
+    #Ask whether one wants to create a new account or not (skip=False) and then start the main program.
+    app(skip=False)
 
-    except KeyboardInterrupt as e:
-        print('\n\nYou have terminated the application with Ctrl+C!')
-        exit()
+#Error Catching
+except KeyboardInterrupt as e:
+    print('\n\nYou have terminated the application with Ctrl+C!')
+    exit()
 
-    except ValueError as e:
-        print('\n[❌] Wrong value was given!',e)
-        traceback.print_exc()
-        pass
+except ValueError as e:
+    print('\n[❌] Wrong value was given!',e)
+    traceback.print_exc()
 
-    except TypeError as e:
-        print('[❌] TypeError:',e)
-        traceback.print_exc()
-        pass
+except TypeError as e:
+    print('[❌] TypeError:',e)
+    traceback.print_exc()

@@ -11,6 +11,7 @@ clear = lambda : os.system('tput reset')
 #Text Styling
 from Utils import style
 
+#Return to the user screen
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning back to User Screen...')
@@ -18,6 +19,7 @@ def return_user_screen(state):
     clear()
     state["user_screen"](state)
 
+#Do new habit, print information, show options and go through questionary style to fill out the details
 def new(state):
     '''The new screen is used for creating new habits, which can be normal or dynamic. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()

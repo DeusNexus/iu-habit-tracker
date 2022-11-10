@@ -10,6 +10,7 @@ from Database import db_api as api
 from Load import Habit_Model
 from Utils import style, seconds_to_timestring
 
+#Used to return to user screen
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning back to User Screen...')
@@ -17,6 +18,7 @@ def return_user_screen(state):
     clear()
     state["user_screen"](state)
 
+#Used to return to view screen
 def return_view_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning to View Screen...')
@@ -54,9 +56,11 @@ def view(state):
                     else:
                         pass
                 
+                #options to choose from
                 ao2 = ['Global Statistics','[Return]']
                 interact = quest.select('See more?',ao2).ask()
 
+                #When first option is choosen
                 if(interact == ao2[0]):
                     clear()
                     habits = [habit for habit in state["active_user"].habits if habit.active]
@@ -81,29 +85,36 @@ def view(state):
                     print(style(f'Earliest Habit Deadline: {Analytics.earliest(habits).title}','YELLOW'))
                     print('\n')
 
+                    #Options to choose from in global stat
                     ao3 = ['Back to All Habits','[Return]']
                     interact2 = quest.select('See more?',ao3).ask()
                     
+                    #Option 1 in global statistics
                     if(interact2==ao3[0]):
                         clear()
-                        #all habits
+                        #Return to all habits, view_all receives the answer that returns to the right view
                         view_all(options[0])
+                    #Option 2 in global statistics
                     elif(interact2==ao3[1]):
                         clear()
-                        #view screen
+                        #Return to view screen
                         return_view_screen(state)
 
+                #When second option is choosen [Return]
                 elif(interact == ao2[1]):
                     clear()
                     return_view_screen(state)
             
             #Individual Habit
             elif(ans == options[1]):
+                #Get all habit titles and add return option to the list, then present as question
                 choices = [habit.title for habit in state["active_user"].habits if habit.active] + ['[Return]']
                 selected_habit = quest.select('Which habit would you like to individually inspect?', choices).ask()
 
+                #Store the habit index of question answer to user later on in same menu (retain info).
                 habit_index = None
 
+                #Go over all habits and set the choosen habit plus print all the details
                 for indx, habit in enumerate(state["active_user"].habits):
                     if habit.title == selected_habit and habit.active:
                         habit_index = indx
@@ -118,9 +129,11 @@ def view(state):
                             f"\nTime left until deadline: {'OVERDUE for' if (habit.next_deadline.timestamp() - datetime.now().timestamp()) < 0 else 'TIME LEFT'} {seconds_to_timestring(habit.next_deadline.timestamp() -  datetime.now().timestamp())}\n"
                         )
                 
+                #Options after the print, to see more or return
                 io2 =  ['Detailed Summary Statistics','[Return]']
                 interact = quest.select('See more?',io2).ask()
                 
+                #Answer of question, see more details
                 if(interact == io2[0]):
                     clear()
                     h = state["active_user"].habits[habit_index]
@@ -139,6 +152,8 @@ def view(state):
                     quest.select('Press Enter to return.', ['Enter']).ask()
                     clear()
                     view_all(ans)
+
+                #Return option to view screen
                 elif(interact == io2[1]):
                     return_view_screen(state)
 
@@ -146,9 +161,11 @@ def view(state):
             
             #Filter Criteria
             elif(ans == options[2]):
+                #All valid attributes to choose from
                 criteria = ['interval','difficulity','category','importance','streak','success','fail','cost','cost_accum']
                 ans = quest.select('Which filter criteria would you like to use?',criteria).ask()
 
+                #Formatted data to print for habit
                 def print_overview(hm):
                     print(
                         f"[{'DYNAMIC' if hm['is_dynamic']==True else 'REGULAR'}] <{hm['interval']}> '{hm['title']}:{hm['description']}' | Moto: {hm['moto']}"+ 
@@ -159,6 +176,7 @@ def view(state):
                         f"\nTime left until deadline: {'OVERDUE for' if (hm['next_deadline'].timestamp() - datetime.now().timestamp()) < 0 else 'TIME LEFT'} {seconds_to_timestring(hm['next_deadline'].timestamp() -  datetime.now().timestamp())}\n"
                     )
 
+                #Filter option
                 if(ans == 'interval'):
                     interval = quest.text('Write the interval which you would like to use a filter for you habits? E.g. 1D, 4H').ask()
                     
@@ -184,7 +202,8 @@ def view(state):
                             print("Failed to get interval: ",e)
                             traceback.print_exc()
                             sleep(10)
-
+                
+                #Filter option
                 elif(ans == 'difficulity'):
                         difficulity = quest.select('Select the difficulity that you want to use to filter your habits?', ['1','2','3','4','5']).ask()
                         
@@ -210,7 +229,8 @@ def view(state):
                             print("Failed to get difficulity: ",e)
                             traceback.print_exc()
                             sleep(10)
-
+                
+                #Filter option
                 elif(ans =='category'):
                         category = quest.text('Provide the category you want to use as a filter, note it is case-sensitive how you defined it! E.g. Sport, Food, Education..?').ask()
                         
@@ -237,6 +257,7 @@ def view(state):
                             traceback.print_exc()
                             sleep(10)
                 
+                #Filter option 
                 elif(ans =='importance'):
                         importance = quest.select('Select the importance that you want to use to filter your habits?', ['1','2','3','4','5']).ask()
                         
@@ -263,6 +284,7 @@ def view(state):
                             traceback.print_exc()
                             sleep(10)
                 
+                #Filter option
                 elif(ans =='streak'):
                         operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: streak <= 5, streak > 7', ['>','>=','=','<','<=']).ask()
                         comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
@@ -289,6 +311,7 @@ def view(state):
                             traceback.print_exc()
                             sleep(10)
                 
+                #Filter option
                 elif(ans =='success'):
                         operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: success <= 5, success > 7', ['>','>=','=','<','<=']).ask()
                         comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
@@ -315,6 +338,7 @@ def view(state):
                             traceback.print_exc()
                             sleep(10)
                 
+                #Filter option
                 elif(ans =='fail'):
                         operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: fail <= 5, fail > 7', ['>','>=','=','<','<=']).ask()
                         comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
@@ -341,6 +365,7 @@ def view(state):
                             traceback.print_exc()
                             sleep(10)
                 
+                #Filter option
                 elif(ans =='cost'):
                         operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: fail <= 5, fail > 7', ['>','>=','=','<','<=']).ask()
                         comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
@@ -366,7 +391,8 @@ def view(state):
                             print("Failed to get difficulity: ",e)
                             traceback.print_exc()
                             sleep(10)
-                    
+                
+                #Filter option  
                 elif(ans =='cost_accum'):
                         operator = quest.select('Select one of the operators to use for comparison. Next you will provide a value to compare for. E.g.: cost_accum <= 5, cost_accum > 7', ['>','>=','=','<','<=']).ask()
                         comparison_val = quest.text('Provide a valid number (float or int) that will be used to compare?').ask()
@@ -395,8 +421,9 @@ def view(state):
 
                 return_view_screen(state)
             
-            #Return to user screen
+            #Return to user screen options in the view menu
             elif(ans == options[3]):
                 return_user_screen(state)
 
+        #Return to view all habits window if ans was set
         view_all(ans)

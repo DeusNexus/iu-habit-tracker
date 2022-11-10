@@ -8,6 +8,7 @@ from Utils import style
 
 SLEEP_SPEED=0
 
+#User Model for parsing data from database to correct python types
 def User_Model(res):
     user = {
         'user_id':res[0],
@@ -19,6 +20,7 @@ def User_Model(res):
     }
     return user
 
+#Habit Model for parsing data from database to correct python types
 def Habit_Model(res):
     habit = {
         'user_id':str(res[0]),
@@ -47,6 +49,7 @@ def Habit_Model(res):
     }
     return habit
 
+#Checkin Model for parsing data from database to correct python types
 def Checkin_Model(res):
     checkin = {
         'user_id':str(res[0]),
@@ -64,25 +67,22 @@ def Checkin_Model(res):
     }
     return checkin
 
+#Function use to load the users into the state object
 def load_users(users):
     '''Creates Example Users, Habits and Check-ins in memory from database.'''
     api.db_view()
     db_users = api.db_get_users()
     print(style(f'[🔍] Loaded {len(db_users)} available users from sqlite3 database...','GREEN'))
-    #[('userid_1', 'salt24662', 'Jim', 'pass1', '2022-06-27 06:59:59', '2022-09-28 14:29:00'),...]    
-    # print(db_users)
     #For each user in the database, create a user class in memory and then overwrite with database values.
 
-    index=0
-    for u in db_users:
+    for index, u in enumerate(db_users):
         print(f'[⏳] Initializing {index+1} of {len(db_users)}...')
         um = User_Model(u)
         users.create(um['name'],um['password'])
         users.users[index].overwrite(um['user_id'],um['salt'],um['name'],um['password'],um['created'],um['last_login'])
-        index += 1
+
     print(style(f'[✔️] Habit Tracker fully initialized!','GREEN'))
     
-
 def default_example_data(user_id) -> tuple:
     '''Generates example data for a user_id so that it is unique and returns the habits and checkins as a tuple.!'''
     habits = [
@@ -210,11 +210,10 @@ def default_example_data(user_id) -> tuple:
 
     return (habits, checkins)
 
+#Function to load logged in user with personal data, populates initially using placeholder objects for habits/checkins and then overwrites them with the correct data from the database.
 def load_user_data(users,user_id):
     '''The load_user_data function receives the loggedin user and then fetches the latest local database to insert users habits and checkins. Its main purpose is to load data from storage to memory while the program operates.'''
-    
-     #For each example user class now, create example habits and overwrite with database values.
-    
+        
     #Get the habits of the active user_id
     habits = api.db_get_habits(user_id)
     #Get the checkins of the active user_id
@@ -258,7 +257,6 @@ def load_user_data(users,user_id):
                         cost=hm['cost'],
                         cost_accum=hm['cost_accum'])
 
-                # CheckIn(user_id,'habit_id1','checkin_id1','2020-06-06 12:15:20',True,'Good',5,0,0,False,0)
                 #While still on current habit, lets load all the available checkins from the database and add them to the habits checkins list.
                 for cidx, c in enumerate(checkins):
                     for hidx, h in enumerate(u.habits):

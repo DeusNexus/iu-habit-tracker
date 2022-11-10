@@ -8,6 +8,7 @@ from Database import db_api as api
 #Text Styling
 from Utils import style
 
+#Return to user screen
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning back to User Screen...')

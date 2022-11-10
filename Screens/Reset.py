@@ -9,6 +9,7 @@ from Database import db_api as api
 #Text Styling
 from Utils import style
 
+#Returns to user screen
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning back to User Screen...')
@@ -16,6 +17,7 @@ def return_user_screen(state):
     clear()
     state["user_screen"](state)
 
+#Returns to main app (to reload the app from database and login again)
 def return_app(state):
     state["active_user"].reset()
     sleep(1)
@@ -26,6 +28,7 @@ def return_app(state):
     #Return to login-screen to load resetted user from database so in-memory is consistent with db.
     state["app"](skip=True)
 
+#Do reset print and show options
 def reset(state):
     '''The reset screen is used for resetting the user to various default states. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()

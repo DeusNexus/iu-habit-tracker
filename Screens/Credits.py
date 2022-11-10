@@ -7,6 +7,7 @@ clear = lambda : os.system('tput reset')
 # of the terminal
 columns,lines = os.get_terminal_size()
 
+#Return to the user screen
 def return_user_screen(state):
     sleep(1*state["SLEEP_SPEED"])
     print('[!] Returning back to User Screen...')
@@ -14,6 +15,7 @@ def return_user_screen(state):
     clear()
     state["user_screen"](state)
 
+#Display credits
 def credits(state):
     '''The credits screen is used for showing credits of the creator, course and the university name and returns afterwards back to user screen. It receives the User-object, active_user, from the user_screen view and also the user_screen function that renders the main menu when exiting the view screen.'''
     clear()

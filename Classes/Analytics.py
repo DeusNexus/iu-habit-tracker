@@ -15,7 +15,6 @@ def active_habits(habits:list) -> list:
 
 def same_period(habits:list, interval:str) -> list:
     '''Receives habits list and returns all habits with the given interval in a list,e.g. 1W.'''
-    
     same_interval = []
 
     #For each habit increment if it has same interval

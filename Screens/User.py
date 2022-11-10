@@ -26,9 +26,11 @@ from Utils import style
 def user_screen(state):
     '''The user screen acts as the main menu for the user. The user_screen function receives the User-object of the logged-in user and passes it further to the individual menu views. The individual views can then access user data and execute user functions.'''
     try:
+        #Clear the cli text
         clear()
         sleep(1*state["SLEEP_SPEED"])
         
+        #Print welcome statement
         print(style('[USER SCREEN]','UNDERLINE'))
         print(style(f'\nWelcome back {state["active_user"].name}, {("your last login was on " + state["active_user"].last_login.strftime("%A %d-%m-%Y, %H:%M")) if type(state["active_user"].last_login) == datetime.datetime else "this is the first time you login! This is a great way to keep building your habits, good luck."}.','YELLOW'))
         print(
@@ -39,6 +41,7 @@ def user_screen(state):
             ' habits.')
 
 
+        #Find earliest habit for user to meet deadline for.
         if state["active_user"].habits:
             earliest_deadline = earliest(state["active_user"].habits)
             print(
@@ -49,10 +52,9 @@ def user_screen(state):
                 ' is on '+
                 style(f'{earliest_deadline.next_deadline.strftime("%A %d-%m-%Y, %H:%M")}','YELLOW')+
                 ', please check-in if you have completed it or your streak will reset!')
-
-        print(f'\nPlease select one of the menu options to interact with the habit tracker.\n')
         
-        #Screens
+        #Show menu options
+        print(f'\nPlease select one of the menu options to interact with the habit tracker.\n')
         option = quest.select('[User Screen Options]', ['View','Checkin','New','Edit','Delete','Export/Import','Reset','See Credits','Logout']).ask()
 
         if(option == 'View'):

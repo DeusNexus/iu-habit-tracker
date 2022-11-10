@@ -8,13 +8,16 @@ import Load
 from Database import Examples
 users, habits, checkins = Examples.data()
 
+#File location of the Database file
 DB_FILE = 'Database/app.db'
 
+#Used to open connection, returns cursor and connection
 def open_connection() -> 'c, conn':
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     return c, conn
 
+#Used to commit and close database connection
 def close_connection(conn) -> None:
     conn.commit()
     conn.close()

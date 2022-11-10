@@ -1,6 +1,7 @@
 import pytest
 import Utils
 
+#Test if we can create invalid intervals that are properly catched
 def test_interval_to_seconds():
     values = {
         'm':60,
@@ -21,6 +22,7 @@ def test_interval_to_seconds():
         with pytest.raises(ValueError):
             Utils.interval_to_seconds(val)
 
+#Styling doesn't really need to be test beside that style corresponds with proper string format, it helps to increase total test coverage of pytest
 def test_stylize():
     with pytest.raises(ValueError):
         Utils.style('test','invalid')
