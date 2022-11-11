@@ -158,6 +158,7 @@ def app(skip:bool=False) -> None:
         print('\n\nYou have terminated the application with Ctrl+C!')
         exit()
 
+
 #Start habit tracker application
 try:
     print(style("[🔎] Starting Habit Tracker and checking if database already exists...",'BLUE'))

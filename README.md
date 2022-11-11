@@ -31,6 +31,8 @@ Python 3.7+
 `python3 main.py`
 ## To Delete Database (will reinit clean on start of habit tracker)
 `rm Database/app.db`
+## Run test units for pytest
+`python -m pytest`
 
 # User interface
 ## Welcome Screen
