@@ -131,8 +131,11 @@ class Habit:
             style(f'{self.interval}','BLUE')+
             '\nNew Streak: '+
             style(f'{self.streak}','BOLD'))
-        if(self.streak % self.milestone_streak == 0):
-            print(f'You completed a milestone streak with {self.milestone_streak} uninterrupted successful checkins!')
+        
+        if(self.milestone_streak):
+            if(self.milestone_streak > 0):
+                if(self.streak % self.milestone_streak == 0):
+                    print(f'You completed a milestone streak with {self.milestone_streak} uninterrupted successful checkins!')
 
     def update_deadlines_failed(self) -> None:
         '''Updates the previous_deadline to the current and sets the next_deadline to current deadline based on date in the future plus the interval.'''
