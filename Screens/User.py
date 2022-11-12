@@ -1,7 +1,7 @@
 import os
 import questionary as quest
 from time import sleep
-import datetime as datetime
+from datetime import datetime
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 import traceback
@@ -22,6 +22,9 @@ from Classes.Analytics import earliest
 #Text Styling
 from Utils import style
 
+#Update new active habits
+from Database.db_api import db_update_habit
+
 #The user screen acts as the main menu after a user logs-in to his personal account.
 def user_screen(state):
     '''The user screen acts as the main menu for the user. The user_screen function receives the User-object of the logged-in user and passes it further to the individual menu views. The individual views can then access user data and execute user functions.'''
@@ -32,13 +35,31 @@ def user_screen(state):
         
         #Print welcome statement
         print(style('[USER SCREEN]','UNDERLINE'))
-        print(style(f'\nWelcome back {state["active_user"].name}, {("your last login was on " + state["active_user"].last_login.strftime("%A %d-%m-%Y, %H:%M")) if type(state["active_user"].last_login) == datetime.datetime else "this is the first time you login! This is a great way to keep building your habits, good luck."}.','YELLOW'))
+        print(style(f'\nWelcome back {state["active_user"].name}, {("your last login was on " + state["active_user"].last_login.strftime("%A %d-%m-%Y, %H:%M")) if type(state["active_user"].last_login) == datetime else "this is the first time you login! This is a great way to keep building your habits, good luck."}.','YELLOW'))
         print(
             '\nYou currently have '+
             style(f'{len([habit for habit in state["active_user"].habits if habit.active])} active','GREEN') + 
             ' and '+
             style(f'{len([habit for habit in state["active_user"].habits if not habit.active])} inactive','CYAN')+
             ' habits.')
+
+        #Habits that turned active
+        new_active = False
+        new_active_habits = []
+        for habit in state['active_user'].habits:
+            if not habit.active and datetime.now() > habit.start_from:
+                habit.update_deadline_now_active()
+                habit.active = True
+                db_update_habit(habit.habit_id, 'active', 'True')
+                db_update_habit(habit.habit_id, 'prev_deadline', habit.prev_deadline)
+                db_update_habit(habit.habit_id, 'next_deadline', habit.next_deadline)
+                new_active_habits.append(habit)
+                new_active = True
+        if new_active:
+            print(style('\nThe following habit(s) just turned their status to active:','YELLOW'))
+            for r in new_active_habits:
+                print(style(f'[{r.title}] active from {r.start_from.strftime("%A %d-%m-%Y, %H:%M")} and', 'BOLD') + style(f' deadline on {r.next_deadline.strftime("%A %d-%m-%Y, %H:%M")}', 'YELLOW'))
+            print('')
 
 
         #Find earliest habit for user to meet deadline for.

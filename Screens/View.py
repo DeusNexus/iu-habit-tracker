@@ -130,7 +130,7 @@ def view(state):
                         print((f"\nMilestone Streak: {habit.milestone_streak}" if habit.milestone_streak else '\nMilestone streak not set, see Edit menu..'))
                         print((f"{'Required # of Checkins before Deadline:' + str(habit.checkin_num_before_deadline)} | {'Current # of Checkins before Deadline:' + str(habit.dynamic_count)}" if habit.is_dynamic==True else ''))
                         print(f"Streak: {habit.streak}  Success:{habit.success} Fail: {habit.fail} ")
-                        print((f"\nCost: {habit.cost}  |  Accumulated Cost: {habit.cost_accum}" if habit.cost or habit.cost_accum  else '\n'))
+                        print((f"\nCost: {habit.cost}  |  Accumulated Cost: {habit.cost_accum}" if (habit.cost > 0 or habit.cost_accum > 0) else '\n'))
                         print(f"Deadline Due: {habit.next_deadline.strftime('%Y-%m-%d %H:%M')}  Created: {habit.created_on.strftime('%Y-%m-%d %H:%M')}\n")
                         print(
                             style(f"Deadline FAILED by {seconds_to_timestring(habit.next_deadline.timestamp() -  datetime.now().timestamp())}",'RED')

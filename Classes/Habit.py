@@ -145,6 +145,11 @@ class Habit:
             style(f'{self.interval}','BLUE')+
             style(f'\nNew Streak: {self.streak}','BOLD'))
 
+    def update_deadline_now_active(self):
+        '''Updates the deadline when start_from triggers the habit to become active in a future date. It adds the specified interval to the start_from date.'''
+        self.prev_deadline: datetime = self.next_deadline
+        self.next_deadline: datetime = add_streak_to_deadline(self.start_from, interval_to_seconds(self.interval))
+
     def incr_streak(self) -> None:
         '''Increases the habit streak by 1'''
         self.streak += 1

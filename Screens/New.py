@@ -30,7 +30,7 @@ def new(state):
 
     def questionary(is_dynamic:bool):
         #user input
-        title_ask = interval_ask = milestone_ask = checkin_num_before_deadline_ask = cost_ask = True
+        title_ask = interval_ask = milestone_ask = checkin_num_before_deadline_ask = cost_ask = start_from_ask = True
 
         while(title_ask):
             #Test user input
@@ -55,80 +55,93 @@ def new(state):
         if(is_dynamic):
             while(checkin_num_before_deadline_ask):
                 #Test user input
-                checkin_num_before_deadline = quest.text('How often do you want to perform the habit before a deadline? Type an integer numer; e.g. 1, 3, 5',style=state['qstyle']).ask()
-                
-                #If number in string is a valid int
-                if(type(int(checkin_num_before_deadline)) == int):
+                try:
+                    checkin_num_before_deadline = int(quest.text('How often do you want to perform the habit before a deadline? Type an integer numer; e.g. 1, 3, 5',style=state['qstyle']).ask())
                     #When int is < 0, try again.
-                    if(int(checkin_num_before_deadline) < 1 ):
+                    if(checkin_num_before_deadline < 1 ):
                         print('Please provide a integer larger than 0!')
                     #When valid, set loop to false and continue outer code
                     else:
                         checkin_num_before_deadline_ask = False
-                
-                #If string does not represent a valid int, ask again (return to top of while-loop)
-                else:
+                except ValueError as e:
+                    #If string does not represent a valid int, ask again (return to top of while-loop)
                     print('Please use an integer value for how many times you need to checkin before the deadline. E.g. 1, 3, 10')
+        
+        #If its not dynamic, set None value
         else:
-            #If its not dynamic, set None value
             checkin_num_before_deadline = None
 
         optional = quest.confirm("Fill out optional fields? E.g. active, difficulity, category, moto, importance, milestone target.",style=state['qstyle']).ask()
 
         #No optional questions -> Fill default values
-        if(not optional):
-            active = True
-            start_from = datetime.now()
-            difficulity = None
-            category = None
-            moto = None
-            importance = None
-            milestone = None
-            cost = 0
+        active = True
+        start_from = datetime.now()
+        difficulity = None
+        category = None
+        moto = None
+        importance = None
+        milestone = None
+        cost = 0
 
-        #If optional is True, fill out more details
-        else:
+        #If optional is True, fill out more details, default will be overriden
+        if(optional):
             active = quest.confirm("Do you directly want to set the habit to active?",style=state['qstyle']).ask()
-
             if(active):
                 start_from = datetime.now()
             else:
-                #Test user input
-                start_from = quest.text('Provide a start date when you want it to become active? Please follow the format YYYY/MM/DD HH:mm, e.g. 2050/03/28 15:35.',style=state['qstyle']).ask()
+                while(start_from_ask):
+                    try:
+                        #Test user input
+                        start_from_res = quest.text('Provide a start date when you want it to become active? Please follow the format YYYY-MM-DD HH:mm, e.g. 2050-03-28 15:35.',style=state['qstyle']).ask()
+                        start_from = datetime.strptime(start_from_res+'.000001', "%Y-%m-%d %H:%M:%S.%f")
+                        start_from_ask = False
+                    except ValueError as e:
+                        print('Please provide a valid date in the format YYYY-MM-DD HH:MM:SS, e.g. 2030-01-28 12:13:14')
 
-            difficulity = quest.select("How difficult do you find it to perform?",['1','2','3','4','5'],style=state['qstyle']).ask()
+            use_difficulity = quest.confirm('Do you want to set a difficulity?',style=state['qstyle']).ask()
+            if(use_difficulity):
+                difficulity = quest.select("How difficult do you find it to perform?",['1','2','3','4','5'],style=state['qstyle']).ask()
 
             #Test user input
-            category = quest.text('Do you want to assign this habit to a common category? Similar habits will be grouped together. E.g.: Eduction, Sport, Hobby',style=state['qstyle']).ask()
+            use_category = quest.confirm('Do you want to assign this habit to a common category? Similar habits will be grouped together. E.g.: Eduction, Sport, Hobby',style=state['qstyle']).ask()
+            if(use_category):
+                category = quest.text('Specify the category for this habit',style=state['qstyle']).ask()
 
             #Test user input
-            moto = quest.text('What is your moto you would like to remind yourself of to keep doing the habit?').ask()
+            use_moto = quest.confirm('Do you want to set a moto?',style=state['qstyle']).ask()
+            if(use_moto):
+                moto = quest.text('What is your moto you would like to remind yourself of to keep doing the habit?').ask()
 
-            importance = quest.select("How important do you find it to perform?",['1','2','3','4','5'],style=state['qstyle']).ask()
+            use_importance = quest.confirm('Do you want to set importance?',style=state['qstyle']).ask()
+            if(use_importance):
+                importance = quest.select("How important do you find it to perform?",['1','2','3','4','5'],style=state['qstyle']).ask()
 
-            while(milestone_ask):
-                #Test user input
-                milestone = quest.text("Set milestone target for multiple successes. E.g. 5 for 5 consequent succesfull checkins!",style=state['qstyle']).ask()
-                if(type(int(milestone)) == int):
-                    milestone_ask = False
-                else:
-                    print("Use an integer to specify the milestone target.")
-            
+            use_milestone = quest.confirm("Do you want to set a milestone achievement? It will display message each time when you reached n multiple streak of your milestone.",style=state['qstyle']).ask()
+            if(use_milestone):
+                while(milestone_ask):
+                    #Test user input
+                    try:
+                        milestone = int(quest.text("Set milestone target for multiple successes. E.g. 5 for 5 consequent succesfull checkins!",style=state['qstyle']).ask())
+                        if(milestone < 1):
+                            print('You need to specify a milestone of atleast 1 or higher.')
+                        else:
+                            milestone_ask = False
+                    except ValueError as e:
+                        print("Use an integer to specify the milestone target.")
             
             use_cost = quest.confirm("Would you like to associate a cost for the habit? E.g. the habit will calculate the total spend cost each time you checked in.",style=state['qstyle']).ask()
-            
             if(use_cost):
                 while(cost_ask):
                     #Test user input
-                    cost = quest.text("Please specify how much the habit costs per time you do it/check in.",style=state['qstyle']).ask()
-                    if(type(float(cost)) == float):
-                        cost_ask = False
-                    else:
+                    try:
+                        cost = float(quest.text("Please specify how much the habit costs per time you do it/check in.",style=state['qstyle']).ask())
+                        if(not cost > 0):
+                            print('Please specify a positive number for the cost.')
+                        else:
+                            cost_ask = False
+                    except ValueError as e:
                         print("Use a correct float number to define your habit cost! E.g.: 1, 2.50, 9.99")
-            #Dont use cost, set to default of 0
-            else:
-                cost = 0
-
+                
         #Create habit with user input
         try:
             habit_index = len(state["active_user"].habits)
