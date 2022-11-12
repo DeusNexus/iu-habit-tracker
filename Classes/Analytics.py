@@ -112,21 +112,24 @@ def most_late(habits:list) -> [int, str]:
 
         #!!!! Make sure that avg time left until deadline for each habit is calculated and based on that see which is most late!
         for habit in habits:
-            # print(habit.title)
-            sum_of_time_left_till_deadline = 0
-            total_checkins_habit = len(habit.checkins) if habit.checkins else 1 #Prevent ZeroDivision if 0 habits
-            
-            #Add time left for each checkin to total sum of time remaining for habit.
-            for checkin in habit.checkins:
-                sum_of_time_left_till_deadline += checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
-            
-            #Now calc average time left for habit
-            avg_time_left = sum_of_time_left_till_deadline / total_checkins_habit
-            
-            #If we indeed find avg that has more time remaining then update the most_time_remain to the value and set the most_punctual_habit to be the habit object.
-            if avg_time_left < least_time_remain_sec:
-                least_time_remain_sec = avg_time_left
-                most_late_habit = habit.title
+            #Prevent habits with no checkins to be included
+            if len(habit.checkins) > 0:
+                # print(habit.title)
+                sum_of_time_left_till_deadline = 0
+                total_checkins_habit = len(habit.checkins) if habit.checkins else 1 #Prevent ZeroDivision if 0 habits
+                
+                if habit.success or habit.fail:
+                    #Add time left for each checkin to total sum of time remaining for habit.
+                    for checkin in habit.checkins:
+                        sum_of_time_left_till_deadline += checkin.deadline.timestamp() - checkin.checkin_datetime.timestamp()
+                    
+                    #Now calc average time left for habit
+                    avg_time_left = sum_of_time_left_till_deadline / total_checkins_habit
+                    
+                    #If we indeed find avg that has more time remaining then update the most_time_remain to the value and set the most_punctual_habit to be the habit object.
+                    if avg_time_left < least_time_remain_sec:
+                        least_time_remain_sec = avg_time_left
+                        most_late_habit = habit.title
 
 
         if(not most_late_habit):

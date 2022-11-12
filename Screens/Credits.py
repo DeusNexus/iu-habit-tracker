@@ -1,5 +1,6 @@
 import os
 from time import sleep
+from Utils import style
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
 
@@ -21,11 +22,12 @@ def credits(state):
     clear()
     print('[Credit Screen]')
     plines = []
+    name_line = ' Created by Fabian Menne - 2022 '
     for i in range(lines):
         if(i < lines//2):
-            plines.append((i * (columns//lines) * '.' + ' Created by Fabian Menne - 2022'))
+            plines.append((i * (columns//lines) * style('.','RED') + name_line + ((lines-i) * (columns//lines) -len(name_line)) * style('.','BLUE')))
         else:
-            plines.append(((lines-i) * (columns//lines) * '.' + ' Created by Fabian Menne - 2022'))
+            plines.append(((lines-i) * (columns//lines) * style('.','BLUE') + name_line + ((i) * (columns//lines) -len(name_line)) * style('.','RED')))
     for line in plines:
         print(line)
         sleep(0.1*state["SLEEP_SPEED"])

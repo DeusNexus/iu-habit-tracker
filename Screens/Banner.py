@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+from Utils import style
 
 # Get the size
 # of the terminal
@@ -11,12 +12,12 @@ def banner(users) -> list[str]:
     lines = []
     u = users.users
     b = {
-        'l1': '*.' * (columns//2),
-        'l2': '/\\' * (columns//6)+ ' ' * (( columns//3 - len('Welcome to Habit Tracker') ) // 2) + 'Welcome to Habit Tracker' + ' ' * (( columns//3 - len('Welcome to Habit Tracker') ) // 2) + '/\\' * (columns//6),
-        'l3': '.*' * (columns//6)+ ' ' * (( columns//3 - len(f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}') ) // 2) + f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}' + ' ' * (( columns//3 - len(f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}') ) // 2) + '.*' * (columns//6),
-        'l4': '\\/' * (columns//6)+ ' ' * (( columns//3 - len(f'Total Users Registered: {len(u)}') ) // 2) + f'Total Users Registered: {len(u)}' + ' ' * (( columns//3 - len(f'Total Users Registered: {len(u)}') ) // 2) + '\\/' * (columns//6),
-        'l5': '*' * (columns//3)+ ' ' * (columns//3)  + '*'*(columns//3),
-        'l6': '*~~*' * (columns//4),
+        'l1': style('*.' * (columns//2),'YELLOW'),
+        'l2': style('/\\' * (columns//6)+ ' ' * (( columns//3 - len('Welcome to Habit Tracker') ) // 2) + 'Welcome to Habit Tracker' + ' ' * (( columns//3 - len('Welcome to Habit Tracker') ) // 2) + '/\\' * (columns//6),'GREEN'),
+        'l3': style('.*' * (columns//6)+ ' ' * (( columns//3 - len(f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}') ) // 2) + f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}' + ' ' * (( columns//3 - len(f'Today is {datetime.now().strftime("%A %d-%m-%Y, %H:%M:%S")}') ) // 2) + '.*' * (columns//6),'BOLD'),
+        'l4': style('\\/' * (columns//6)+ ' ' * (( columns//3 - len(f'Total Users Registered: {len(u)}') ) // 2) + f'Total Users Registered: {len(u)}' + ' ' * (( columns//3 - len(f'Total Users Registered: {len(u)}') ) // 2) + '\\/' * (columns//6),'CYAN'),
+        'l5': style('*' * (columns//3)+ ' ' * (columns//3)  + '*'*(columns//3),'BLUE'),
+        'l6': style('*~~*' * (columns//4),'RED'),
     }
     
     def add_line(text,times):

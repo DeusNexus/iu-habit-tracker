@@ -40,7 +40,7 @@ def reset(state):
     print(style('or everything gets reset like stated above and no example data is added so you can start with your own personal journey.\n','RED'))
     sleep(1*state["SLEEP_SPEED"])
     questions = ['Full Reset with Example Data', 'Full Reset without Example Data', 'Go Back to User Screen']
-    ans = quest.select('What would you like to do?',questions).ask()
+    ans = quest.select('What would you like to do?',questions,style=state['qstyle']).ask()
     
     #Full Reset with Example Data
     if(ans==questions[0]):

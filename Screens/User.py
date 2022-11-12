@@ -55,7 +55,7 @@ def user_screen(state):
         
         #Show menu options
         print(f'\nPlease select one of the menu options to interact with the habit tracker.\n')
-        option = quest.select('[User Screen Options]', ['View','Checkin','New','Edit','Delete','Export/Import','Reset','See Credits','Logout']).ask()
+        option = quest.select('[User Screen Options]', ['View','Checkin','New','Edit','Delete','Export/Import','Reset','See Credits','Logout'],style=state['qstyle']).ask()
 
         if(option == 'View'):
             view(state)

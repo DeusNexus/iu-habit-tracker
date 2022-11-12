@@ -27,7 +27,7 @@ def export_import(state):
     print('If you wish to import a file, it is recommened to drop it into the habit tracker directory so it can be easily found.')
     print('Once in the directory you can select the filename of the supported files.\n\n')
     questions = ['Export My Account', 'Import Account', 'Go Back to User Screen']
-    ans = quest.select('What do you want to do?', questions).ask()
+    ans = quest.select('What do you want to do?', questions,style=state['qstyle']).ask()
 
     #Export
     if(ans==questions[0]):
@@ -60,7 +60,7 @@ def export_import(state):
         files = list(filter(lambda name: str.__contains__(name,".json"), os.listdir('./IMPORT')))
 
         if(files):
-            file_name = quest.select('Select a valid user json file to import from available files:', files).ask()
+            file_name = quest.select('Select a valid user json file to import from available files:', files,style=state['qstyle']).ask()
             
             with open(f'./IMPORT/{file_name}',mode='r') as file:
                 user_obj = json.loads(file.read()) #user_obj is a dict

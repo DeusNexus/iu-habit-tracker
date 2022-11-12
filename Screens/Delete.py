@@ -32,7 +32,7 @@ def delete(state):
             habits:list = state["active_user"].habits
             print(style(f'Total Available Habits: {len(habits)}\n','CYAN'))
             habit_strings:list =  [habit.title for habit in habits] + ['Go Back to User Screen']
-            ans = quest.select('Be careful, which habit would you like to permanently delete?', habit_strings).ask()
+            ans = quest.select('Be careful, which habit would you like to permanently delete?', habit_strings,style=state['qstyle']).ask()
             
             #Option Return
             if(ans == 'Go Back to User Screen'):

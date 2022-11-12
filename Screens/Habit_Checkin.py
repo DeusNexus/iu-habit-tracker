@@ -1,5 +1,6 @@
 import os
 import questionary as quest
+
 from time import sleep
 #Function to Clear Terminal
 clear = lambda : os.system('tput reset')
@@ -40,6 +41,7 @@ def habit_checkin(state):
             habits:list = [habit for habit in state["active_user"].habits if habit.active]
 
             print('\nTotal Available Habits for Checkin: ',len(habits))
+            
             habit_strings:list =  [
                 f'{idx+1} [{"Dynamic" if habit.is_dynamic else "Regular"}]'+ 
                 f'[{"DEADLINE DUE" if datetime.now() > habit.next_deadline else "IN TIME"}] {habit.title} - '+ 
@@ -48,7 +50,8 @@ def habit_checkin(state):
                 (f' - Number of checkins out of goal: {habit.dynamic_count}/{habit.checkin_num_before_deadline}' if habit.is_dynamic else '') +
                 '\n'
                 for idx,habit in enumerate(habits)] + ['Go Back to User Screen']
-            ans = quest.select('Which habit would you like to checkin for?', habit_strings).ask()
+            
+            ans = quest.select('Which habit would you like to checkin for?', habit_strings,style=state['qstyle']).ask()
 
             #First check if we don't want to return (last element in list) since that one doesn't have an index (this could have been done in a better way, but for simplicity of program should be fine.)            
             if(ans != habit_strings[-1]):
@@ -64,8 +67,8 @@ def habit_checkin(state):
                 print('Checkin in to habit...')
                 sleep(1*state["SLEEP_SPEED"])
 
-                note = quest.text('Write a short note on how it went. Did everything go as you planned for? Any issues or things that were positive?').ask()
-                rating = quest.select('How well did it go? 1 = Worst and 5 = Best!',['1','2','3','4','5']).ask()
+                note = quest.text('Write a short note on how it went. Did everything go as you planned for? Any issues or things that were positive?',style=state['qstyle']).ask()
+                rating = quest.select('How well did it go? 1 = Worst and 5 = Best!',['1','2','3','4','5'],style=state['qstyle']).ask()
 
                 #If dynamic habit, use the dynamic_checkin method of the habit instance
                 if(h2c.is_dynamic):
@@ -104,7 +107,7 @@ def habit_checkin(state):
                     except Exception as e:
                         print('Failed to insert dynamic checkin: ',e)
 
-                    quest.select('Presse Enter to continue.', ['Okay']).ask()
+                    quest.select('Presse Enter to continue.', ['Okay'],style=state['qstyle']).ask()
 
                 #If regular habit, use normal checkin method
                 else:
@@ -144,7 +147,7 @@ def habit_checkin(state):
                         print('Failed to insert regular checkin: ',e)
 
                     sleep(2*state["SLEEP_SPEED"])
-                    quest.select('Presse Enter to continue.', ['Okay']).ask()
+                    quest.select('Presse Enter to continue.', ['Okay'],style=state['qstyle']).ask()
 
                 #Return to checkin list
                 return_checkin_screen(state)
