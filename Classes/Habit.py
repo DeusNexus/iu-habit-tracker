@@ -119,8 +119,10 @@ class Habit:
         '''Updates the previous_deadline to the current and sets the next_deadline to current deadline plus habit interval length.'''
         self.prev_deadline: datetime = self.next_deadline
         self.next_deadline: datetime = add_streak_to_deadline(self.prev_deadline, interval_to_seconds(self.interval))
+
         print(style(f'Updating your deadline to new one based on your given habit interval!','GREEN'))
         print(
+            style(f'\n{self.title}','UNDERLINE')+
             '\nOld Deadline: '+
             style(f'{self.prev_deadline.strftime("%Y-%m-%d %H:%M")}', 'CYAN') +   
             '\nNew Deadline: ' + 
@@ -129,6 +131,8 @@ class Habit:
             style(f'{self.interval}','BLUE')+
             '\nNew Streak: '+
             style(f'{self.streak}','BOLD'))
+        if(self.streak % self.milestone_streak == 0):
+            print(f'You completed a milestone streak with {self.milestone_streak} uninterrupted successful checkins!')
 
     def update_deadlines_failed(self) -> None:
         '''Updates the previous_deadline to the current and sets the next_deadline to current deadline based on date in the future plus the interval.'''
@@ -137,6 +141,7 @@ class Habit:
         self.next_deadline: dattime = add_streak_to_deadline(datetime.now(), interval_to_seconds(self.interval))
         print(style(f'You failed to meet your habit checkin deadline! This means that your current streak is reset back to 0. \nSince your deadline is in the past the new deadline will be based on current date plus your specified interval.','RED'))
         print(
+            style(f'\n{self.title}','UNDERLINE')+
             '\nOld Deadline: '+
             style(f'{self.prev_deadline.strftime("%Y-%m-%d %H:%M")}', 'CYAN') +   
             '\nNew Deadline: ' + 
